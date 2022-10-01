@@ -61,7 +61,7 @@ public class TurnExecutor : MonoBehaviour
         }
         else if (state == TurnExecutorState.Stopped)
         {
-            Game.Get().onPlanningStart.Invoke();
+            Game.Get().OnExecutionEnd();
         }
     }
 

@@ -3,13 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum IconType
-{
-    QuestionMark,
-    Movement,
-    Attack,
-}
-
 public class GUI_Timeline_Icon : MonoBehaviour
 {
     public GameObject slot;

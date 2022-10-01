@@ -23,7 +23,7 @@ public class Timer : MonoBehaviour
             time -= Time.deltaTime;
             if (time < 0.0f)
             {
-                Game.Get().onExecutionStart.Invoke();
+                //Game.Get().OnPlanningEnd();
             }
         }
         var text = GetComponent<TMPro.TextMeshPro>();

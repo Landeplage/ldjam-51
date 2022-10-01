@@ -2,32 +2,52 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum IconType
+{
+    QuestionMark,
+    Movement,
+    Attack,
+}
+
 public class GUI_Timeline : MonoBehaviour
 {
     public GUI_Timeline_Icon[] blueSlots = new GUI_Timeline_Icon[5];
     public GUI_Timeline_Icon[] redSlots = new GUI_Timeline_Icon[5];
 
-    public void SetAction(int turn, IconType icon)
+    public void Start()
     {
-        if (turn % 2 == 0)
+        Game.Get().OnTurnStart.AddListener(turnNum => Reset());
+    }
+
+    public void Reset()
+    {
+        foreach (GUI_Timeline_Icon slot in blueSlots)
         {
-            redSlots[turn / 2].ShowIcon(icon);
+            slot.ShowDot();
         }
-        else
+        foreach (GUI_Timeline_Icon slot in redSlots)
         {
-            blueSlots[turn / 2].ShowIcon(icon);
+            slot.ShowDot();
         }
     }
 
-    public void UnsetAction(int turn)
+    public void UpdateFromBoard(Board board, Board aiBoard)
     {
-        if (turn % 2 == 0)
+        for (int i = 0; i < board.actions.Count && i < 5; i++)
         {
-            redSlots[turn / 2].ShowDot();
+            IconType icon;
+            switch (board.actions[i].type)
+            {
+                case BoardActionType.Move: icon = IconType.Movement; break;
+                case BoardActionType.Attack: icon = IconType.Attack; break;
+                default: icon = IconType.QuestionMark; break;
+            }
+            blueSlots[i].ShowIcon(icon);
         }
-        else
+
+        for (int i = 0; i < aiBoard.actions.Count && i < 5; i++)
         {
-            blueSlots[turn / 2].ShowDot();
+            redSlots[i].ShowIcon(IconType.QuestionMark);
         }
     }
 }

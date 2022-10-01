@@ -13,6 +13,9 @@ public class GUI_PhaseHeader : MonoBehaviour
     void Start()
     {
         SetPlanning();
+        Game.Get().onPlanningStart.AddListener(SetPlanning);
+        Game.Get().onExecutionStart.AddListener(SetExecuting);
+        Game.Get().OnTurnStart.AddListener(OnTurnStart);
     }
 
     public void SetPlanning()
@@ -27,7 +30,7 @@ public class GUI_PhaseHeader : MonoBehaviour
         executing.SetActive(true);
     }
     
-    public void SetTurn(int turn)
+    public void OnTurnStart(int turn)
     {
         turnText.text = "Turn " + turn;
     }

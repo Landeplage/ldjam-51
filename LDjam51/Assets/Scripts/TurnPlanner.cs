@@ -271,6 +271,7 @@ public class TurnPlanner : MonoBehaviour
     private Board aiBoard;
     [System.NonSerialized]
     public TurnPlannerVisuals visuals;
+    public GUI_Timeline guiTimeline;
 
     private List<BoardAction> validActions = new();
     private BoardActionType actionType = BoardActionType.Move;
@@ -340,6 +341,7 @@ public class TurnPlanner : MonoBehaviour
         {
             validActions = new();
         }
+        guiTimeline.UpdateFromBoard(board, aiBoard);
     }
 
     void OnClickAny(Clickable clickable)
@@ -414,7 +416,7 @@ public class TurnPlanner : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             planning = false;
-            FindObjectOfType<TurnExecutor>().Go(board.actions, aiBoard.actions);
+            Game.Get().OnPlanningEnd(board.actions, aiBoard.actions);
             ClearActions();
         }
         if (Input.GetKeyDown(KeyCode.Alpha1))

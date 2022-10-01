@@ -9,11 +9,14 @@ public class Game : MonoBehaviour
     public SelectManager selectManager;
 
     public UnityEvent onGameStart = new();
+    public UnityEvent<int> OnTurnStart = new();
+
     public UnityEvent onPlanningStart = new();
     public UnityEvent onExecutionStart = new();
 
     private float timeAlive = 0.0f;
     private bool gameStarted = false;
+    private int turnNum = 1;
 
     public static Game Get()
     {
@@ -39,8 +42,21 @@ public class Game : MonoBehaviour
         if (!gameStarted && timeAlive > 0.1f)
         {
             onGameStart.Invoke();
+            OnTurnStart.Invoke(turnNum);
             onPlanningStart.Invoke();
             gameStarted = true;
         }
+    }
+
+    public void OnPlanningEnd(List<BoardAction> playerActions, List<BoardAction> aiActions)
+    {
+        onExecutionStart.Invoke();
+        FindObjectOfType<TurnExecutor>().Go(playerActions, aiActions);
+    }
+
+    public void OnExecutionEnd()
+    {
+        OnTurnStart.Invoke(++turnNum);
+        onPlanningStart.Invoke();
     }
 }
