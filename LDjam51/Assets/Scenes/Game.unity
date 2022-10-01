@@ -12602,10 +12602,6 @@ PrefabInstance:
       propertyPath: grid
       value: 
       objectReference: {fileID: 1016227476}
-    - target: {fileID: 7213127312589892548, guid: b2557782715e44b4893d4af98e553470, type: 3}
-      propertyPath: movementLine
-      value: 
-      objectReference: {fileID: 1952490782494139265, guid: 25ace2dc4e2c0f343a29f0694c72932c, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b2557782715e44b4893d4af98e553470, type: 3}
 --- !u!1001 &4402545679935046656
