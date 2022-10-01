@@ -7,6 +7,8 @@ using UnityEngine.Events;
 [ExecuteInEditMode]
 public class Grid : MonoBehaviour
 {
+    public UnityEvent<GridSlot> onClickGrid = new();
+
     public GameObject slotPrefab;
     public int width = 10;
     public int height = 10;
@@ -45,6 +47,15 @@ public class Grid : MonoBehaviour
                     }
                 }
             }
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    var label = string.Format("{0},{1}", x, y);
+                    var child = transform.Find(label);
+                    child.GetComponent<GridSlot>().gridPosition = new Vector2Int(x, y);
+                }
+            }
         }
     }
 
@@ -63,8 +74,7 @@ public class Grid : MonoBehaviour
                     {
                         var newChild = PrefabUtility.InstantiatePrefab(slotPrefab) as GameObject;
                         newChild.name = label;
-                        var slot = newChild.GetComponent<GridSlot>();
-                        slot.gridPosition = new Vector2Int(x, y);
+                        newChild.GetComponent<GridSlot>();
                         child = newChild.transform;
                         child.transform.parent = transform;
                     }
@@ -76,6 +86,7 @@ public class Grid : MonoBehaviour
                     }
                     child.transform.localPosition = new Vector3(xx, yy, 0.0f);
                     child.transform.localScale = new Vector3(grid.cellSize.x, grid.cellSize.y, 0.0f);
+                    child.GetComponent<GridSlot>().gridPosition = new Vector2Int(x, y);
                 }
             }
         }

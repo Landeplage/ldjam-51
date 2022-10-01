@@ -24,4 +24,9 @@ public class Unit : MonoBehaviour
     {
         spriteRenderer.color = Color.white;
     }
+
+    public GridSlot GetGridSlot()
+    {
+        return GetComponent<GridEntity>().gridSlot;
+    }
 }

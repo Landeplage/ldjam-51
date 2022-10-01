@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7382134693569745725}
   - component: {fileID: 6657732267557632588}
   - component: {fileID: 5344463035172038058}
+  - component: {fileID: 6492549406459701702}
   m_Layer: 0
   m_Name: GridSlot
   m_TagString: Untagged
@@ -129,3 +130,18 @@ PolygonCollider2D:
       - {x: 0.0003417408, y: -0.49956822}
       - {x: 0.49973947, y: -0.24951771}
       - {x: 0.5000468, y: 0.24965824}
+--- !u!114 &6492549406459701702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5983844531341551233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dc65e7db01653346956de0d3125cbff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []

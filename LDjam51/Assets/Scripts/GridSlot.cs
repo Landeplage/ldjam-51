@@ -5,11 +5,15 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class GridSlot : MonoBehaviour
 {
-    [System.NonSerialized]
     public Vector2Int gridPosition;
 
     [System.NonSerialized]
     public GridEntity entity;
+
+    private void Start()
+    {
+        GetComponent<Clickable>().onClick.AddListener(OnClick);
+    }
 
     void Update()
     {
@@ -22,5 +26,16 @@ public class GridSlot : MonoBehaviour
                 DestroyImmediate(gameObject);
             }
         }
+    }
+
+    void OnClick()
+    {
+        var grid = GetComponentInParent<Grid>();
+        grid.onClickGrid.Invoke(this);
+    }
+
+    bool IsAdjecent(GridSlot other)
+    {
+        return true;
     }
 }

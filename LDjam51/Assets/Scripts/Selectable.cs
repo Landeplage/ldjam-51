@@ -3,46 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+[RequireComponent(typeof(Clickable))]
 public class Selectable : MonoBehaviour
 {
-    static Selectable selected = null;
-    static bool canSelect = false;
-
-    static public UnityEvent<Selectable> onSelectionChange = new UnityEvent<Selectable>();
+    static public UnityEvent<Selectable> onSelectionChange = new();
 
     public UnityEvent onSelect;
     public UnityEvent onDeselect;
 
-    private void Update()
+    private void Start()
     {
-        /*if (Input.GetMouseButtonDown(0) && canSelect)
-        {
-            if (selected)
-            {
-                selected.onDeselect.Invoke();
-                onSelectionChange.Invoke(null);
-                selected = null;
-            }
-        }*/
+        GetComponent<Clickable>().onClick.AddListener(OnClick);
     }
 
-    private void LateUpdate()
+    private void OnClick()
     {
-        canSelect = true;
-    }
-
-    private void OnMouseDown()
-    {
-        if (canSelect)
-        {
-            if (selected)
-            {
-                selected.onDeselect.Invoke();
-            }
-            selected = this;
-            onSelect.Invoke();
-            onSelectionChange.Invoke(this);
-            canSelect = false;
-        }
+        Game.Get().selectManager.Select(this);
     }
 }
