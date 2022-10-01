@@ -12,12 +12,24 @@ public class Unit : MonoBehaviour
 
     void OnGhost()
     {
-        GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+        foreach (var spriteRenderer in GetComponentsInChildren<SpriteRenderer>())
+        {
+            if (spriteRenderer.gameObject.name != "DropShadow")
+            {
+                spriteRenderer.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+            }
+        }
     }
 
     void OnUnghost()
     {
-        GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        foreach (var spriteRenderer in GetComponentsInChildren<SpriteRenderer>())
+        {
+            if (spriteRenderer.gameObject.name != "DropShadow")
+            {
+                spriteRenderer.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+            }
+        }
     }
 
     public GridSlot GetGridSlot()
