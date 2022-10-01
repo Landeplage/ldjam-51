@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1173805153544851518}
   - component: {fileID: 7382134693569745725}
   - component: {fileID: 6657732267557632588}
+  - component: {fileID: 5344463035172038058}
   m_Layer: 0
   m_Name: GridSlot
   m_TagString: Untagged
@@ -97,3 +98,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d45d2e8ce27f39648a0d2468971cad24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!60 &5344463035172038058
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5983844531341551233}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0.049999997, y: 0.049999997, z: 0.049999997, w: 0.049999997}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.16, y: 0.16}
+    newSize: {x: 0.16, y: 0.16}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.0003932317, y: 0.4999197}
+      - {x: -0.49965718, y: 0.24971403}
+      - {x: -0.49991035, y: -0.24987426}
+      - {x: 0.0003417408, y: -0.49956822}
+      - {x: 0.49973947, y: -0.24951771}
+      - {x: 0.5000468, y: 0.24965824}

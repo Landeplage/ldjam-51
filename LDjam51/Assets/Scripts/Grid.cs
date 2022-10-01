@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.Events;
 
 [ExecuteInEditMode]
 public class Grid : MonoBehaviour
@@ -74,6 +75,7 @@ public class Grid : MonoBehaviour
                         xx += 0.5f * grid.cellSize.x;
                     }
                     child.transform.localPosition = new Vector3(xx, yy, 0.0f);
+                    child.transform.localScale = new Vector3(grid.cellSize.x, grid.cellSize.y, 0.0f);
                 }
             }
         }
