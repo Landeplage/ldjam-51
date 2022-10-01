@@ -90,7 +90,7 @@ public class TurnExecutor : MonoBehaviour
         {
             visuals.AttackSlot(action.attackTarget);
         }
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
         if (ValidAction(action))
         {
             if (action.type == BoardActionType.Move)

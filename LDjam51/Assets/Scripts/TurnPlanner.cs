@@ -41,6 +41,11 @@ public class Board
         actions.Add(action);
     }
 
+    public void AddIdleAction()
+    {
+        actions.Add(BoardAction.Idle());
+    }
+
     public void ClearActions()
     {
         actions.Clear();
@@ -234,6 +239,7 @@ public class BoardSquare
 
 public enum BoardActionType
 {
+    Idle,
     Move,
     Attack,
 }
@@ -249,6 +255,15 @@ public class BoardAction
     public Vector2Int moveTo;
 
     public Vector2Int attackTarget;
+
+    public static BoardAction Idle()
+    {
+        BoardAction action = new();
+        action.type = BoardActionType.Idle;
+        action.position = new Vector2Int(-1, -1);
+        action.obj = null;
+        return action;
+    }
 
     public static BoardAction Move(Vector2Int from, Vector2Int to, GameObject obj)
     {
@@ -333,7 +348,7 @@ public class TurnPlanner : MonoBehaviour
         aiBoard = board.Copy();
     }
 
-    void DrawBoardActions(List<BoardAction> actions)
+    void DrawBoardActions(List<BoardAction> actions, bool player)
     {
         for (var i = 0; i < actions.Count; ++i)
         {
@@ -342,7 +357,7 @@ public class TurnPlanner : MonoBehaviour
             {
                 visuals.MovementLine(action.moveFrom, action.moveTo);
                 visuals.Ghost(action.moveTo, action.obj);
-                visuals.SecondIndicator(action.moveFrom, action.moveTo, i + 1);
+                visuals.SecondIndicator(action.moveFrom, action.moveTo, i * 2 + (player ? 1 : 2));
             }
         }
     }
@@ -350,8 +365,8 @@ public class TurnPlanner : MonoBehaviour
     void PlanActions()
     {
         visuals.Clear();
-        DrawBoardActions(board.actions);
-        DrawBoardActions(aiBoard.actions);
+        DrawBoardActions(board.actions, true);
+        DrawBoardActions(aiBoard.actions, false);
         if (selectedSlot != null && CanPlan())
         {
             validActions = board.ValidActionsFor(true, selectedSlot.position, this.actionType);
