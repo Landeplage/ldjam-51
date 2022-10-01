@@ -10,7 +10,6 @@ public class Game : MonoBehaviour
 
     public UnityEvent onGameStart = new();
     public UnityEvent onPlanningStart = new();
-    public UnityEvent onAiPlanMove = new();
     public UnityEvent onExecutionStart = new();
 
     private float timeAlive = 0.0f;
