@@ -492,7 +492,6 @@ public class TurnPlanner : MonoBehaviour
             List<BoardAction> aiActions = new(aiBoard.actions);
             ClearActions();
             Game.Get().OnPlanningEnd(playerActions, aiActions);
-            FindObjectOfType<TurnExecutor>().Go(playerActions, aiActions);
         }
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
