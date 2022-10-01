@@ -238,6 +238,7 @@ public class TurnPlanner : MonoBehaviour
     public Grid grid;
 
     private Board board;
+    [System.NonSerialized]
     public TurnPlannerVisuals visuals;
 
     private List<BoardAction> validActions = new();
