@@ -3,13 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum IconType
-{
-    QuestionMark,
-    Movement,
-    Attack,
-}
-
 public class GUI_Timeline_Icon : MonoBehaviour
 {
     public GameObject slot;
@@ -19,13 +12,18 @@ public class GUI_Timeline_Icon : MonoBehaviour
     public GameObject Icon_Movement;
     public GameObject Icon_Attack;
 
+    Sprite EnabledSprite;
+    public Sprite DisabledSprite;
+
     void Start()
     {
+        EnabledSprite = slot.GetComponent<Image>().sprite;
         ShowDot();
     }
 
     public void ShowIcon(IconType ico)
     {
+        slot.GetComponent<Image>().sprite = EnabledSprite;
         slot.SetActive(true);
         dot.SetActive(false);
         
@@ -44,5 +42,10 @@ public class GUI_Timeline_Icon : MonoBehaviour
     {
         slot.SetActive(false);
         dot.SetActive(true);
+    }
+
+    public void SetPerformed()
+    {
+        slot.GetComponent<Image>().sprite = DisabledSprite;
     }
 }

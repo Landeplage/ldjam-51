@@ -308,6 +308,7 @@ public class TurnPlanner : MonoBehaviour
     private Board aiBoard;
     [System.NonSerialized]
     public TurnPlannerVisuals visuals;
+    public GUI_Timeline guiTimeline;
 
     private List<BoardAction> validActions = new();
     private BoardActionType actionType = BoardActionType.Move;
@@ -386,6 +387,7 @@ public class TurnPlanner : MonoBehaviour
         {
             validActions = new();
         }
+        guiTimeline.UpdateFromBoard(board, aiBoard);
     }
 
     bool CanPlan()
@@ -489,6 +491,7 @@ public class TurnPlanner : MonoBehaviour
             List<BoardAction> playerActions = new(board.actions);
             List<BoardAction> aiActions = new(aiBoard.actions);
             ClearActions();
+            Game.Get().OnPlanningEnd(playerActions, aiActions);
             FindObjectOfType<TurnExecutor>().Go(playerActions, aiActions);
         }
         if (Input.GetKeyDown(KeyCode.Alpha1))
