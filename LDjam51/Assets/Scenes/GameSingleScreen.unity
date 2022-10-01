@@ -710,6 +710,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 463001021020181904, guid: 99b88d364dd58f640b81f1ef5b28235c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1746884279844837958, guid: 99b88d364dd58f640b81f1ef5b28235c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5867789640504339080, guid: 99b88d364dd58f640b81f1ef5b28235c, type: 3}
       propertyPath: m_Name
       value: Canvas
@@ -802,6 +810,14 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 64684836}
+    - target: {fileID: 6287820104002907123, guid: 99b88d364dd58f640b81f1ef5b28235c, type: 3}
+      propertyPath: m_Name
+      value: QuestionMark
+      objectReference: {fileID: 0}
+    - target: {fileID: 6287820104002907123, guid: 99b88d364dd58f640b81f1ef5b28235c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 99b88d364dd58f640b81f1ef5b28235c, type: 3}
 --- !u!1001 &272134010

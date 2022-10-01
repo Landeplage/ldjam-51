@@ -11,6 +11,7 @@ public class GUI_Timeline_Icon : MonoBehaviour
     public GameObject Icon_QuestionMark;
     public GameObject Icon_Movement;
     public GameObject Icon_Attack;
+    public GameObject Icon_Wait;
 
     Sprite EnabledSprite;
     public Sprite DisabledSprite;
@@ -30,11 +31,13 @@ public class GUI_Timeline_Icon : MonoBehaviour
         Icon_QuestionMark.SetActive(false);
         Icon_Movement.SetActive(false); 
         Icon_Attack.SetActive(false); 
+        Icon_Wait.SetActive(false); 
         switch (ico)
         {
             case IconType.QuestionMark: Icon_QuestionMark.SetActive(true); break;
             case IconType.Movement: Icon_Movement.SetActive(true); break;
             case IconType.Attack: Icon_Attack.SetActive(true); break;
+            case IconType.Wait: Icon_Wait.SetActive(true); break;
         }
     }
 
