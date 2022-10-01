@@ -9,10 +9,6 @@ public class Board
     public BoardSquare[] squares;
     public List<BoardAction> actions = new();
 
-    void Start()
-    {
-    }
-
     Board Copy()
     {
         Board board = new();
@@ -45,6 +41,11 @@ public class Board
         actions.Add(action);
     }
 
+    public void ClearActions()
+    {
+        actions.Clear();
+    }
+
     public Board ApplyActions()
     {
         var board = Copy();
@@ -67,15 +68,25 @@ public class Board
         return null;
     }
 
-    public List<BoardAction> ValidActionsFor(Vector2Int position)
+    public List<BoardAction> ValidActionsFor(Vector2Int position, BoardActionType type)
     {
         var actions = new List<BoardAction>();
         var square = At(position);
-        if (square.type == BoardSquareType.Unit)
+        if (square.Type() == BoardSquareType.Unit)
         {
-            foreach (var adjacentSquare in Adjacent(square))
+            if (type == BoardActionType.Move)
             {
-                actions.Add(BoardAction.Move(square.position, adjacentSquare.position));
+                foreach (var adjacentSquare in Adjacent(square))
+                {
+                    actions.Add(BoardAction.Move(square.position, adjacentSquare.position, square.obj));
+                }
+            }
+            else if (type == BoardActionType.Attack)
+            {
+                foreach (var adjacentSquare in Adjacent(square))
+                {
+                    actions.Add(BoardAction.Attack(adjacentSquare.position, square.obj));
+                }
             }
         }
         return actions;
@@ -121,33 +132,46 @@ public enum BoardSquareType
 public class BoardSquare
 {
     public GridSlot slot;
-    public BoardSquareType type;
     public Vector2Int position;
+    public GameObject obj;
 
     BoardSquare() {}
 
     public BoardSquare(GridSlot slot)
     {
-        if (slot.entity == null)
+        this.slot = slot;
+        this.position = slot.position;
+        var entity = slot.GetComponent<GridSlot>().entity;
+        if (entity != null)
         {
-            this.type = BoardSquareType.Empty;
+            this.obj = entity.gameObject;
         }
         else
         {
-            this.type = BoardSquareType.Unit;
+            this.obj = null;
         }
-        this.slot = slot;
-        this.position = slot.position;
+    }
+
+    public BoardSquareType Type()
+    {
+        if (obj != null)
+        {
+            return BoardSquareType.Unit;
+        }
+        else
+        {
+            return BoardSquareType.Empty;
+        }
     }
 
     public void MakeEmpty()
     {
-        this.type = BoardSquareType.Empty;
+        this.obj = null;
     }
 
     public void Take(BoardSquare other)
     {
-        this.type = other.type;
+        this.obj = other.obj;
         other.MakeEmpty();
     }
 
@@ -155,7 +179,7 @@ public class BoardSquare
     {
         BoardSquare square = new();
         square.slot = this.slot;
-        square.type = this.type;
+        square.obj = this.obj;
         square.position = this.position;
         return square;
     }
@@ -164,20 +188,35 @@ public class BoardSquare
 public enum BoardActionType
 {
     Move,
+    Attack,
 }
 
 public class BoardAction
 {
     public BoardActionType type;
+    public GameObject obj;
+
     public Vector2Int moveFrom;
     public Vector2Int moveTo;
 
-    public static BoardAction Move(Vector2Int from, Vector2Int to)
+    public Vector2Int attackTarget;
+
+    public static BoardAction Move(Vector2Int from, Vector2Int to, GameObject obj)
     {
         BoardAction action = new();
         action.type = BoardActionType.Move;
         action.moveFrom = from;
         action.moveTo = to;
+        action.obj = obj;
+        return action;
+    }
+
+    public static BoardAction Attack(Vector2Int target, GameObject obj)
+    {
+        BoardAction action = new();
+        action.type = BoardActionType.Attack;
+        action.attackTarget = target;
+        action.obj = obj;
         return action;
     }
 
@@ -185,8 +224,10 @@ public class BoardAction
     {
         BoardAction action = new();
         action.type = this.type;
+        action.obj = this.obj;
         action.moveFrom = this.moveFrom;
         action.moveTo = this.moveTo;
+        action.attackTarget = this.attackTarget;
         return action;
     }
 }
@@ -200,6 +241,8 @@ public class TurnPlanner : MonoBehaviour
     public TurnPlannerVisuals visuals;
 
     private List<BoardAction> validActions = new();
+    private BoardActionType actionType = BoardActionType.Move;
+    private GridSlot selectedSlot = null;
 
     void Start()
     {
@@ -228,18 +271,33 @@ public class TurnPlanner : MonoBehaviour
             if (action.type == BoardActionType.Move)
             {
                 visuals.MovementLine(action.moveFrom, action.moveTo);
+                visuals.Ghost(action.moveTo, action.obj);
             }
         }
     }
 
-    void PlanActionsFor(Vector2Int position)
+    void PlanActions()
     {
-        validActions = board.ApplyActions().ValidActionsFor(position);
         visuals.Clear();
         DrawBoardActions();
-        foreach (var move in validActions)
+        if (selectedSlot != null)
         {
-            visuals.HighlightSlot(move.moveTo);
+            validActions = board.ApplyActions().ValidActionsFor(selectedSlot.position, this.actionType);
+            foreach (var action in validActions)
+            {
+                if (action.type == BoardActionType.Move)
+                {
+                    visuals.MoveSlot(action.moveTo);
+                }
+                else if (action.type == BoardActionType.Attack)
+                {
+                    visuals.AttackSlot(action.attackTarget);
+                }
+            }
+        }
+        else
+        {
+            validActions = new();
         }
     }
 
@@ -263,7 +321,8 @@ public class TurnPlanner : MonoBehaviour
                 if (validAction.moveTo == gridSlot.position)
                 {
                     board.AddAction(validAction);
-                    PlanActionsFor(gridSlot.position);
+                    selectedSlot = gridSlot;
+                    PlanActions();
                     appliedMove = true;
                     break;
                 }
@@ -271,7 +330,9 @@ public class TurnPlanner : MonoBehaviour
         }
         if (!appliedMove)
         {
-            PlanActionsFor(gridSlot.position);
+            selectedSlot = gridSlot;
+            actionType = BoardActionType.Move;
+            PlanActions();
         }
     }
 
@@ -279,7 +340,19 @@ public class TurnPlanner : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            MakeBoardFromScene();
+            board.ClearActions();
+            selectedSlot = null;
+            PlanActions();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            actionType = BoardActionType.Move;
+            PlanActions();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            actionType = BoardActionType.Attack;
+            PlanActions();
         }
     }
 }

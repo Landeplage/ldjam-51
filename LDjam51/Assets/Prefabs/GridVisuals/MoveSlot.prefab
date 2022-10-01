@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8918722519138138096}
   - component: {fileID: 8833980941856181157}
   m_Layer: 0
-  m_Name: HighlightSlot
+  m_Name: MoveSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
