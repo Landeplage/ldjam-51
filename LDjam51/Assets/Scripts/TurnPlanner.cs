@@ -68,24 +68,41 @@ public class Board
         return null;
     }
 
-    public List<BoardAction> ValidActionsFor(Vector2Int position, BoardActionType type)
+    public List<BoardAction> AllValidActions(bool friendly)
+    {
+        var actions = new List<BoardAction>();
+        foreach (var square in squares)
+        {
+            actions.AddRange(ValidActionsFor(friendly, square.position, BoardActionType.Move));
+            //actions.AddRange(ValidActionsFor(friendly, square.position, BoardActionType.Attack));
+        }
+        return actions;
+    }
+
+    public List<BoardAction> ValidActionsFor(bool friendly, Vector2Int position, BoardActionType type)
     {
         var actions = new List<BoardAction>();
         var square = At(position);
         if (square.Type() == BoardSquareType.Unit)
         {
-            if (type == BoardActionType.Move)
+            if (square.Friendly() == friendly)
             {
-                foreach (var adjacentSquare in Adjacent(square))
+                if (type == BoardActionType.Move)
                 {
-                    actions.Add(BoardAction.Move(square.position, adjacentSquare.position, square.obj));
+                    foreach (var adjacentSquare in Adjacent(square))
+                    {
+                        if (adjacentSquare.Type() == BoardSquareType.Empty)
+                        {
+                            actions.Add(BoardAction.Move(square.position, adjacentSquare.position, square.obj));
+                        }
+                    }
                 }
-            }
-            else if (type == BoardActionType.Attack)
-            {
-                foreach (var adjacentSquare in Adjacent(square))
+                else if (type == BoardActionType.Attack)
                 {
-                    actions.Add(BoardAction.Attack(adjacentSquare.position, square.obj));
+                    foreach (var adjacentSquare in Adjacent(square))
+                    {
+                        actions.Add(BoardAction.Attack(adjacentSquare.position, square.obj));
+                    }
                 }
             }
         }
@@ -162,6 +179,19 @@ public class BoardSquare
         {
             return BoardSquareType.Empty;
         }
+    }
+
+    public bool Friendly()
+    {
+        if (obj != null)
+        {
+            var unit = obj.GetComponent<Unit>();
+            if (unit)
+            {
+                return unit.friendly;
+            }
+        }
+        return false;
     }
 
     public void MakeEmpty()
@@ -249,6 +279,7 @@ public class TurnPlanner : MonoBehaviour
     {
         grid = FindObjectOfType<Grid>();
         Game.Get().clickManager.onClickAny.AddListener(OnClickAny);
+        Game.Get().clickManager.onClickNothing.AddListener(OnClickNothing);
         Game.Get().onGameStart.AddListener(MakeBoardFromScene);
         visuals = GetComponentInChildren<TurnPlannerVisuals>();
     }
@@ -283,7 +314,7 @@ public class TurnPlanner : MonoBehaviour
         DrawBoardActions();
         if (selectedSlot != null)
         {
-            validActions = board.ApplyActions().ValidActionsFor(selectedSlot.position, this.actionType);
+            validActions = board.ApplyActions().ValidActionsFor(true, selectedSlot.position, this.actionType);
             foreach (var action in validActions)
             {
                 if (action.type == BoardActionType.Move)
@@ -312,6 +343,12 @@ public class TurnPlanner : MonoBehaviour
         }
     }
 
+    void OnClickNothing()
+    {
+        selectedSlot = null;
+        PlanActions();
+    }
+
     void OnClickGridSlot(GridSlot gridSlot)
     {
         var appliedMove = false;
@@ -322,6 +359,7 @@ public class TurnPlanner : MonoBehaviour
                 if (validAction.moveTo == gridSlot.position)
                 {
                     board.AddAction(validAction);
+                    TurnPlannerAi.PlanMove(board);
                     selectedSlot = gridSlot;
                     PlanActions();
                     appliedMove = true;
