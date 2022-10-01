@@ -2,65 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-enum TurnExecutorState
-{
-    Stopped,
-    PlayerAction,
-    AiAction,
-}
-
 public class TurnExecutor : MonoBehaviour
 {
-    List<BoardAction> playerActions;
-    List<BoardAction> aiActions;
+    List<BoardAction> actions;
 
-    TurnExecutorState state = TurnExecutorState.Stopped;
+    public TurnPlannerVisuals visuals;
 
-    public void Go(List<BoardAction> playerActions, List<BoardAction> aiActions)
+    bool running = false;
+
+    private void Start()
     {
-        this.playerActions = new(playerActions);
-        this.aiActions = new(aiActions);
+        visuals = FindObjectOfType<TurnPlannerVisuals>();
+    }
+
+    public void Go(List<BoardAction> actions)
+    {
+        this.actions = actions;
         StartCoroutine(NextAction());
     }
 
     private IEnumerator NextAction()
     {
-        if (state == TurnExecutorState.Stopped || state == TurnExecutorState.AiAction)
+        running = actions.Count > 0;
+        if (running)
         {
-            if (playerActions.Count > 0)
-            {
-                state = TurnExecutorState.PlayerAction;
-            }
-            else
-            {
-                state = TurnExecutorState.Stopped;
-            }
+            var action = actions[0];
+            actions.RemoveAt(0);
+            yield return RunAction(action);
         }
         else
         {
-            if (aiActions.Count > 0)
-            {
-                state = TurnExecutorState.AiAction;
-            }
-            else
-            {
-                state = TurnExecutorState.Stopped;
-            }
-        }
-        if (state == TurnExecutorState.PlayerAction)
-        {
-            var action = playerActions[0];
-            playerActions.RemoveAt(0);
-            yield return RunAction(true, action);
-        }
-        else if (state == TurnExecutorState.AiAction)
-        {
-            var action = aiActions[0];
-            aiActions.RemoveAt(0);
-            yield return RunAction(true, action);
-        }
-        else if (state == TurnExecutorState.Stopped)
-        {
+            visuals.Clear();
             Game.Get().onPlanningStart.Invoke();
         }
     }
@@ -75,9 +47,26 @@ public class TurnExecutor : MonoBehaviour
         return true;
     }
 
-    private IEnumerator RunAction(bool player, BoardAction action)
+    private IEnumerator RunAction(BoardAction action)
     {
-        yield return new WaitForSeconds(0.2f);
+        visuals.Clear();
+        if (action.type == BoardActionType.Move)
+        {
+            visuals.MovementLine(action.moveFrom, action.moveTo);
+            if (ValidAction(action))
+            {
+                visuals.MoveSlot(action.moveTo);
+            }
+            else
+            {
+                visuals.BadMoveSlot(action.moveTo);
+            }
+        }
+        else if (action.type == BoardActionType.Attack)
+        {
+            visuals.AttackSlot(action.attackTarget);
+        }
+        yield return new WaitForSeconds(0.5f);
         if (ValidAction(action))
         {
             if (action.type == BoardActionType.Move)

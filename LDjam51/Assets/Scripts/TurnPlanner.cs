@@ -91,7 +91,7 @@ public class Board
                 {
                     foreach (var adjacentSquare in Adjacent(square))
                     {
-                        if (adjacentSquare.Type() == BoardSquareType.Empty)
+                        if (IsSlotAvailable(adjacentSquare.position))
                         {
                             actions.Add(BoardAction.Move(square.position, adjacentSquare.position, square.obj));
                         }
@@ -107,6 +107,12 @@ public class Board
             }
         }
         return actions;
+    }
+
+    bool IsSlotAvailable(Vector2Int position)
+    {
+        var square = At(position);
+        return (square.Type() == BoardSquareType.Empty);
     }
 
     List<BoardSquare> Adjacent(BoardSquare square)
@@ -268,7 +274,6 @@ public class TurnPlanner : MonoBehaviour
     public Grid grid;
 
     private Board board;
-    private Board aiBoard;
     [System.NonSerialized]
     public TurnPlannerVisuals visuals;
 
@@ -283,6 +288,8 @@ public class TurnPlanner : MonoBehaviour
         Game.Get().clickManager.onClickAny.AddListener(OnClickAny);
         Game.Get().clickManager.onClickNothing.AddListener(OnClickNothing);
         Game.Get().onPlanningStart.AddListener(OnPlanningStart);
+        Game.Get().onExecutionStart.AddListener(OnExecutionStart);
+        Game.Get().onAiPlanMove.AddListener(OnAiPlanMove);
         visuals = GetComponentInChildren<TurnPlannerVisuals>();
     }
 
@@ -290,6 +297,20 @@ public class TurnPlanner : MonoBehaviour
     {
         planning = true;
         MakeBoardFromScene();
+    }
+
+    void OnExecutionStart()
+    {
+        planning = false;
+        List<BoardAction> actions = new(board.actions);
+        ClearActions();
+        FindObjectOfType<TurnExecutor>().Go(actions);
+    }
+
+    void OnAiPlanMove()
+    {
+        TurnPlannerAi.PlanMove(board);
+        DrawBoardActions(board.actions);
     }
 
     void MakeBoardFromScene()
@@ -302,17 +323,21 @@ public class TurnPlanner : MonoBehaviour
         {
             board.squares[slot.position.x + grid.width * slot.position.y] = new BoardSquare(slot);
         }
-        aiBoard = board.Copy();
     }
 
-    void DrawBoardActions()
+    void DrawBoardActions(List<BoardAction> actions)
     {
-        foreach (var action in board.actions)
+        foreach (var action in actions)
         {
             if (action.type == BoardActionType.Move)
             {
                 visuals.MovementLine(action.moveFrom, action.moveTo);
                 visuals.Ghost(action.moveTo, action.obj);
+            }
+            else if (action.type == BoardActionType.Attack)
+            {
+                visuals.MovementLine(action.moveFrom, action.moveTo);
+                visuals.AttackSlot(action.attackTarget);
             }
         }
     }
@@ -320,7 +345,7 @@ public class TurnPlanner : MonoBehaviour
     void PlanActions()
     {
         visuals.Clear();
-        DrawBoardActions();
+        DrawBoardActions(board.actions);
         if (selectedSlot != null)
         {
             validActions = board.ApplyActions().ValidActionsFor(true, selectedSlot.position, this.actionType);
@@ -375,8 +400,19 @@ public class TurnPlanner : MonoBehaviour
             {
                 if (validAction.moveTo == gridSlot.position)
                 {
-                    AddAction(validAction);
+                    board.AddAction(validAction);
                     selectedSlot = gridSlot;
+                    PlanActions();
+                    appliedMove = true;
+                    break;
+                }
+            }
+            else if (validAction.type == BoardActionType.Attack)
+            {
+                if (validAction.attackTarget == gridSlot.position)
+                {
+                    board.AddAction(validAction);
+                    selectedSlot = null;
                     PlanActions();
                     appliedMove = true;
                     break;
@@ -391,16 +427,9 @@ public class TurnPlanner : MonoBehaviour
         }
     }
 
-    void AddAction(BoardAction action)
-    {
-        board.AddAction(action);
-        TurnPlannerAi.PlanMove(aiBoard);
-    }
-
     void ClearActions()
     {
         board.ClearActions();
-        aiBoard.ClearActions();
         selectedSlot = null;
         PlanActions();
     }
@@ -409,12 +438,6 @@ public class TurnPlanner : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            ClearActions();
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            planning = false;
-            FindObjectOfType<TurnExecutor>().Go(board.actions, aiBoard.actions);
             ClearActions();
         }
         if (Input.GetKeyDown(KeyCode.Alpha1))

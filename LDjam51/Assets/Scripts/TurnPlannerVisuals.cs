@@ -41,6 +41,17 @@ public class TurnPlannerVisuals : MonoBehaviour
         }
     }
 
+    public void BadMoveSlot(Vector2Int position)
+    {
+        var slot = grid.At(position);
+        if (slot != null)
+        {
+            var move = Instantiate(attackSlot);
+            move.transform.parent = transform;
+            move.transform.position = slot.transform.position;
+        }
+    }
+
     public void MovementLine(Vector2Int from, Vector2Int to)
     {
         var fromSlot = grid.At(from);
