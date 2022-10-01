@@ -78,8 +78,24 @@ public class Board
         List<Vector2Int> blocked = new();
         foreach (var action in actions)
         {
-            blocked.Add(action.moveFrom);
-            blocked.Add(action.moveTo);
+            if (action.type == BoardActionType.Move)
+            {
+                blocked.Add(action.moveFrom);
+                blocked.Add(action.moveTo);
+            }
+        }
+        return blocked;
+    }
+
+    List<Vector2Int> BlockedEntities()
+    {
+        List<Vector2Int> blocked = new();
+        foreach (var action in actions)
+        {
+            if (action.type == BoardActionType.Attack)
+            {
+                blocked.Add(action.position);
+            }
         }
         return blocked;
     }
@@ -90,7 +106,7 @@ public class Board
         var applied = ApplyActions();
         foreach (var square in squares)
         {
-            actions.AddRange(applied.ValidActionsForInternal(friendly, square.position, BoardActionType.Move, BlockedPositions()));
+            actions.AddRange(applied.ValidActionsForInternal(friendly, square.position, BoardActionType.Move, BlockedPositions(), BlockedEntities()));
             //actions.AddRange(ValidActionsFor(friendly, square.position, BoardActionType.Attack));
         }
         return actions;
@@ -98,22 +114,22 @@ public class Board
 
     public List<BoardAction> ValidActionsFor(bool friendly, Vector2Int position, BoardActionType type)
     {
-        return ApplyActions().ValidActionsForInternal(friendly, position, type, BlockedPositions());
+        return ApplyActions().ValidActionsForInternal(friendly, position, type, BlockedPositions(), BlockedEntities());
     }
 
-    List<BoardAction> ValidActionsForInternal(bool friendly, Vector2Int position, BoardActionType type, List<Vector2Int> blocked)
+    List<BoardAction> ValidActionsForInternal(bool friendly, Vector2Int position, BoardActionType type, List<Vector2Int> blockedPositions, List<Vector2Int> blockedEntities)
     {
         var actions = new List<BoardAction>();
         var square = At(position);
         if (square.Type() == BoardSquareType.Unit)
         {
-            if (square.Friendly() == friendly)
+            if (square.Friendly() == friendly && !blockedEntities.Contains(square.position))
             {
                 if (type == BoardActionType.Move)
                 {
                     foreach (var adjacentSquare in Adjacent(square))
                     {
-                        if (adjacentSquare.Type() == BoardSquareType.Empty && !blocked.Contains(adjacentSquare.position))
+                        if (adjacentSquare.Type() == BoardSquareType.Empty && !blockedPositions.Contains(adjacentSquare.position))
                         {
                             actions.Add(BoardAction.Move(square.position, adjacentSquare.position, square.obj));
                         }
@@ -354,11 +370,21 @@ public class TurnPlanner : MonoBehaviour
         for (var i = 0; i < actions.Count; ++i)
         {
             var action = actions[i];
+            var second = i * 2 + (player ? 1 : 2);
             if (action.type == BoardActionType.Move)
             {
+                if (i < board.actions.Count)
+                {
+                    visuals.Ghost(action.moveTo, action.obj);
+                }
                 visuals.MovementLine(action.moveFrom, action.moveTo);
-                visuals.Ghost(action.moveTo, action.obj);
-                visuals.SecondIndicator(action.moveFrom, action.moveTo, i * 2 + (player ? 1 : 2));
+                visuals.SecondIndicator(action.moveFrom, action.moveTo, second);
+            }
+            else if (action.type == BoardActionType.Attack)
+            {
+                visuals.AttackSlot(action.attackTarget);
+                visuals.MovementLine(action.position, action.attackTarget);
+                visuals.SecondIndicator(action.position, action.attackTarget, second);
             }
         }
     }
@@ -474,6 +500,7 @@ public class TurnPlanner : MonoBehaviour
         {
             var lastAction = board.actions[board.actions.Count - 1];
             selectedSlot = grid.At(lastAction.position);
+            actionType = BoardActionType.Move;
             board.actions.RemoveAt(board.actions.Count - 1);
             PlanActions();
         }
@@ -485,11 +512,15 @@ public class TurnPlanner : MonoBehaviour
         {
             UndoAction();
         }
-        if (Input.GetKeyDown(KeyCode.Space) && board.actions.Count == 5)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             planning = false;
             List<BoardAction> playerActions = new(board.actions);
             List<BoardAction> aiActions = new(aiBoard.actions);
+            while (playerActions.Count < 5)
+            {
+                playerActions.Add(BoardAction.Idle());
+            }
             ClearActions();
             Game.Get().OnPlanningEnd(playerActions, aiActions);
         }
