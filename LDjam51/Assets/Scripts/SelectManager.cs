@@ -18,6 +18,7 @@ public class SelectManager : MonoBehaviour
         if (selected != null)
         {
             Deselect(selected);
+            onSelectionChange.Invoke(null);
         }
     }
 
@@ -28,6 +29,7 @@ public class SelectManager : MonoBehaviour
             Deselect(selected);
         }
         selectable.onSelect.Invoke();
+        onSelectionChange.Invoke(selectable);
         this.selected = selectable;
     }
 

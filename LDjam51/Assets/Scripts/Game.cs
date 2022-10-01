@@ -1,18 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Game : MonoBehaviour
 {
     public ClickManager clickManager;
     public SelectManager selectManager;
 
+    public UnityEvent onGameStart = new();
+
+    private float timeAlive = 0.0f;
+    private bool gameStarted = false;
+
     public static Game Get()
     {
         var game = FindObjectOfType<Game>();
         if (game == null)
         {
-            var newGame = new GameObject();
+            GameObject newGame = new();
             newGame.name = "Game";
             game = newGame.AddComponent<Game>();
             game.clickManager = newGame.AddComponent<ClickManager>();
@@ -22,6 +28,16 @@ public class Game : MonoBehaviour
         else
         {
             return game;
+        }
+    }
+
+    public void Update()
+    {
+        timeAlive += Time.deltaTime;
+        if (!gameStarted && timeAlive > 0.1f)
+        {
+            onGameStart.Invoke();
+            gameStarted = true;
         }
     }
 }

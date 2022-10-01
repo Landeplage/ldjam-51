@@ -5,7 +5,7 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class GridSlot : MonoBehaviour
 {
-    public Vector2Int gridPosition;
+    public Vector2Int position;
 
     [System.NonSerialized]
     public GridEntity entity;
@@ -21,7 +21,7 @@ public class GridSlot : MonoBehaviour
         GetComponent<SpriteRenderer>().color = grid.visible ? Color.white : new Color(0.0f, 0.0f, 0.0f, 0.0f);
         if (!Application.IsPlaying(gameObject))
         {
-            if (gridPosition.x >= grid.width || gridPosition.y >= grid.height)
+            if (position.x >= grid.width || position.y >= grid.height)
             {
                 DestroyImmediate(gameObject);
             }

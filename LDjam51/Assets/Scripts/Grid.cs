@@ -53,7 +53,7 @@ public class Grid : MonoBehaviour
                 {
                     var label = string.Format("{0},{1}", x, y);
                     var child = transform.Find(label);
-                    child.GetComponent<GridSlot>().gridPosition = new Vector2Int(x, y);
+                    child.GetComponent<GridSlot>().position = new Vector2Int(x, y);
                 }
             }
         }
@@ -86,9 +86,34 @@ public class Grid : MonoBehaviour
                     }
                     child.transform.localPosition = new Vector3(xx, yy, 0.0f);
                     child.transform.localScale = new Vector3(grid.cellSize.x, grid.cellSize.y, 0.0f);
-                    child.GetComponent<GridSlot>().gridPosition = new Vector2Int(x, y);
+                    child.GetComponent<GridSlot>().position = new Vector2Int(x, y);
                 }
             }
         }
+    }
+
+    public GridSlot At(Vector2Int position)
+    {
+        var label = string.Format("{0},{1}", position.x, position.y);
+        var child = transform.Find(label);
+        if (child != null)
+        {
+            return child.GetComponent<GridSlot>();
+        }
+        return null;
+    }
+
+    public GridSlot[] Slots()
+    {
+        var slots = new GridSlot[width * height];
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                var label = string.Format("{0},{1}", x, y);
+                slots[x + y * width] = transform.Find(label).GetComponent<GridSlot>();
+            }
+        }
+        return slots;
     }
 }
