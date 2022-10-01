@@ -7,6 +7,7 @@ public enum IconType
     QuestionMark,
     Movement,
     Attack,
+    Wait
 }
 
 public enum TeamType
@@ -37,24 +38,36 @@ public class GUI_Timeline : MonoBehaviour
         }
     }
 
-    public void UpdateFromBoard(Board board, Board aiBoard)
+    void UpdateSlots(GUI_Timeline_Icon[] slots, Board board)
     {
-        for (int i = 0; i < board.actions.Count && i < 5; i++)
+        for (int i = 0; i < 5; i++)
         {
-            IconType icon;
-            switch (board.actions[i].type)
+            if (i < board.actions.Count)
             {
-                case BoardActionType.Move: icon = IconType.Movement; break;
-                case BoardActionType.Attack: icon = IconType.Attack; break;
-                default: icon = IconType.QuestionMark; break;
+                IconType icon = IconType.QuestionMark;
+                if (!board.actions[i].hidden)
+                {
+                    switch (board.actions[i].type)
+                    {
+                        case BoardActionType.Move: icon = IconType.Movement; break;
+                        case BoardActionType.Attack: icon = IconType.Attack; break;
+                        //case BoardActionType.Wait: icon = IconType.Wait; break;
+                        default: icon = IconType.QuestionMark; break;
+                    }
+                }
+                slots[i].ShowIcon(icon);
             }
-            blueSlots[i].ShowIcon(icon);
+            else
+            {
+                slots[i].ShowDot();
+            }
         }
+    }
 
-        for (int i = 0; i < aiBoard.actions.Count && i < 5; i++)
-        {
-            redSlots[i].ShowIcon(IconType.QuestionMark);
-        }
+    public void UpdateFromBoards(Board board, Board aiBoard)
+    {
+        UpdateSlots(blueSlots, board);
+        UpdateSlots(redSlots, aiBoard);
     }
 
     public void ActionPerformed(TeamType team, int actionNum)

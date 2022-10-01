@@ -272,12 +272,15 @@ public class BoardAction
 
     public Vector2Int attackTarget;
 
+    public bool hidden;
+
     public static BoardAction Idle()
     {
         BoardAction action = new();
         action.type = BoardActionType.Idle;
         action.position = new Vector2Int(-1, -1);
         action.obj = null;
+        action.hidden = false;
         return action;
     }
 
@@ -289,6 +292,7 @@ public class BoardAction
         action.moveFrom = from;
         action.moveTo = to;
         action.obj = obj;
+        action.hidden = false;
         return action;
     }
 
@@ -299,6 +303,7 @@ public class BoardAction
         action.position = position;
         action.attackTarget = target;
         action.obj = obj;
+        action.hidden = false;
         return action;
     }
 
@@ -311,6 +316,7 @@ public class BoardAction
         action.moveFrom = this.moveFrom;
         action.moveTo = this.moveTo;
         action.attackTarget = this.attackTarget;
+        action.hidden = false;
         return action;
     }
 }
@@ -413,7 +419,7 @@ public class TurnPlanner : MonoBehaviour
         {
             validActions = new();
         }
-        guiTimeline.UpdateFromBoard(board, aiBoard);
+        guiTimeline.UpdateFromBoards(board, aiBoard);
     }
 
     bool CanPlan()
