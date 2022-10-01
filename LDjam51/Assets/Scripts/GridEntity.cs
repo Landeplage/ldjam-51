@@ -14,4 +14,12 @@ public class GridEntity : MonoBehaviour
             transform.position = gridSlot.transform.position;
         }
     }
+
+    public void MoveTo(Vector2Int position)
+    {
+        if (gridSlot != null)
+        {
+            gridSlot.MoveTo(position);
+        }
+    }
 }

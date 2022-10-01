@@ -9,7 +9,7 @@ public class Board
     public BoardSquare[] squares;
     public List<BoardAction> actions = new();
 
-    Board Copy()
+    public Board Copy()
     {
         Board board = new();
         board.width = this.width;
@@ -268,20 +268,28 @@ public class TurnPlanner : MonoBehaviour
     public Grid grid;
 
     private Board board;
+    private Board aiBoard;
     [System.NonSerialized]
     public TurnPlannerVisuals visuals;
 
     private List<BoardAction> validActions = new();
     private BoardActionType actionType = BoardActionType.Move;
     private GridSlot selectedSlot = null;
+    private bool planning = false;
 
     void Start()
     {
         grid = FindObjectOfType<Grid>();
         Game.Get().clickManager.onClickAny.AddListener(OnClickAny);
         Game.Get().clickManager.onClickNothing.AddListener(OnClickNothing);
-        Game.Get().onGameStart.AddListener(MakeBoardFromScene);
+        Game.Get().onPlanningStart.AddListener(OnPlanningStart);
         visuals = GetComponentInChildren<TurnPlannerVisuals>();
+    }
+
+    void OnPlanningStart()
+    {
+        planning = true;
+        MakeBoardFromScene();
     }
 
     void MakeBoardFromScene()
@@ -294,6 +302,7 @@ public class TurnPlanner : MonoBehaviour
         {
             board.squares[slot.position.x + grid.width * slot.position.y] = new BoardSquare(slot);
         }
+        aiBoard = board.Copy();
     }
 
     void DrawBoardActions()
@@ -335,6 +344,10 @@ public class TurnPlanner : MonoBehaviour
 
     void OnClickAny(Clickable clickable)
     {
+        if (!planning)
+        {
+            return;
+        }
         var gridSlot = clickable.GetComponent<GridSlot>();
         if (gridSlot)
         {
@@ -345,6 +358,10 @@ public class TurnPlanner : MonoBehaviour
 
     void OnClickNothing()
     {
+        if (!planning)
+        {
+            return;
+        }
         selectedSlot = null;
         PlanActions();
     }
@@ -358,8 +375,7 @@ public class TurnPlanner : MonoBehaviour
             {
                 if (validAction.moveTo == gridSlot.position)
                 {
-                    board.AddAction(validAction);
-                    TurnPlannerAi.PlanMove(board);
+                    AddAction(validAction);
                     selectedSlot = gridSlot;
                     PlanActions();
                     appliedMove = true;
@@ -375,13 +391,31 @@ public class TurnPlanner : MonoBehaviour
         }
     }
 
+    void AddAction(BoardAction action)
+    {
+        board.AddAction(action);
+        TurnPlannerAi.PlanMove(aiBoard);
+    }
+
+    void ClearActions()
+    {
+        board.ClearActions();
+        aiBoard.ClearActions();
+        selectedSlot = null;
+        PlanActions();
+    }
+
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            ClearActions();
+        }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            board.ClearActions();
-            selectedSlot = null;
-            PlanActions();
+            planning = false;
+            FindObjectOfType<TurnExecutor>().Go(board.actions, aiBoard.actions);
+            ClearActions();
         }
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {

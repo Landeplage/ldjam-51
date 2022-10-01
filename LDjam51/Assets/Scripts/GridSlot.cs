@@ -34,8 +34,16 @@ public class GridSlot : MonoBehaviour
         grid.onClickGrid.Invoke(this);
     }
 
-    bool IsAdjecent(GridSlot other)
+    public void MoveTo(Vector2Int position)
     {
-        return true;
+        if (entity != null)
+        {
+            var grid = GetComponentInParent<Grid>();
+            var targetSlot = grid.At(position);
+            if (targetSlot != null)
+            {
+                grid.MoveEntity(entity, targetSlot);
+            }
+        }
     }
 }

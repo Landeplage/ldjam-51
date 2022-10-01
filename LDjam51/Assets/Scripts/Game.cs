@@ -9,6 +9,7 @@ public class Game : MonoBehaviour
     public SelectManager selectManager;
 
     public UnityEvent onGameStart = new();
+    public UnityEvent onPlanningStart = new();
 
     private float timeAlive = 0.0f;
     private bool gameStarted = false;
@@ -37,6 +38,7 @@ public class Game : MonoBehaviour
         if (!gameStarted && timeAlive > 0.1f)
         {
             onGameStart.Invoke();
+            onPlanningStart.Invoke();
             gameStarted = true;
         }
     }

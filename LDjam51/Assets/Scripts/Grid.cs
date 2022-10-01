@@ -116,4 +116,15 @@ public class Grid : MonoBehaviour
         }
         return slots;
     }
+
+    public void MoveEntity(GridEntity entity, GridSlot slot)
+    {
+        entity.gridSlot.entity = null;
+        if (slot.entity != null)
+        {
+            Destroy(slot.entity.gameObject);
+        }
+        entity.gridSlot = slot;
+        slot.entity = entity;
+    }
 }
