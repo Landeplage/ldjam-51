@@ -137,3 +137,4 @@ MonoBehaviour:
   moveSlot: {fileID: 3589109381274663705, guid: 9ade08995ae70b140942892660670fc2, type: 3}
   movementLine: {fileID: 1952490782494139265, guid: 25ace2dc4e2c0f343a29f0694c72932c, type: 3}
   attackSlot: {fileID: 3589109381274663705, guid: 41a683b4747b69245bef87c2e784ad23, type: 3}
+  secondIndicator: {fileID: 1135065511454372396, guid: c2d485513facab54f8e4be4502d83e42, type: 3}

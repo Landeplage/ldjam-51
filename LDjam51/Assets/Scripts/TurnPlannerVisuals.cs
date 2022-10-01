@@ -9,6 +9,7 @@ public class TurnPlannerVisuals : MonoBehaviour
     public GameObject moveSlot;
     public GameObject movementLine;
     public GameObject attackSlot;
+    public GameObject secondIndicator;
 
     private List<Ghostable> ghosts = new();
 
@@ -92,6 +93,20 @@ public class TurnPlannerVisuals : MonoBehaviour
             var copy = ghostable.Ghost();
             copy.transform.parent = transform;
             copy.transform.position = positionSlot.transform.position;
+        }
+    }
+
+    public void SecondIndicator(Vector2Int from, Vector2Int to, int second)
+    {
+        var fromSlot = grid.At(from);
+        var toSlot = grid.At(to);
+        if (fromSlot != null && toSlot != null)
+        {
+            var center = ((((Vector2)fromSlot.transform.position) + ((Vector2)toSlot.transform.position)) * 0.5f);
+            var obj = Instantiate(secondIndicator);
+            obj.transform.SetParent(transform, false);
+            obj.transform.position = new Vector3(center.x, center.y, 0.0f);
+            obj.GetComponentInChildren<TMPro.TextMeshPro>().text = second.ToString();
         }
     }
 }

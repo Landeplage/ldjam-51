@@ -6,7 +6,7 @@ public class TurnPlannerAi
 {
     public static void PlanMove(Board board)
     {
-        var actions = board.ApplyActions().AllValidActions(false);
+        var actions = board.AllValidActions(false);
         board.AddAction(actions[Random.Range(0, actions.Count)]);
     }
 }

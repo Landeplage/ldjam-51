@@ -15,11 +15,13 @@ public class TurnExecutor : MonoBehaviour
     List<BoardAction> aiActions;
 
     TurnExecutorState state = TurnExecutorState.Stopped;
+    TurnPlannerVisuals visuals;
 
     public void Go(List<BoardAction> playerActions, List<BoardAction> aiActions)
     {
-        this.playerActions = new(playerActions);
-        this.aiActions = new(aiActions);
+        visuals = FindObjectOfType<TurnPlannerVisuals>();
+        this.playerActions = playerActions;
+        this.aiActions = aiActions;
         StartCoroutine(NextAction());
     }
 
@@ -61,6 +63,7 @@ public class TurnExecutor : MonoBehaviour
         }
         else if (state == TurnExecutorState.Stopped)
         {
+            visuals.Clear();
             Game.Get().onPlanningStart.Invoke();
         }
     }
@@ -77,7 +80,17 @@ public class TurnExecutor : MonoBehaviour
 
     private IEnumerator RunAction(bool player, BoardAction action)
     {
-        yield return new WaitForSeconds(0.2f);
+        visuals.Clear();
+        if (action.type == BoardActionType.Move)
+        {
+            visuals.MovementLine(action.moveFrom, action.moveTo);
+            visuals.MoveSlot(action.moveTo);
+        }
+        else if (action.type == BoardActionType.Attack)
+        {
+            visuals.AttackSlot(action.attackTarget);
+        }
+        yield return new WaitForSeconds(1.0f);
         if (ValidAction(action))
         {
             if (action.type == BoardActionType.Move)

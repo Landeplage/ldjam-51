@@ -68,18 +68,35 @@ public class Board
         return null;
     }
 
+    List<Vector2Int> BlockedPositions()
+    {
+        List<Vector2Int> blocked = new();
+        foreach (var action in actions)
+        {
+            blocked.Add(action.moveFrom);
+            blocked.Add(action.moveTo);
+        }
+        return blocked;
+    }
+
     public List<BoardAction> AllValidActions(bool friendly)
     {
         var actions = new List<BoardAction>();
+        var applied = ApplyActions();
         foreach (var square in squares)
         {
-            actions.AddRange(ValidActionsFor(friendly, square.position, BoardActionType.Move));
+            actions.AddRange(applied.ValidActionsForInternal(friendly, square.position, BoardActionType.Move, BlockedPositions()));
             //actions.AddRange(ValidActionsFor(friendly, square.position, BoardActionType.Attack));
         }
         return actions;
     }
 
     public List<BoardAction> ValidActionsFor(bool friendly, Vector2Int position, BoardActionType type)
+    {
+        return ApplyActions().ValidActionsForInternal(friendly, position, type, BlockedPositions());
+    }
+
+    List<BoardAction> ValidActionsForInternal(bool friendly, Vector2Int position, BoardActionType type, List<Vector2Int> blocked)
     {
         var actions = new List<BoardAction>();
         var square = At(position);
@@ -91,7 +108,7 @@ public class Board
                 {
                     foreach (var adjacentSquare in Adjacent(square))
                     {
-                        if (adjacentSquare.Type() == BoardSquareType.Empty)
+                        if (adjacentSquare.Type() == BoardSquareType.Empty && !blocked.Contains(adjacentSquare.position))
                         {
                             actions.Add(BoardAction.Move(square.position, adjacentSquare.position, square.obj));
                         }
@@ -101,7 +118,7 @@ public class Board
                 {
                     foreach (var adjacentSquare in Adjacent(square))
                     {
-                        actions.Add(BoardAction.Attack(adjacentSquare.position, square.obj));
+                        actions.Add(BoardAction.Attack(square.position, adjacentSquare.position, square.obj));
                     }
                 }
             }
@@ -226,6 +243,8 @@ public class BoardAction
     public BoardActionType type;
     public GameObject obj;
 
+    public Vector2Int position;
+
     public Vector2Int moveFrom;
     public Vector2Int moveTo;
 
@@ -235,16 +254,18 @@ public class BoardAction
     {
         BoardAction action = new();
         action.type = BoardActionType.Move;
+        action.position = from;
         action.moveFrom = from;
         action.moveTo = to;
         action.obj = obj;
         return action;
     }
 
-    public static BoardAction Attack(Vector2Int target, GameObject obj)
+    public static BoardAction Attack(Vector2Int position, Vector2Int target, GameObject obj)
     {
         BoardAction action = new();
         action.type = BoardActionType.Attack;
+        action.position = position;
         action.attackTarget = target;
         action.obj = obj;
         return action;
@@ -255,6 +276,7 @@ public class BoardAction
         BoardAction action = new();
         action.type = this.type;
         action.obj = this.obj;
+        action.position = this.position;
         action.moveFrom = this.moveFrom;
         action.moveTo = this.moveTo;
         action.attackTarget = this.attackTarget;
@@ -290,6 +312,12 @@ public class TurnPlanner : MonoBehaviour
     {
         planning = true;
         MakeBoardFromScene();
+        for (int i = 0; i < 5; ++i)
+        {
+            TurnPlannerAi.PlanMove(aiBoard);
+        }
+        selectedSlot = null;
+        PlanActions();
     }
 
     void MakeBoardFromScene()
@@ -305,14 +333,16 @@ public class TurnPlanner : MonoBehaviour
         aiBoard = board.Copy();
     }
 
-    void DrawBoardActions()
+    void DrawBoardActions(List<BoardAction> actions)
     {
-        foreach (var action in board.actions)
+        for (var i = 0; i < actions.Count; ++i)
         {
+            var action = actions[i];
             if (action.type == BoardActionType.Move)
             {
                 visuals.MovementLine(action.moveFrom, action.moveTo);
                 visuals.Ghost(action.moveTo, action.obj);
+                visuals.SecondIndicator(action.moveFrom, action.moveTo, i + 1);
             }
         }
     }
@@ -320,10 +350,11 @@ public class TurnPlanner : MonoBehaviour
     void PlanActions()
     {
         visuals.Clear();
-        DrawBoardActions();
-        if (selectedSlot != null)
+        DrawBoardActions(board.actions);
+        DrawBoardActions(aiBoard.actions);
+        if (selectedSlot != null && CanPlan())
         {
-            validActions = board.ApplyActions().ValidActionsFor(true, selectedSlot.position, this.actionType);
+            validActions = board.ValidActionsFor(true, selectedSlot.position, this.actionType);
             foreach (var action in validActions)
             {
                 if (action.type == BoardActionType.Move)
@@ -342,9 +373,14 @@ public class TurnPlanner : MonoBehaviour
         }
     }
 
+    bool CanPlan()
+    {
+        return planning && board.actions.Count < 5;
+    }
+
     void OnClickAny(Clickable clickable)
     {
-        if (!planning)
+        if (!CanPlan())
         {
             return;
         }
@@ -358,7 +394,7 @@ public class TurnPlanner : MonoBehaviour
 
     void OnClickNothing()
     {
-        if (!planning)
+        if (!CanPlan())
         {
             return;
         }
@@ -382,6 +418,17 @@ public class TurnPlanner : MonoBehaviour
                     break;
                 }
             }
+            else if (validAction.type == BoardActionType.Attack)
+            {
+                if (validAction.attackTarget == gridSlot.position)
+                {
+                    AddAction(validAction);
+                    selectedSlot = null;
+                    PlanActions();
+                    appliedMove = true;
+                    break;
+                }
+            }
         }
         if (!appliedMove)
         {
@@ -394,7 +441,6 @@ public class TurnPlanner : MonoBehaviour
     void AddAction(BoardAction action)
     {
         board.AddAction(action);
-        TurnPlannerAi.PlanMove(aiBoard);
     }
 
     void ClearActions()
@@ -405,17 +451,30 @@ public class TurnPlanner : MonoBehaviour
         PlanActions();
     }
 
+    void UndoAction()
+    {
+        if (board.actions.Count > 0)
+        {
+            var lastAction = board.actions[board.actions.Count - 1];
+            selectedSlot = grid.At(lastAction.position);
+            board.actions.RemoveAt(board.actions.Count - 1);
+            PlanActions();
+        }
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            ClearActions();
+            UndoAction();
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && board.actions.Count == 5)
         {
             planning = false;
-            FindObjectOfType<TurnExecutor>().Go(board.actions, aiBoard.actions);
+            List<BoardAction> playerActions = new(board.actions);
+            List<BoardAction> aiActions = new(aiBoard.actions);
             ClearActions();
+            FindObjectOfType<TurnExecutor>().Go(playerActions, aiActions);
         }
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
