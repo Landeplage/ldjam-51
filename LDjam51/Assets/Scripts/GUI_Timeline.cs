@@ -9,6 +9,12 @@ public enum IconType
     Attack,
 }
 
+public enum TeamType
+{
+    Player,
+    AI,
+}
+
 public class GUI_Timeline : MonoBehaviour
 {
     public GUI_Timeline_Icon[] blueSlots = new GUI_Timeline_Icon[5];
@@ -48,6 +54,24 @@ public class GUI_Timeline : MonoBehaviour
         for (int i = 0; i < aiBoard.actions.Count && i < 5; i++)
         {
             redSlots[i].ShowIcon(IconType.QuestionMark);
+        }
+    }
+
+    public void ActionPerformed(TeamType team, int actionNum)
+    {
+        if (team == TeamType.Player)
+        {
+            for (int i = 0; i < actionNum && i < 5; i++)
+            {
+                blueSlots[i].SetPerformed();
+            }
+        }
+        else
+        {
+            for (int i = 0; i < actionNum && i < 5; i++)
+            {
+                redSlots[i].SetPerformed();
+            }
         }
     }
 }

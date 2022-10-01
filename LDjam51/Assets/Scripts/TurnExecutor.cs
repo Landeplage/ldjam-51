@@ -11,8 +11,11 @@ enum TurnExecutorState
 
 public class TurnExecutor : MonoBehaviour
 {
+    public GUI_Timeline guiTimeline;
     List<BoardAction> playerActions;
     List<BoardAction> aiActions;
+    int playerActionDoneCount = 0;
+    int aiActionDoneCount = 0;
 
     TurnExecutorState state = TurnExecutorState.Stopped;
 
@@ -20,48 +23,59 @@ public class TurnExecutor : MonoBehaviour
     {
         this.playerActions = new(playerActions);
         this.aiActions = new(aiActions);
-        StartCoroutine(NextAction());
+        this.playerActionDoneCount = 0;
+        this.aiActionDoneCount = 0;
+        StartCoroutine(RunActions());
     }
 
-    private IEnumerator NextAction()
+    private IEnumerator RunActions()
     {
-        if (state == TurnExecutorState.Stopped || state == TurnExecutorState.AiAction)
+        while (true)
         {
-            if (playerActions.Count > 0)
+            if (state == TurnExecutorState.Stopped || state == TurnExecutorState.AiAction)
             {
-                state = TurnExecutorState.PlayerAction;
+                if (playerActions.Count > 0)
+                {
+                    state = TurnExecutorState.PlayerAction;
+                }
+                else
+                {
+                    state = TurnExecutorState.Stopped;
+                }
             }
             else
             {
-                state = TurnExecutorState.Stopped;
+                if (aiActions.Count > 0)
+                {
+                    state = TurnExecutorState.AiAction;
+                }
+                else
+                {
+                    state = TurnExecutorState.Stopped;
+                }
             }
-        }
-        else
-        {
-            if (aiActions.Count > 0)
+            if (state == TurnExecutorState.PlayerAction)
             {
-                state = TurnExecutorState.AiAction;
+                var action = playerActions[0];
+                playerActions.RemoveAt(0);
+                yield return RunAction(true, action);
+                playerActionDoneCount++;
+                guiTimeline.ActionPerformed(TeamType.Player, playerActionDoneCount);
             }
-            else
+            else if (state == TurnExecutorState.AiAction)
             {
-                state = TurnExecutorState.Stopped;
+                var action = aiActions[0];
+                aiActions.RemoveAt(0);
+                yield return RunAction(true, action);
+                aiActionDoneCount++;
+                guiTimeline.ActionPerformed(TeamType.AI, aiActionDoneCount);
             }
-        }
-        if (state == TurnExecutorState.PlayerAction)
-        {
-            var action = playerActions[0];
-            playerActions.RemoveAt(0);
-            yield return RunAction(true, action);
-        }
-        else if (state == TurnExecutorState.AiAction)
-        {
-            var action = aiActions[0];
-            aiActions.RemoveAt(0);
-            yield return RunAction(true, action);
-        }
-        else if (state == TurnExecutorState.Stopped)
-        {
-            Game.Get().OnExecutionEnd();
+            else if (state == TurnExecutorState.Stopped)
+            {
+                yield return new WaitForSeconds(0.5f);
+                Game.Get().OnExecutionEnd();
+                break;
+            }
         }
     }
 
@@ -85,6 +99,5 @@ public class TurnExecutor : MonoBehaviour
                 action.obj.GetComponent<GridEntity>().MoveTo(action.moveTo);
             }
         }
-        yield return NextAction();
     }
 }

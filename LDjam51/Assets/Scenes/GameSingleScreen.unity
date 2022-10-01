@@ -1583,6 +1583,10 @@ PrefabInstance:
       propertyPath: guiTimeline
       value: 
       objectReference: {fileID: 132258232}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: guiTimeline
+      value: 
+      objectReference: {fileID: 132258232}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b2557782715e44b4893d4af98e553470, type: 3}
 --- !u!1001 &694149917
