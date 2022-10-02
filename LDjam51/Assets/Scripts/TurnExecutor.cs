@@ -79,6 +79,10 @@ public class TurnExecutor : MonoBehaviour
                     Destroy(info.target.gameObject);
                 }
             }
+            if (action.type == BoardActionType.Heal)
+            {
+                info.target.Heal(1);
+            }
             yield return new WaitForSeconds(0.2f);
             if (info.gridEntity)
             {
