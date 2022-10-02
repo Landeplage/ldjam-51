@@ -83,7 +83,7 @@ public class TurnExecutor : MonoBehaviour
             {
                 info.target.Heal(1);
             }
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.05f);
             if (info.gridEntity)
             {
                 info.newSlot.SetEntity(info.gridEntity);
