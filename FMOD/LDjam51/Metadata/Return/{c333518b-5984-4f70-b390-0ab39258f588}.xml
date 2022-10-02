@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="MixerReturn" id="{c333518b-5984-4f70-b390-0ab39258f588}">
+		<property name="volume">
+			<value>-26</value>
+		</property>
+		<property name="name">
+			<value>VO FX L</value>
+		</property>
+		<relationship name="effectChain">
+			<destination>{26cd3e06-3095-4362-882b-ccb995fc9b80}</destination>
+		</relationship>
+		<relationship name="panner">
+			<destination>{e4ee51d2-8e66-4b70-a947-06e6d7b3dc0c}</destination>
+		</relationship>
+		<relationship name="output">
+			<destination>{809dd9eb-b9cd-46e6-af78-7e211886bb57}</destination>
+		</relationship>
+	</object>
+	<object class="MixerBusEffectChain" id="{26cd3e06-3095-4362-882b-ccb995fc9b80}">
+		<relationship name="effects">
+			<destination>{8222bfa8-4eea-4140-a49e-1477711301c3}</destination>
+			<destination>{02a928ce-c942-4520-b094-45cd31f21dd0}</destination>
+			<destination>{c6082691-ebf6-4122-aecc-6d62fd7f29f5}</destination>
+		</relationship>
+	</object>
+	<object class="MixerBusPanner" id="{e4ee51d2-8e66-4b70-a947-06e6d7b3dc0c}">
+		<property name="stereoPan">
+			<value>-100</value>
+		</property>
+	</object>
+	<object class="MixerBusFader" id="{8222bfa8-4eea-4140-a49e-1477711301c3}" />
+	<object class="DelayEffect" id="{02a928ce-c942-4520-b094-45cd31f21dd0}">
+		<property name="delay">
+			<value>360</value>
+		</property>
+		<property name="feedback">
+			<value>34</value>
+		</property>
+		<property name="dryLevel">
+			<value>-80</value>
+		</property>
+	</object>
+	<object class="ThreeEQEffect" id="{c6082691-ebf6-4122-aecc-6d62fd7f29f5}">
+		<property name="highGain">
+			<value>-16.5</value>
+		</property>
+	</object>
+</objects>
