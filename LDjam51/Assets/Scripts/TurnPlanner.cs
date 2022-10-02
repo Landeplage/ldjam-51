@@ -380,7 +380,9 @@ public class TurnPlanner : MonoBehaviour
     public Grid grid;
 
     private List<Board> previousBoards = new();
+    private List<Board> redoBoards = new();
     private List<GridSlot> previousSelectedSlots = new();
+    private List<GridSlot> redoSelectedSlots = new();
     private Board board;
     [System.NonSerialized]
     public TurnPlannerVisuals visuals;
@@ -566,6 +568,8 @@ public class TurnPlanner : MonoBehaviour
         var turnExecutor = FindObjectOfType<TurnExecutor>();
         previousBoards.Add(board);
         previousSelectedSlots.Add(selectedSlot);
+        redoBoards = new();
+        redoSelectedSlots = new();
 
         appliedActions += 1;
         guiTimeline.UpdateSlots(appliedActions);
@@ -624,6 +628,8 @@ public class TurnPlanner : MonoBehaviour
         if (previousBoards.Count > 0)
         {
             var turnExecutor = FindObjectOfType<TurnExecutor>();
+            redoBoards.Add(board);
+            redoSelectedSlots.Add(selectedSlot);
             board = previousBoards[^1];
             selectedSlot = previousSelectedSlots[^1];
             previousBoards.RemoveAt(previousBoards.Count - 1);
@@ -632,6 +638,28 @@ public class TurnPlanner : MonoBehaviour
             if (appliedActions < 0)
             {
                 appliedActions += 10;
+            }
+            guiTimeline.UpdateSlots(appliedActions);
+            turnExecutor.ResetEntities(board);
+            OnPlanningStart();
+        }
+    }
+
+    void RedoAction()
+    {
+        if (redoBoards.Count > 0)
+        {
+            var turnExecutor = FindObjectOfType<TurnExecutor>();
+            previousBoards.Add(board);
+            previousSelectedSlots.Add(selectedSlot);
+            board = redoBoards[^1];
+            selectedSlot = redoSelectedSlots[^1];
+            redoBoards.RemoveAt(redoBoards.Count - 1);
+            redoSelectedSlots.RemoveAt(redoSelectedSlots.Count - 1);
+            appliedActions += 2;
+            if (appliedActions > 10)
+            {
+                appliedActions -= 10;
             }
             guiTimeline.UpdateSlots(appliedActions);
             turnExecutor.ResetEntities(board);
@@ -650,6 +678,10 @@ public class TurnPlanner : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Z) && planning)
         {
             UndoAction();
+        }
+        if (Input.GetKeyDown(KeyCode.Y) && planning)
+        {
+            RedoAction();
         }
         else if (Input.GetKeyDown(KeyCode.Space) && planning)
         {
