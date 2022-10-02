@@ -107,7 +107,8 @@ public class Board
                 {
                     if (adjacentSquare.type != BoardSquareType.Blocked)
                     {
-                        actions.Add(BoardAction.Attack(square.position, adjacentSquare.position, adjacentSquare.type != BoardSquareType.Empty && adjacentSquare.type != square.type));
+                        var otherFriendly = adjacentSquare.type == BoardSquareType.Friendly || adjacentSquare.type == BoardSquareType.Well;
+                        actions.Add(BoardAction.Attack(square.position, adjacentSquare.position, adjacentSquare.type != BoardSquareType.Empty && friendly != otherFriendly));
                     }
                 }
             }
@@ -508,7 +509,7 @@ public class TurnPlanner : MonoBehaviour
                             break;
                         }
                     }
-                    else if (validAction.type == BoardActionType.Attack)
+                    /*else if (validAction.type == BoardActionType.Attack)
                     {
                         if (validAction.target == gridSlot.position)
                         {
@@ -517,7 +518,7 @@ public class TurnPlanner : MonoBehaviour
                             appliedMove = true;
                             break;
                         }
-                    }
+                    }*/
                 }
             }
         }
@@ -534,20 +535,44 @@ public class TurnPlanner : MonoBehaviour
         var turnExecutor = FindObjectOfType<TurnExecutor>();
         previousBoards.Add(board);
         previousSelectedSlots.Add(selectedSlot);
+
         appliedActions.Add(action);
         guiTimeline.UpdateSlots(appliedActions);
         yield return turnExecutor.PlayAction(action);
         board = board.ApplyAction(action);
+
+        var autoActions = board.AllValidActions(true);
+        foreach (var autoAction in autoActions)
+        {
+            if (autoAction.type == BoardActionType.Attack && autoAction.enabled && board.At(autoAction.target).type != BoardSquareType.Empty)
+            {
+                yield return turnExecutor.PlayAction(autoAction);
+                board = board.ApplyAction(autoAction);
+            }
+        }
+
         var aiAction = TurnPlannerAi.PlanMove(board);
         appliedActions.Add(aiAction);
         guiTimeline.UpdateSlots(appliedActions);
         yield return turnExecutor.PlayAction(aiAction);
         board = board.ApplyAction(aiAction);
+
+        autoActions = board.AllValidActions(false);
+        foreach (var autoAction in autoActions)
+        {
+            if (autoAction.type == BoardActionType.Attack && autoAction.enabled && board.At(autoAction.target).type != BoardSquareType.Empty)
+            {
+                yield return turnExecutor.PlayAction(autoAction);
+                board = board.ApplyAction(autoAction);
+            }
+        }
+
         selectedSlot = nextSelection;
         if (appliedActions.Count == 10)
         {
             appliedActions = new();
             guiTimeline.UpdateSlots(appliedActions);
+            SpawnEnemy();
             PreventUndos();
         }
         OnPlanningStart();
@@ -589,11 +614,19 @@ public class TurnPlanner : MonoBehaviour
         }
     }
 
-    public void Spawn(Vector2Int position, BoardSquareType type)
+    public void SpawnEnemy()
     {
-        var turnExecutor = FindObjectOfType<TurnExecutor>();
-        board.squares[board.Index(position)] = new BoardSquare(position, type);
-        turnExecutor.ResetEntities(board);
-        OnPlanningStart();
+        for (int i = 0; i < 100; ++i)
+        {
+            int index = Random.Range(0, board.squares.Length);
+            if (board.squares[index].type == BoardSquareType.Empty && board.squares[index].position.x > 3)
+            {
+                var position = board.squares[index].position;
+                var turnExecutor = FindObjectOfType<TurnExecutor>();
+                board.squares[board.Index(position)] = new BoardSquare(position, BoardSquareType.Enemy);
+                turnExecutor.ResetEntities(board);
+                break;
+            }
+        }
     }
 }

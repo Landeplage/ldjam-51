@@ -11,7 +11,7 @@ public class TurnPlannerAi
         var hasAttack = false;
         for (int i = 0; i < actions.Count; ++i)
         {
-            if (!actions[i].enabled)
+            if (!actions[i].enabled || actions[i].type == BoardActionType.Attack)
             {
                 actions.RemoveAt(i);
                 i--;

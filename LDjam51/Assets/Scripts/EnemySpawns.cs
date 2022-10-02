@@ -25,7 +25,6 @@ public class EnemySpawns : MonoBehaviour
                     int index = Random.Range(0, slots.Length);
                     if (!slots[index].entity && slots[index].position.x > 3)
                     {
-                        turnPlanner.Spawn(slots[index].position, BoardSquareType.Enemy);
                         break;
                     }
                 }
