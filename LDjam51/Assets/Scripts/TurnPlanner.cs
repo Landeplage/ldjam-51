@@ -306,7 +306,7 @@ public class BoardSquare
 
     static public bool FriendlyType(BoardSquareType type)
     {
-        return type == BoardSquareType.FriendlyMelee || type == BoardSquareType.FriendlyRange || type == BoardSquareType.FriendlyHealer;
+        return type == BoardSquareType.Well || type == BoardSquareType.FriendlyMelee || type == BoardSquareType.FriendlyRange || type == BoardSquareType.FriendlyHealer;
     }
 
     static public bool AttackingType(BoardSquareType type)
@@ -582,11 +582,18 @@ public class TurnPlanner : MonoBehaviour
             }
         }
 
-        var aiActions = TurnPlannerAi.PlanMoves(board);
         appliedActions.Add(BoardAction.Idle());
-
-        foreach (var aiAction in aiActions)
+        List<Vector2Int> enemies = new();
+        foreach (var square in board.squares)
         {
+            if (board.At(square.position).type == BoardSquareType.Enemy)
+            {
+                enemies.Add(square.position);
+            }
+        }
+        foreach (var enemy in enemies)
+        {
+            var aiAction = TurnPlannerAi.PlanMovesFor(board, enemy);
             guiTimeline.UpdateSlots(appliedActions);
             yield return turnExecutor.PlayAction(aiAction);
             board = board.ApplyAction(aiAction);

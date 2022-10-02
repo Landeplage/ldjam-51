@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class TurnPlannerAi
 {
-    public static List<BoardAction> PlanMoves(Board board)
+    public static BoardAction PlanMovesFor(Board board, Vector2Int position)
     {
         Entropy entropy = new(board.entropy);
-        var actions = board.AllValidActions(false);
+        var actions = board.ValidActionsFor(false, position);
         var hasAttack = false;
         for (int i = 0; i < actions.Count; ++i)
         {
+            if (actions[i].type == BoardActionType.Attack)
+            {
+                hasAttack = true;
+            }
             if (!actions[i].enabled || actions[i].type == BoardActionType.Attack)
             {
                 actions.RemoveAt(i);
@@ -56,27 +60,14 @@ public class TurnPlannerAi
             }
         }
         actions.Sort((x, y) => x.score.CompareTo(y.score));
-        var foundEntities = new List<Vector2Int>();
-        for (int i = 0; i < actions.Count; ++i) {
-            if (foundEntities.Contains(actions[i].position))
-            {
-                actions.RemoveAt(i);
-                i--;
-            }
-            else
-            {
-                foundEntities.Add(actions[i].position);
-            }
-        }
-        /*if (actions.Count == 0)
+        if (actions.Count == 0)
         {
             return BoardAction.Idle();
         }
         else
         {
             return actions[(int)(entropy.Next() * actions.Count)];
-        }*/
-        return actions;
+        }
     }
 
     static bool GoodAction(Board board, BoardAction action)
