@@ -82,8 +82,8 @@ public class Board
         var applied = ApplyActions();
         foreach (var square in squares)
         {
-            actions.AddRange(applied.ValidActionsForInternal(friendly, square.position, BoardActionType.Move, actions));
-            actions.AddRange(applied.ValidActionsForInternal(friendly, square.position, BoardActionType.Attack, actions));
+            actions.AddRange(applied.ValidActionsForInternal(friendly, square.position, BoardActionType.Move, this.actions));
+            actions.AddRange(applied.ValidActionsForInternal(friendly, square.position, BoardActionType.Attack, this.actions));
         }
         return actions;
     }
@@ -376,18 +376,24 @@ public class TurnPlanner : MonoBehaviour
                     visuals.Ghost(action.moveTo, action.obj);
                 }
             }
-            if (action.obj == currentObj)
+            var lastEnemyMove = i == board.actions.Count - 1;
+            if (action.obj == currentObj || lastEnemyMove)
             {
                 if (action.type == BoardActionType.Move)
                 {
                     visuals.MovementLine(action.moveFrom, action.moveTo);
-                    visuals.SecondIndicator(action.moveFrom, action.moveTo, second);
+                    if (!lastEnemyMove)
+                    {
+                        visuals.SecondIndicator(action.moveFrom, action.moveTo, second);
+                    }
                 }
                 else if (action.type == BoardActionType.Attack)
                 {
                     visuals.AttackSlot(action.attackTarget);
-                    visuals.MovementLine(action.position, action.attackTarget);
-                    visuals.SecondIndicator(action.position, action.attackTarget, second);
+                    if (!lastEnemyMove)
+                    {
+                        visuals.SecondIndicator(action.position, action.attackTarget, second);
+                    }
                 }
             }
         }
@@ -426,6 +432,10 @@ public class TurnPlanner : MonoBehaviour
 
     void OnClickAny(Clickable clickable)
     {
+        if (!planning)
+        {
+            return;
+        }
         var gridSlot = clickable.GetComponent<GridSlot>();
         if (gridSlot)
         {
@@ -436,6 +446,10 @@ public class TurnPlanner : MonoBehaviour
 
     void OnClickNothing()
     {
+        if (!planning)
+        {
+            return;
+        }
         selectedSlot = null;
         PlanActions();
     }
@@ -449,9 +463,8 @@ public class TurnPlanner : MonoBehaviour
             {
                 if (validAction.moveTo == gridSlot.position)
                 {
-                    AddAction(validAction);
                     selectedSlot = gridSlot;
-                    PlanActions();
+                    AddAction(validAction);
                     appliedMove = true;
                     break;
                 }
@@ -461,7 +474,6 @@ public class TurnPlanner : MonoBehaviour
                 if (validAction.attackTarget == gridSlot.position)
                 {
                     AddAction(validAction);
-                    PlanActions();
                     appliedMove = true;
                     break;
                 }
@@ -479,6 +491,7 @@ public class TurnPlanner : MonoBehaviour
     {
         board.AddAction(action);
         TurnPlannerAi.PlanMove(board, new(board.ApplyActions().entropy));
+        PlanActions();
     }
 
     void ClearActions()
@@ -493,7 +506,10 @@ public class TurnPlanner : MonoBehaviour
         if (board.actions.Count > 0)
         {
             var lastAction = board.actions[board.actions.Count - 2];
-            selectedSlot = grid.At(lastAction.position);
+            if (lastAction.position.x != -1)
+            {
+                selectedSlot = grid.At(lastAction.position);
+            }
             actionType = BoardActionType.Move;
             board.actions.RemoveAt(board.actions.Count - 1);
             board.actions.RemoveAt(board.actions.Count - 1);
@@ -503,11 +519,15 @@ public class TurnPlanner : MonoBehaviour
 
     void Update()
     {
+        if (!planning)
+        {
+            return;
+        }
         if (Input.GetKeyDown(KeyCode.Z))
         {
             UndoAction();
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && board.actions.Count == 10)
         {
             planning = false;
             List<BoardAction> actions = new(board.actions);
@@ -523,6 +543,10 @@ public class TurnPlanner : MonoBehaviour
         {
             actionType = BoardActionType.Attack;
             PlanActions();
+        }
+        if (Input.GetKeyDown(KeyCode.W) && CanPlan())
+        {
+            AddAction(BoardAction.Idle());
         }
     }
 }
