@@ -2801,6 +2801,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1658506754664327540, guid: 5874660ed6c31984593f56ca86cfcf75, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 64684836}
     - target: {fileID: 8415190494346797361, guid: 5874660ed6c31984593f56ca86cfcf75, type: 3}
       propertyPath: m_Name
       value: EnemyUnit
@@ -2847,18 +2851,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8415190494346797366, guid: 5874660ed6c31984593f56ca86cfcf75, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8919739214664722261, guid: 5874660ed6c31984593f56ca86cfcf75, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8919739214664722261, guid: 5874660ed6c31984593f56ca86cfcf75, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8919739214664722261, guid: 5874660ed6c31984593f56ca86cfcf75, type: 3}
-      propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

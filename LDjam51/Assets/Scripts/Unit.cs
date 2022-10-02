@@ -5,9 +5,14 @@ using UnityEngine;
 public class Unit : MonoBehaviour
 {
     public bool friendly;
+    public GUI_Healthbar hpBar;
+    public int maxHealth = 1;
+    int health = 0;
 
     private void Start()
     {
+        health = maxHealth;
+        hpBar.UpdateBar(health, maxHealth);
         GetComponent<Ghostable>().onGhost.AddListener(OnGhost);
         GetComponent<Ghostable>().onUnghost.AddListener(OnUnghost);
     }
@@ -52,5 +57,11 @@ public class Unit : MonoBehaviour
     public GridSlot GetGridSlot()
     {
         return GetComponent<GridEntity>().gridSlot;
+    }
+
+    public void Hurt(int amount)
+    {
+        health = (int)Mathf.Max(health - amount, 0.0f);
+        hpBar.UpdateBar(health, maxHealth);
     }
 }

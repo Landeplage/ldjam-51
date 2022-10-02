@@ -49,6 +49,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   friendly: 1
+  hpBar: {fileID: 1658506755943190066}
+  maxHealth: 4
 --- !u!114 &7682777801698368077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,6 +90,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8415190494346797366}
     m_Modifications:
+    - target: {fileID: 1658506755102129330, guid: ffbdc3d61834b574484fbbcfe8ef52f2, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ec78523f2a624394791ef73467444554, type: 3}
     - target: {fileID: 1658506755868989910, guid: ffbdc3d61834b574484fbbcfe8ef52f2, type: 3}
       propertyPath: m_Name
       value: HealthbarCanvas
@@ -158,11 +164,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1658506755868989911, guid: ffbdc3d61834b574484fbbcfe8ef52f2, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.04
+      value: 0.03
       objectReference: {fileID: 0}
     - target: {fileID: 1658506755868989911, guid: ffbdc3d61834b574484fbbcfe8ef52f2, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 1.58
+      value: 1.54
       objectReference: {fileID: 0}
     - target: {fileID: 1658506755868989911, guid: ffbdc3d61834b574484fbbcfe8ef52f2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -187,6 +193,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1658506755868989911, guid: ffbdc3d61834b574484fbbcfe8ef52f2, type: 3}
   m_PrefabInstance: {fileID: 1658506755688716649}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1658506755943190066 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 335353691, guid: ffbdc3d61834b574484fbbcfe8ef52f2, type: 3}
+  m_PrefabInstance: {fileID: 1658506755688716649}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 531959326b5f2884896800ecf3be5041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6720065769942255078
 PrefabInstance:
   m_ObjectHideFlags: 0
