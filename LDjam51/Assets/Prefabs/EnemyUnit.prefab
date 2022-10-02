@@ -64,6 +64,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridSlot: {fileID: 0}
+  offset: {x: 0, y: 0, z: -1}
 --- !u!114 &6466891557627217885
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -31,14 +31,15 @@ public class TurnPlannerVisuals : MonoBehaviour
         ghosts = new();
     }
 
-    public void MoveSlot(Vector2Int position)
+    public void MoveSlot(Vector2Int position, bool enableHover)
     {
         var slot = grid.At(position);
         if (slot != null)
         {
             var move = Instantiate(moveSlot);
+            move.GetComponent<SlotVisual>().Init(slot, enableHover);
             move.transform.parent = transform;
-            move.transform.position = slot.transform.position;
+            move.transform.position = slot.transform.position + new Vector3(0.0f, 0.0f, -0.1f);
         }
     }
 
@@ -48,8 +49,9 @@ public class TurnPlannerVisuals : MonoBehaviour
         if (slot != null)
         {
             var move = Instantiate(attackSlot);
+            move.GetComponent<SlotVisual>().Init(slot, false);
             move.transform.parent = transform;
-            move.transform.position = slot.transform.position;
+            move.transform.position = slot.transform.position + new Vector3(0.0f, 0.0f, -0.1f);
         }
     }
 
@@ -71,14 +73,15 @@ public class TurnPlannerVisuals : MonoBehaviour
         }
     }
 
-    public void AttackSlot(Vector2Int position)
+    public void AttackSlot(Vector2Int position, bool enableHover)
     {
         var slot = grid.At(position);
         if (slot != null)
         {
             var attack = Instantiate(attackSlot);
+            attack.GetComponent<SlotVisual>().Init(slot, enableHover);
             attack.transform.parent = transform;
-            attack.transform.position = slot.transform.position;
+            attack.transform.position = slot.transform.position + new Vector3(0.0f, 0.0f, -0.1f);
         }
     }
 
@@ -94,7 +97,7 @@ public class TurnPlannerVisuals : MonoBehaviour
             }
             var copy = ghostable.Ghost();
             copy.transform.parent = transform;
-            copy.transform.position = positionSlot.transform.position;
+            copy.transform.position = positionSlot.transform.position + new Vector3(0.0f, 0.0f, -0.2f);
         }
     }
 
