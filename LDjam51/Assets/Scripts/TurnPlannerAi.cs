@@ -31,7 +31,7 @@ public class TurnPlannerAi
                 }
                 if (actions[i].type == BoardActionType.Move)
                 {
-                    var wellPosition = board.ClosestWell(actions[i].target);
+                    var wellPosition = board.ClosestAiInterest(actions[i].target);
                     if (wellPosition.x == -1)
                     {
                         actions[i].score = 9999.0f;

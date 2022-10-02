@@ -17,6 +17,7 @@ public class TurnPlannerVisuals : MonoBehaviour
     public GameObject moveSlot;
     public GameObject movementLine;
     public GameObject attackSlot;
+    public GameObject healSlot;
     public GameObject attackLine;
     public GameObject secondIndicator;
 
@@ -126,6 +127,18 @@ public class TurnPlannerVisuals : MonoBehaviour
         if (slot != null)
         {
             var attack = Instantiate(attackSlot);
+            attack.GetComponent<SlotVisual>().Init(slot, enableHover);
+            attack.transform.parent = transform;
+            attack.transform.position = slot.transform.position + new Vector3(0.0f, 0.0f, -0.1f);
+        }
+    }
+
+    public void HealSlot(Vector2Int position, bool enableHover)
+    {
+        var slot = grid.At(position);
+        if (slot != null)
+        {
+            var attack = Instantiate(healSlot);
             attack.GetComponent<SlotVisual>().Init(slot, enableHover);
             attack.transform.parent = transform;
             attack.transform.position = slot.transform.position + new Vector3(0.0f, 0.0f, -0.1f);

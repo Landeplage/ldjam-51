@@ -59,6 +59,10 @@ public class Board
                 board.squares[Index(action.target)].type = BoardSquareType.Empty;
             }
         }
+        if (action.type == BoardActionType.Heal)
+        {
+            board.squares[Index(action.target)].health = Mathf.Min(board.squares[Index(action.target)].health + 1, board.squares[Index(action.target)].maxHealth);
+        }
         board.entropy.Apply(Index(action.position));
         return board;
     }
@@ -95,7 +99,7 @@ public class Board
         if (squareFriendly == friendly)
         {
             if (BoardSquare.MovingType(square.type)) {
-                foreach (var adjacentSquare in Adjacent(square))
+                foreach (var adjacentSquare in MoveType(square))
                 {
                     if (adjacentSquare.type != BoardSquareType.Blocked)
                     {
@@ -107,9 +111,19 @@ public class Board
                 foreach (var adjacentSquare in AttackType(square))
                 {
                     var otherFriendly = BoardSquare.FriendlyType(adjacentSquare.type);
-                    if (adjacentSquare.type != BoardSquareType.Blocked && friendly != otherFriendly)
+                    if ((BoardSquare.AttackableType(adjacentSquare.type) && friendly != otherFriendly) || (adjacentSquare.type == BoardSquareType.Empty && friendly))
                     {
-                        actions.Add(BoardAction.Attack(square.position, adjacentSquare.position, adjacentSquare.type != BoardSquareType.Empty && friendly != otherFriendly));
+                        actions.Add(BoardAction.Attack(square.position, adjacentSquare.position, adjacentSquare.type != BoardSquareType.Empty));
+                    }
+                }
+            }
+            if (BoardSquare.HealingType(square.type)) {
+                foreach (var adjacentSquare in HealType(square))
+                {
+                    var otherFriendly = BoardSquare.FriendlyType(adjacentSquare.type);
+                    if ((BoardSquare.AttackableType(adjacentSquare.type) && friendly == otherFriendly) || (adjacentSquare.type == BoardSquareType.Empty && friendly))
+                    {
+                        actions.Add(BoardAction.Heal(square.position, adjacentSquare.position, adjacentSquare.type != BoardSquareType.Empty));
                     }
                 }
             }
@@ -196,6 +210,25 @@ public class Board
         });
     }
 
+    List<BoardSquare> Adjacent2(BoardSquare square)
+    {
+        return Moves(new List<List<BoardSquare>>
+        {
+            Offsets(square, new List<(int, int)> { ( 0, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 1, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 2, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 3, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 4, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 5, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 0, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 1, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 2, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 3, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 4, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 5, 2 ) }),
+        });
+    }
+
     List<BoardSquare> RangedAttack(BoardSquare square)
     {
         return Moves(new List<List<BoardSquare>>
@@ -235,13 +268,62 @@ public class Board
         }
     }
 
-    public Vector2Int ClosestWell(Vector2Int position)
+    List<BoardSquare> RangedHeal(BoardSquare square)
+    {
+        return Moves(new List<List<BoardSquare>>
+        {
+            Offsets(square, new List<(int, int)> { ( 0, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 1, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 2, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 3, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 4, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 5, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 0, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 0, 2 ), ( 2, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 1, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 1, 2 ), ( 3, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 2, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 2, 2 ), ( 4, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 3, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 3, 2 ), ( 5, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 4, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 4, 2 ), ( 0, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 5, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 5, 2 ), ( 1, 1 ) }),
+        });
+    }
+
+    List<BoardSquare> MoveType(BoardSquare square)
+    {
+        if (square.type == BoardSquareType.FriendlyRange)
+        {
+            return Adjacent2(square);
+        }
+        else
+        {
+            return Adjacent(square);
+        }
+    }
+
+    List<BoardSquare> HealType(BoardSquare square)
+    {
+        if (square.type == BoardSquareType.FriendlyHealer)
+        {
+            return RangedHeal(square);
+        }
+        else
+        {
+            return new();
+        }
+    }
+
+    public Vector2Int ClosestAiInterest(Vector2Int position)
     {
         var closest = new Vector2Int(-1, -1);
         var distance = 0.0f;
         foreach (var square in squares)
         {
-            if (square.type == BoardSquareType.Well)
+            if (BoardSquare.FriendlyType(square.type))
             {
                 if (((Vector2)square.position - position).magnitude < distance || closest.x == -1)
                 {
@@ -263,6 +345,7 @@ public enum BoardSquareType
     FriendlyHealer,
     Enemy,
     Well,
+    EnemyWell,
 }
 
 public class BoardSquare
@@ -284,6 +367,10 @@ public class BoardSquare
         else if (type == BoardSquareType.Well)
         {
             maxHealth = 10;
+        }
+        else if (type == BoardSquareType.EnemyWell)
+        {
+            maxHealth = 5;
         }
         health = maxHealth;
     }
@@ -309,9 +396,24 @@ public class BoardSquare
         return type == BoardSquareType.Well || type == BoardSquareType.FriendlyMelee || type == BoardSquareType.FriendlyRange || type == BoardSquareType.FriendlyHealer;
     }
 
+    static public bool EnemyType(BoardSquareType type)
+    {
+        return type == BoardSquareType.EnemyWell || type == BoardSquareType.Enemy;
+    }
+
     static public bool AttackingType(BoardSquareType type)
     {
         return type == BoardSquareType.FriendlyMelee || type == BoardSquareType.FriendlyRange || type == BoardSquareType.Enemy;
+    }
+
+    static public bool HealingType(BoardSquareType type)
+    {
+        return type == BoardSquareType.FriendlyHealer;
+    }
+
+    static public bool AttackableType(BoardSquareType type)
+    {
+        return FriendlyType(type) || EnemyType(type);
     }
 
     static public bool MovingType(BoardSquareType type)
@@ -325,6 +427,7 @@ public enum BoardActionType
     Idle,
     Move,
     Attack,
+    Heal,
 }
 
 public class BoardAction
@@ -358,6 +461,16 @@ public class BoardAction
     {
         BoardAction action = new();
         action.type = BoardActionType.Attack;
+        action.position = position;
+        action.target = target;
+        action.enabled = enabled;
+        return action;
+    }
+
+    public static BoardAction Heal(Vector2Int position, Vector2Int target, bool enabled)
+    {
+        BoardAction action = new();
+        action.type = BoardActionType.Heal;
         action.position = position;
         action.target = target;
         action.enabled = enabled;
@@ -495,6 +608,17 @@ public class TurnPlanner : MonoBehaviour
                         }
                     }
                 }
+                else if (action.type == BoardActionType.Heal)
+                {
+                    if (selected)
+                    {
+                        if (!attackSquares.Contains(action.target))
+                        {
+                            visuals.HealSlot(action.target, false);
+                            attackSquares.Add(action.target);
+                        }
+                    }
+                }
             }
         }
         else
@@ -579,7 +703,7 @@ public class TurnPlanner : MonoBehaviour
         var autoActions = board.AllValidActions(true);
         foreach (var autoAction in autoActions)
         {
-            if (autoAction.type == BoardActionType.Attack && autoAction.enabled && board.At(autoAction.target).type != BoardSquareType.Empty)
+            if ((autoAction.type == BoardActionType.Attack || autoAction.type == BoardActionType.Heal) && autoAction.enabled && board.At(autoAction.target).type != BoardSquareType.Empty)
             {
                 yield return turnExecutor.PlayAction(autoAction);
                 board = board.ApplyAction(autoAction);
@@ -692,16 +816,29 @@ public class TurnPlanner : MonoBehaviour
 
     public void SpawnEnemy()
     {
-        for (int i = 0; i < 100; ++i)
+        List<Vector2Int> enemyWells = new();
+        foreach (var square in board.squares)
         {
-            int index = Random.Range(0, board.squares.Length);
-            if (board.squares[index].type == BoardSquareType.Empty && board.squares[index].position.x > 4)
+            if (board.At(square.position).type == BoardSquareType.EnemyWell)
             {
-                var position = board.squares[index].position;
-                var turnExecutor = FindObjectOfType<TurnExecutor>();
-                board.squares[board.Index(position)] = new BoardSquare(position, BoardSquareType.Enemy);
-                turnExecutor.ResetEntities(board);
-                break;
+                enemyWells.Add(square.position);
+            }
+        }
+        Entropy entropy = new(board.entropy);
+        foreach (var enemyWell in enemyWells)
+        {
+            for (int i = 0; i < 100; ++i)
+            {
+                int index = (int)(entropy.Next() * board.squares.Length);
+                var distance = ((Vector2)enemyWell - board.squares[index].position).magnitude;
+                if (board.squares[index].type == BoardSquareType.Empty && distance < 3)
+                {
+                    var position = board.squares[index].position;
+                    var turnExecutor = FindObjectOfType<TurnExecutor>();
+                    board.squares[board.Index(position)] = new BoardSquare(position, BoardSquareType.Enemy);
+                    turnExecutor.ResetEntities(board);
+                    break;
+                }
             }
         }
     }

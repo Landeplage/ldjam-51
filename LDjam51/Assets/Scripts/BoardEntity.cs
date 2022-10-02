@@ -11,6 +11,7 @@ public class BoardEntity : MonoBehaviour
     public GameObject friendlyHealerVisuals;
     public GameObject enemyVisuals;
     public GameObject wellVisuals;
+    public GameObject enemyWellVisuals;
 
     [System.NonSerialized]
     public int maxHealth;
@@ -22,6 +23,10 @@ public class BoardEntity : MonoBehaviour
     public void Create()
     {
         if (type == BoardSquareType.Well)
+        {
+            Instantiate(enemyWellVisuals).transform.SetParent(transform, false);
+        }
+        else if (type == BoardSquareType.EnemyWell)
         {
             Instantiate(wellVisuals).transform.SetParent(transform, false);
         }
@@ -56,6 +61,11 @@ public class BoardEntity : MonoBehaviour
         {
             healthbar.UpdateBar(health, maxHealth);
         }
+    }
+
+    public void Heal(int amount)
+    {
+        health = (int)Mathf.Min(health + amount, maxHealth);
     }
 
     public bool Dead()
