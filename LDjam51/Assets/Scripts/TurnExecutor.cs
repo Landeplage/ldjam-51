@@ -53,24 +53,31 @@ public class TurnExecutor : MonoBehaviour
 
     public IEnumerator PlayAction(BoardAction action)
     {
-        var info = GetMoveInfo(action);
-        if (action.type == BoardActionType.Move) {
-            info.obj.transform.position = info.targetPosition;
-        }
-        yield return new WaitForSeconds(0.2f);
-        if (info.gridEntity)
+        if (action.type != BoardActionType.Idle)
         {
-            info.newSlot.SetEntity(info.gridEntity);
+            var info = GetMoveInfo(action);
+            if (action.type == BoardActionType.Move)
+            {
+                info.obj.transform.position = info.targetPosition;
+            }
+            yield return new WaitForSeconds(0.2f);
+            if (info.gridEntity)
+            {
+                info.newSlot.SetEntity(info.gridEntity);
+            }
         }
     }
 
     public IEnumerator UndoAction(BoardAction action)
     {
-        var info = GetMoveInfo(action);
-        yield return new WaitForSeconds(0.2f);
-        if (info.gridEntity)
+        if (action.type != BoardActionType.Idle)
         {
-            info.newSlot.SetEntity(info.gridEntity);
+            var info = GetMoveInfo(action);
+            yield return new WaitForSeconds(0.2f);
+            if (info.gridEntity)
+            {
+                info.newSlot.SetEntity(info.gridEntity);
+            }
         }
     }
 }

@@ -279,13 +279,12 @@ public class TurnPlanner : MonoBehaviour
         board.squares = new BoardSquare[grid.width * grid.height];
         foreach (var slot in grid.Slots())
         {
-            if (slot.position.x == 0)
+            if (slot.entity && slot.entity.GetComponent<BoardEntity>())
             {
-                board.squares[board.Index(slot.position)] = new BoardSquare(slot.position, BoardSquareType.Friendly);
-            }
-            else if (slot.position.x == 6)
-            {
-                board.squares[board.Index(slot.position)] = new BoardSquare(slot.position, BoardSquareType.Enemy);
+                var boardEntity = slot.entity.GetComponent<BoardEntity>();
+                board.squares[board.Index(slot.position)] = new BoardSquare(slot.position, boardEntity.type);
+                Destroy(slot.entity.gameObject);
+                slot.entity = null;
             }
             else
             {

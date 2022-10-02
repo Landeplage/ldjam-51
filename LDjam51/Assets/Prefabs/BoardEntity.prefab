@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1473237593295216998}
   - component: {fileID: 8344326731232769447}
   - component: {fileID: -6790311881120092845}
+  - component: {fileID: 4432444397456500161}
   m_Layer: 0
   m_Name: BoardEntity
   m_TagString: Untagged
@@ -100,6 +101,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridSlot: {fileID: 0}
   offset: {x: 0, y: 0, z: 0}
+--- !u!114 &4432444397456500161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 606924425411672372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5870f693788b23c4b89888520628eeb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
 --- !u!1 &3164000594058938892
 GameObject:
   m_ObjectHideFlags: 0
