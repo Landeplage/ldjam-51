@@ -124,13 +124,26 @@ public class TurnExecutor : MonoBehaviour
                 var grid = FindObjectOfType<Grid>();
                 var targetEntity = grid.At(action.attackTarget).entity;
                 var unit = targetEntity.gameObject.GetComponent<Unit>();
-                if (targetEntity != null && unit)
+                var well = targetEntity.gameObject.GetComponent<Well>();
+                if (targetEntity != null)
                 {
-                    unit.Hurt(1);
-                    if (unit.Dead())
+                    if (unit)
                     {
-                        deadEntities.Add(unit.gameObject);
-                        Destroy(unit.gameObject);
+                        unit.Hurt(1);
+                        if (unit.Dead())
+                        {
+                            deadEntities.Add(unit.gameObject);
+                            Destroy(unit.gameObject);
+                        }
+                    }
+                    if (well)
+                    {
+                        well.Hurt(1);
+                        if (well.Dead())
+                        {
+                            deadEntities.Add(well.gameObject);
+                            Destroy(well.gameObject);
+                        }
                     }
                 }
             }
