@@ -416,7 +416,7 @@ public class TurnPlanner : MonoBehaviour
         {
             validActions = new();
         }
-        //guiTimeline.UpdateFromBoard(board);
+        guiTimeline.UpdateFromBoard(board);
     }
 
     bool CanPlan()

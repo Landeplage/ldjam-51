@@ -38,10 +38,11 @@ public class GUI_Timeline : MonoBehaviour
         }
     }
 
-    void UpdateSlots(GUI_Timeline_Icon[] slots, Board board)
+    void UpdateSlots(Board board)
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 10; i++)
         {
+            var slots = i % 2 == 0 ? blueSlots : redSlots;
             if (i < board.actions.Count)
             {
                 IconType icon = IconType.QuestionMark;
@@ -55,19 +56,18 @@ public class GUI_Timeline : MonoBehaviour
                         default: icon = IconType.QuestionMark; break;
                     }
                 }
-                slots[i].ShowIcon(icon);
+                slots[i / 2].ShowIcon(icon);
             }
             else
             {
-                slots[i].ShowDot();
+                slots[i / 2].ShowDot();
             }
         }
     }
 
-    public void UpdateFromBoards(Board board, Board aiBoard)
+    public void UpdateFromBoard(Board board)
     {
-        UpdateSlots(blueSlots, board);
-        UpdateSlots(redSlots, aiBoard);
+        UpdateSlots(board);
     }
 
     public void ActionPerformed(TeamType team, int actionNum)
