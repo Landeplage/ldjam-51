@@ -172,7 +172,20 @@ public class Board
 
     public Vector2Int ClosestWell(Vector2Int position)
     {
-        return new Vector2Int(-1, -1);
+        var closest = new Vector2Int(-1, -1);
+        var distance = 0.0f;
+        foreach (var square in squares)
+        {
+            if (square.Type() == BoardSquareType.Well)
+            {
+                if (((Vector2)square.position - position).magnitude < distance || closest.x == -1)
+                {
+                    closest = square.position;
+                    distance = ((Vector2)square.position - position).magnitude;
+                }
+            }
+        }
+        return closest;
     }
 }
 

@@ -56,7 +56,10 @@ public class TurnPlannerAi
             }
             else
             {
-                foundEntities.Add(actions[i].position);
+                if (entropy.Next() > 0.35)
+                {
+                    foundEntities.Add(actions[i].position);
+                }
             }
         }
         if (actions.Count == 0)
