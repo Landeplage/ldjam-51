@@ -276,8 +276,16 @@ public class BoardSquare
     {
         this.position = position;
         this.type = type;
-        this.maxHealth = 3;
-        this.health = 3;
+        maxHealth = 2;
+        if (type == BoardSquareType.FriendlyMelee)
+        {
+            maxHealth = 5;
+        }
+        else if (type == BoardSquareType.Well)
+        {
+            maxHealth = 10;
+        }
+        health = maxHealth;
     }
 
     public BoardSquare(BoardSquare copy)
