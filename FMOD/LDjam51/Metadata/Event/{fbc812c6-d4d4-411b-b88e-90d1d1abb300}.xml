@@ -98,6 +98,9 @@
 		<property name="length">
 			<value>14.5926875</value>
 		</property>
+		<property name="looping">
+			<value>true</value>
+		</property>
 		<relationship name="modulators">
 			<destination>{c204644d-cc4a-4814-baac-22c0584e07bf}</destination>
 			<destination>{72e150ca-6535-4efb-8dc2-885dcdca875b}</destination>
@@ -107,6 +110,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerGroup" id="{c54f6380-3f38-4697-80fc-82035a445622}">
+		<property name="volume">
+			<value>-3</value>
+		</property>
 		<property name="name">
 			<value>Audio 1</value>
 		</property>

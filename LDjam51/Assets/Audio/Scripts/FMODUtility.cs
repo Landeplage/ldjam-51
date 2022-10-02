@@ -11,6 +11,9 @@ public static class FMODUtility
     /// </summary>
     /// <param name="reference">FMOD event</param>
     static public EventInstance Play(EventReference reference) {
+        if (reference.IsNull)
+            return new EventInstance();
+
         EventInstance instance = RuntimeManager.CreateInstance(reference);
         instance.start();
 
@@ -23,6 +26,9 @@ public static class FMODUtility
     /// <param name="reference">FMOD event</param>
     /// <param name="position">World position</param>
     static public EventInstance Play(EventReference reference, Vector3 position = default) {
+        if (reference.IsNull)
+            return new EventInstance();
+
         EventInstance instance = RuntimeManager.CreateInstance(reference);
         instance.set3DAttributes(RuntimeUtils.To3DAttributes(position));
         instance.start();
