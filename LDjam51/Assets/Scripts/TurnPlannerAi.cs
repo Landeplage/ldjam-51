@@ -16,6 +16,18 @@ public class TurnPlannerAi
                 {
                     hasAttack = true;
                 }
+                if (actions[i].type == BoardActionType.Move)
+                {
+                    var wellPosition = board.ClosestWell(actions[i].moveTo);
+                    if (wellPosition.x == -1)
+                    {
+                        actions[i].score = 9999.0f;
+                    }
+                    else
+                    {
+                        actions[i].score = ((Vector2)actions[i].moveTo - wellPosition).magnitude;
+                    }
+                }
             }
             else
             {
@@ -34,6 +46,19 @@ public class TurnPlannerAi
                 }
             }
         }
+        actions.Sort((x, y) => x.score.CompareTo(y.score));
+        var foundEntities = new List<Vector2Int>();
+        for (int i = 0; i < actions.Count; ++i) {
+            if (foundEntities.Contains(actions[i].position))
+            {
+                actions.RemoveAt(i);
+                i--;
+            }
+            else
+            {
+                foundEntities.Add(actions[i].position);
+            }
+        }
         if (actions.Count == 0)
         {
             board.AddIdleAction();
@@ -49,7 +74,9 @@ public class TurnPlannerAi
         if (action.type == BoardActionType.Attack)
         {
             var targeting = board.At(action.attackTarget);
-            if (targeting.Type() != BoardSquareType.Unit || !targeting.Friendly())
+            var targettingFriendlyUnit = targeting.Type() == BoardSquareType.Unit && targeting.Friendly();
+            var targettingWell = targeting.Type() == BoardSquareType.Well;
+            if (!targettingFriendlyUnit && !targettingWell)
             {
                 return false;
             }

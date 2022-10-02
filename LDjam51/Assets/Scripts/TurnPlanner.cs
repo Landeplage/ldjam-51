@@ -169,12 +169,18 @@ public class Board
         }
         return adjacentSquares;
     }
+
+    public Vector2Int ClosestWell(Vector2Int position)
+    {
+        return new Vector2Int(-1, -1);
+    }
 }
 
 public enum BoardSquareType
 {
     Empty,
     Unit,
+    Well,
 }
 
 public class BoardSquare
@@ -204,7 +210,14 @@ public class BoardSquare
     {
         if (obj != null)
         {
-            return BoardSquareType.Unit;
+            if (obj.GetComponent<Unit>())
+            {
+                return BoardSquareType.Unit;
+            }
+            else
+            {
+                return BoardSquareType.Well;
+            }
         }
         else
         {
@@ -266,6 +279,7 @@ public class BoardAction
     public Vector2Int attackTarget;
 
     public bool hidden;
+    public float score = 0.0f;
 
     public static BoardAction Idle()
     {
