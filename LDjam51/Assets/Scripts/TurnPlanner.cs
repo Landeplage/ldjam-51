@@ -265,7 +265,9 @@ public class TurnPlanner : MonoBehaviour
     {
         if (board == null)
         {
+            var turnExecutor = FindObjectOfType<TurnExecutor>();
             MakeBoardFromScene();
+            turnExecutor.ResetEntities(board);
         }
         planning = true;
         aiAction = TurnPlannerAi.PlanMove(board, new(board.entropy));
@@ -421,10 +423,10 @@ public class TurnPlanner : MonoBehaviour
         var turnExecutor = FindObjectOfType<TurnExecutor>();
         previousBoards.Add(board);
         previousSelectedSlots.Add(selectedSlot);
-        turnExecutor.ResetEntities(board);
+        //turnExecutor.ResetEntities(board);
         yield return FindObjectOfType<TurnExecutor>().PlayAction(aiAction);
         board = board.ApplyAction(aiAction);
-        turnExecutor.ResetEntities(board);
+        //turnExecutor.ResetEntities(board);
         yield return FindObjectOfType<TurnExecutor>().PlayAction(action);
         board = board.ApplyAction(action);
         selectedSlot = nextSelection;
