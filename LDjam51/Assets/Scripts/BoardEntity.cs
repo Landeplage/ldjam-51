@@ -19,17 +19,17 @@ public class BoardEntity : MonoBehaviour
 
     public void Create()
     {
-        if (type == BoardSquareType.Friendly)
-        {
-            Instantiate(friendlyVisuals).transform.SetParent(transform, false);
-        }
-        if (type == BoardSquareType.Enemy)
-        {
-            Instantiate(enemyVisuals).transform.SetParent(transform, false);
-        }
         if (type == BoardSquareType.Well)
         {
             Instantiate(wellVisuals).transform.SetParent(transform, false);
+        }
+        else if (BoardSquare.FriendlyType(type))
+        {
+            Instantiate(friendlyVisuals).transform.SetParent(transform, false);
+        }
+        else if (type == BoardSquareType.Enemy)
+        {
+            Instantiate(enemyVisuals).transform.SetParent(transform, false);
         }
 
         healthbar = GetComponentInChildren<GUI_Healthbar>();

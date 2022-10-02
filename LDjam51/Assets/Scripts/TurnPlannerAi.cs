@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TurnPlannerAi
 {
-    public static BoardAction PlanMove(Board board)
+    public static List<BoardAction> PlanMoves(Board board)
     {
         Entropy entropy = new(board.entropy);
         var actions = board.AllValidActions(false);
@@ -65,20 +65,18 @@ public class TurnPlannerAi
             }
             else
             {
-                if (entropy.Next() > 0.35)
-                {
-                    foundEntities.Add(actions[i].position);
-                }
+                foundEntities.Add(actions[i].position);
             }
         }
-        if (actions.Count == 0)
+        /*if (actions.Count == 0)
         {
             return BoardAction.Idle();
         }
         else
         {
             return actions[(int)(entropy.Next() * actions.Count)];
-        }
+        }*/
+        return actions;
     }
 
     static bool GoodAction(Board board, BoardAction action)
@@ -86,7 +84,7 @@ public class TurnPlannerAi
         if (action.type == BoardActionType.Attack)
         {
             var targeting = board.At(action.target);
-            var targettingFriendlyUnit = targeting.type == BoardSquareType.Friendly;
+            var targettingFriendlyUnit = BoardSquare.FriendlyType(targeting.type);
             var targettingWell = targeting.type == BoardSquareType.Well;
             if (!targettingFriendlyUnit && !targettingWell)
             {

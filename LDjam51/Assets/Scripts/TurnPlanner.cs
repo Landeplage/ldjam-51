@@ -91,11 +91,10 @@ public class Board
     {
         var actions = new List<BoardAction>();
         var square = At(position);
-        if (square.type == BoardSquareType.Friendly || square.type == BoardSquareType.Enemy)
+        var squareFriendly = BoardSquare.FriendlyType(square.type);
+        if (squareFriendly == friendly)
         {
-            var squareFriendly = square.type == BoardSquareType.Friendly;
-            if (squareFriendly == friendly)
-            {
+            if (BoardSquare.MovingType(square.type)) {
                 foreach (var adjacentSquare in Adjacent(square))
                 {
                     if (adjacentSquare.type != BoardSquareType.Blocked)
@@ -103,11 +102,13 @@ public class Board
                         actions.Add(BoardAction.Move(square.position, adjacentSquare.position, adjacentSquare.type == BoardSquareType.Empty));
                     }
                 }
+            }
+            if (BoardSquare.AttackingType(square.type)) {
                 foreach (var adjacentSquare in AttackType(square))
                 {
-                    if (adjacentSquare.type != BoardSquareType.Blocked)
+                    var otherFriendly = BoardSquare.FriendlyType(adjacentSquare.type);
+                    if (adjacentSquare.type != BoardSquareType.Blocked && friendly != otherFriendly)
                     {
-                        var otherFriendly = adjacentSquare.type == BoardSquareType.Friendly || adjacentSquare.type == BoardSquareType.Well;
                         actions.Add(BoardAction.Attack(square.position, adjacentSquare.position, adjacentSquare.type != BoardSquareType.Empty && friendly != otherFriendly));
                     }
                 }
@@ -216,7 +217,11 @@ public class Board
 
     List<BoardSquare> AttackType(BoardSquare square)
     {
-        if (square.type == BoardSquareType.Friendly)
+        if (square.type == BoardSquareType.FriendlyMelee)
+        {
+            return Adjacent(square);
+        }
+        else if (square.type == BoardSquareType.FriendlyRange)
         {
             return RangedAttack(square);
         }
@@ -253,7 +258,9 @@ public enum BoardSquareType
 {
     Empty,
     Blocked,
-    Friendly,
+    FriendlyMelee,
+    FriendlyRange,
+    FriendlyHealer,
     Enemy,
     Well,
 }
@@ -287,6 +294,21 @@ public class BoardSquare
         health = other.health;
         maxHealth = other.maxHealth;
         other.type = BoardSquareType.Empty;
+    }
+
+    static public bool FriendlyType(BoardSquareType type)
+    {
+        return type == BoardSquareType.FriendlyMelee || type == BoardSquareType.FriendlyRange || type == BoardSquareType.FriendlyHealer;
+    }
+
+    static public bool AttackingType(BoardSquareType type)
+    {
+        return type == BoardSquareType.FriendlyMelee || type == BoardSquareType.FriendlyRange || type == BoardSquareType.Enemy;
+    }
+
+    static public bool MovingType(BoardSquareType type)
+    {
+        return type == BoardSquareType.FriendlyMelee || type == BoardSquareType.FriendlyRange || type == BoardSquareType.FriendlyHealer || type == BoardSquareType.Enemy;
     }
 }
 
@@ -406,21 +428,6 @@ public class TurnPlanner : MonoBehaviour
         }
     }
 
-    void DrawBoard()
-    {
-        foreach (var square in board.squares)
-        {
-            if (square.type == BoardSquareType.Friendly)
-            {
-                visuals.Debug(square.position, Color.green);
-            }
-            if (square.type == BoardSquareType.Enemy)
-            {
-                visuals.Debug(square.position, Color.red);
-            }
-        }
-    }
-
     void DrawBoardAction(BoardAction action)
     {
         /*if (action.type == BoardActionType.Move)
@@ -447,20 +454,36 @@ public class TurnPlanner : MonoBehaviour
     void PlanActions(bool isClear = false)
     {
         visuals.Clear();
-        DrawBoard();
         //DrawBoardActions();
-        if (selectedSlot != null && planning)
+        if (planning)
         {
-            validActions = board.ValidActionsFor(true, selectedSlot.position);
-            foreach (var action in validActions)
+            validActions = new();
+            if (selectedSlot)
             {
+                validActions = board.ValidActionsFor(true, selectedSlot.position);
+            }
+            List<Vector2Int> attackSquares = new();
+            foreach (var action in board.AllValidActions(true))
+            {
+                var noneSelected = selectedSlot == null || board.At(selectedSlot.position).type == BoardSquareType.Empty;
+                var selected = selectedSlot != null && action.position == selectedSlot.position;
                 if (action.type == BoardActionType.Move && action.enabled)
                 {
-                    visuals.MoveSlot(action.target, action.enabled);
+                    if (selected)
+                    {
+                        visuals.MoveSlot(action.target, action.enabled);
+                    }
                 }
                 else if (action.type == BoardActionType.Attack)
                 {
-                    visuals.AttackSlot(action.target, action.enabled);
+                    if (noneSelected || selected)
+                    {
+                        if (!attackSquares.Contains(action.target))
+                        {
+                            visuals.AttackSlot(action.target, false);
+                            attackSquares.Add(action.target);
+                        }
+                    }
                 }
             }
         }
@@ -551,11 +574,15 @@ public class TurnPlanner : MonoBehaviour
             }
         }
 
-        var aiAction = TurnPlannerAi.PlanMove(board);
-        appliedActions.Add(aiAction);
-        guiTimeline.UpdateSlots(appliedActions);
-        yield return turnExecutor.PlayAction(aiAction);
-        board = board.ApplyAction(aiAction);
+        var aiActions = TurnPlannerAi.PlanMoves(board);
+        appliedActions.Add(BoardAction.Idle());
+
+        foreach (var aiAction in aiActions)
+        {
+            guiTimeline.UpdateSlots(appliedActions);
+            yield return turnExecutor.PlayAction(aiAction);
+            board = board.ApplyAction(aiAction);
+        }
 
         autoActions = board.AllValidActions(false);
         foreach (var autoAction in autoActions)
@@ -619,7 +646,7 @@ public class TurnPlanner : MonoBehaviour
         for (int i = 0; i < 100; ++i)
         {
             int index = Random.Range(0, board.squares.Length);
-            if (board.squares[index].type == BoardSquareType.Empty && board.squares[index].position.x > 3)
+            if (board.squares[index].type == BoardSquareType.Empty && board.squares[index].position.x > 4)
             {
                 var position = board.squares[index].position;
                 var turnExecutor = FindObjectOfType<TurnExecutor>();
