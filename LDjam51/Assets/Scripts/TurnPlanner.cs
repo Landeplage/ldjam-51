@@ -684,7 +684,7 @@ public class TurnPlanner : MonoBehaviour
             selectedSlot = gridSlot;
             if (selectedSlot != null)
             {
-                if (!BoardSquare.FriendlyType(board.At(selectedSlot.position).type))
+                if (board.At(selectedSlot.position) != null && !BoardSquare.FriendlyType(board.At(selectedSlot.position).type))
                 {
                     selectedSlot = null;
                 }
