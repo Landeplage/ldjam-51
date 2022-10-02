@@ -399,7 +399,7 @@ public class TurnPlanner : MonoBehaviour
         }
     }
 
-    void PlanActions()
+    void PlanActions(bool isClear = false)
     {
         visuals.Clear();
         DrawBoardActions();
@@ -422,7 +422,10 @@ public class TurnPlanner : MonoBehaviour
         {
             validActions = new();
         }
-        guiTimeline.UpdateFromBoard(board);
+        if (!isClear)
+        {
+            guiTimeline.UpdateFromBoard(board);
+        }
     }
 
     bool CanPlan()
@@ -498,7 +501,7 @@ public class TurnPlanner : MonoBehaviour
     {
         board.ClearActions();
         selectedSlot = null;
-        PlanActions();
+        PlanActions(true);
     }
 
     void UndoAction()
