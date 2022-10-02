@@ -2,6 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum LineIndicatorPosition
+{
+    Center,
+    Left,
+    Right
+}
+
 public class TurnPlannerVisuals : MonoBehaviour
 {
     [System.NonSerialized]
@@ -9,6 +16,7 @@ public class TurnPlannerVisuals : MonoBehaviour
     public GameObject moveSlot;
     public GameObject movementLine;
     public GameObject attackSlot;
+    public GameObject attackLine;
     public GameObject secondIndicator;
 
     private List<Ghostable> ghosts = new();
@@ -55,7 +63,37 @@ public class TurnPlannerVisuals : MonoBehaviour
         }
     }
 
-    public void MovementLine(Vector2Int from, Vector2Int to)
+    void SetArrowTransform(GameObject arrow, Vector3 from, Vector3 to, LineIndicatorPosition adjust)
+    {
+        var startToEnd = to - from;
+        var halfpoint = from + startToEnd / 2.0f;
+
+        // Shift tangent along the arrow dir based on the adjustment
+        Vector3 adjustOffset = Vector3.zero;
+        switch (adjust)
+        {
+            case LineIndicatorPosition.Right: adjustOffset = 0.25f * Vector3.Cross(Vector3.Normalize(halfpoint), Vector3.back); break;
+            case LineIndicatorPosition.Left: adjustOffset = -0.25f * Vector3.Cross(Vector3.Normalize(halfpoint), Vector3.back); break;
+            default: break;
+        }
+
+        arrow.transform.position = new Vector3(halfpoint.x, halfpoint.y, to.z) + adjustOffset + new Vector3(0.0f, 0.0f, -0.2f);
+        float angle = Vector3.SignedAngle(
+            new Vector3(1.0f, 0.0f, 0.0f), 
+            new Vector3(startToEnd.x, startToEnd.y, 0.0f),
+            Vector3.forward
+        );
+        arrow.transform.rotation = Quaternion.AngleAxis(
+            angle, 
+            new Vector3(0.0f, 0.0f, 1.0f)
+        );
+        if (arrow.GetComponent<SpriteRenderer>())
+        {
+            arrow.GetComponent<SpriteRenderer>().flipY = angle > 90.0f || angle < -90.0f;
+        }
+    }
+
+    public void MovementLine(Vector2Int from, Vector2Int to, int second, LineIndicatorPosition adjust = LineIndicatorPosition.Center)
     {
         var fromSlot = grid.At(from);
         var toSlot = grid.At(to);
@@ -63,13 +101,8 @@ public class TurnPlannerVisuals : MonoBehaviour
         {
             var lineObject = Instantiate(movementLine);
             lineObject.transform.parent = transform;
-            lineObject.transform.position = Vector3.zero;
-            var line = lineObject.GetComponent<LineRenderer>();
-            //line.startColor = color;
-            //line.endColor = color;
-            line.positionCount = 2;
-            line.SetPosition(0, fromSlot.transform.position);
-            line.SetPosition(1, toSlot.transform.position);
+            SetArrowTransform(lineObject, fromSlot.transform.position, toSlot.transform.position, adjust);
+            lineObject.GetComponent<IndicatorLine>().Init(second);
         }
     }
 
@@ -82,6 +115,19 @@ public class TurnPlannerVisuals : MonoBehaviour
             attack.GetComponent<SlotVisual>().Init(slot, enableHover);
             attack.transform.parent = transform;
             attack.transform.position = slot.transform.position + new Vector3(0.0f, 0.0f, -0.1f);
+        }
+    }
+
+    public void AttackLine(Vector2Int from, Vector2Int to, int second, LineIndicatorPosition adjust = LineIndicatorPosition.Center)
+    {
+        var fromSlot = grid.At(from);
+        var toSlot = grid.At(to);
+        if (fromSlot != null && toSlot != null)
+        {
+            var lineObject = Instantiate(attackLine);
+            lineObject.transform.parent = transform;
+            SetArrowTransform(lineObject, fromSlot.transform.position, toSlot.transform.position, adjust);
+            lineObject.GetComponent<IndicatorLine>().Init(second);
         }
     }
 

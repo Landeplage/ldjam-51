@@ -791,6 +791,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridSlot: {fileID: 0}
+  offset: {x: 0, y: 0, z: 0}
 --- !u!4 &147900703
 Transform:
   m_ObjectHideFlags: 0
@@ -821,6 +822,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hpBar: {fileID: 608218434}
+  maxHealth: 1
 --- !u!1001 &219028567
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1895,6 +1897,10 @@ PrefabInstance:
       propertyPath: guiTimeline
       value: 
       objectReference: {fileID: 132258232}
+    - target: {fileID: 7213127312589892548, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: attackLine
+      value: 
+      objectReference: {fileID: 1952490782494139265, guid: 143b2e18de8569d44a7ad77dcea30aff, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b2557782715e44b4893d4af98e553470, type: 3}
 --- !u!1001 &694149917

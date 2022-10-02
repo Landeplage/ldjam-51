@@ -33,6 +33,7 @@ public class TurnExecutor : MonoBehaviour
 
     private IEnumerator RunActions()
     {
+        int second = 1;
         while (true)
         {
             if (state == TurnExecutorState.Stopped || state == TurnExecutorState.AiAction)
@@ -61,7 +62,7 @@ public class TurnExecutor : MonoBehaviour
             {
                 var action = actions[0];
                 actions.RemoveAt(0);
-                yield return RunAction(true, action);
+                yield return RunAction(true, action, second++);
                 playerActionDoneCount++;
                 guiTimeline.ActionPerformed(TeamType.Player, playerActionDoneCount);
             }
@@ -69,7 +70,7 @@ public class TurnExecutor : MonoBehaviour
             {
                 var action = actions[0];
                 actions.RemoveAt(0);
-                yield return RunAction(true, action);
+                yield return RunAction(true, action, second++);
                 aiActionDoneCount++;
                 guiTimeline.ActionPerformed(TeamType.AI, aiActionDoneCount);
             }
@@ -100,19 +101,20 @@ public class TurnExecutor : MonoBehaviour
         return true;
     }
 
-    private IEnumerator RunAction(bool player, BoardAction action)
+    private IEnumerator RunAction(bool player, BoardAction action, int second)
     {
         visuals.Clear();
         if (ValidAction(action))
         {
             if (action.type == BoardActionType.Move)
             {
-                visuals.MovementLine(action.moveFrom, action.moveTo);
-            visuals.MoveSlot(action.moveTo, false);
+                visuals.MovementLine(action.moveFrom, action.moveTo, second);
+                visuals.MoveSlot(action.moveTo, false);
             }
             else if (action.type == BoardActionType.Attack)
             {
-            visuals.AttackSlot(action.attackTarget, false);
+                visuals.AttackLine(action.position, action.attackTarget, second);
+                visuals.AttackSlot(action.attackTarget, false);
             }
             yield return new WaitForSeconds(0.5f);
             if (action.type == BoardActionType.Move)

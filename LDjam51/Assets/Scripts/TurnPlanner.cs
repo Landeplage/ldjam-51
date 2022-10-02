@@ -385,6 +385,29 @@ public class TurnPlanner : MonoBehaviour
         }
     }
 
+    (BoardAction, int) FindOpposingAction(Vector2Int from, Vector2Int to)
+    {
+        for (var i = 0; i < board.actions.Count; ++i)
+        {
+            var action = board.actions[i];
+            if (action.type == BoardActionType.Move)
+            {
+                if (action.moveTo == from && action.moveFrom == to)
+                {
+                    return (action, i);
+                }
+            }
+            else if (action.type == BoardActionType.Attack)
+            {
+                if (action.attackTarget == from && action.position == to)
+                {
+                    return (action, i);
+                }
+            }
+        }
+        return (null, 0);
+    }
+
     void DrawBoardActions()
     {
         for (var i = 0; i < board.actions.Count; ++i)
@@ -408,19 +431,24 @@ public class TurnPlanner : MonoBehaviour
             {
                 if (action.type == BoardActionType.Move)
                 {
-                    visuals.MovementLine(action.moveFrom, action.moveTo);
-                    if (!lastEnemyMove)
+                    var opposing = FindOpposingAction(action.moveFrom, action.moveTo);
+                    LineIndicatorPosition adjustment = LineIndicatorPosition.Center;
+                    if (opposing.Item1 != null)
                     {
-                        visuals.SecondIndicator(action.moveFrom, action.moveTo, second);
+                        adjustment = opposing.Item2 < i ? LineIndicatorPosition.Left : LineIndicatorPosition.Right;
                     }
+                    visuals.MovementLine(action.moveFrom, action.moveTo, second, adjustment);
                 }
                 else if (action.type == BoardActionType.Attack)
                 {
-                    visuals.AttackSlot(action.attackTarget, false);
-                    if (!lastEnemyMove)
+                    var opposing = FindOpposingAction(action.position, action.attackTarget);
+                    LineIndicatorPosition adjustment = LineIndicatorPosition.Center;
+                    if (opposing.Item1 != null)
                     {
-                        visuals.SecondIndicator(action.position, action.attackTarget, second);
+                        adjustment = opposing.Item2 < i ? LineIndicatorPosition.Left : LineIndicatorPosition.Right;
                     }
+                    visuals.AttackSlot(action.attackTarget, false);
+                    visuals.AttackLine(action.position, action.attackTarget, second, adjustment);
                 }
             }
         }
