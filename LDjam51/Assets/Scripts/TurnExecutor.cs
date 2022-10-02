@@ -4,7 +4,8 @@ using UnityEngine;
 
 class MoveInfo
 {
-    public GameObject obj;
+    public BoardEntity obj;
+    public BoardEntity target;
     public Vector3 position;
     public Vector3 targetPosition;
     public GridSlot newSlot;
@@ -30,8 +31,13 @@ public class TurnExecutor : MonoBehaviour
         {
             if (square.type != BoardSquareType.Empty)
             {
-                var entity = Instantiate(boardEntity);
+                var entity = Instantiate(this.boardEntity);
                 grid.At(square.position).SetEntity(entity.GetComponent<GridEntity>());
+                var boardEntity = entity.GetComponent<BoardEntity>();
+                boardEntity.type = square.type;
+                boardEntity.health = square.health;
+                boardEntity.maxHealth = square.maxHealth;
+                boardEntity.Create();
             }
         }
     }
@@ -40,7 +46,11 @@ public class TurnExecutor : MonoBehaviour
     {
         var grid = FindObjectOfType<Grid>();
         MoveInfo info = new();
-        info.obj = grid.At(action.position).entity.gameObject;
+        info.obj = grid.At(action.position).entity.GetComponent<BoardEntity>();
+        if (grid.At(action.target).entity && grid.At(action.target).entity.GetComponent<BoardEntity>())
+        {
+            info.target = grid.At(action.target).entity.GetComponent<BoardEntity>();
+        }
         info.position = grid.At(action.position).transform.position;
         info.targetPosition = grid.At(action.target).transform.position;
         info.newSlot = grid.At(action.target);
@@ -59,6 +69,14 @@ public class TurnExecutor : MonoBehaviour
             if (action.type == BoardActionType.Move)
             {
                 info.obj.transform.position = info.targetPosition;
+            }
+            if (action.type == BoardActionType.Attack)
+            {
+                info.target.Hurt(1);
+                if (info.target.Dead())
+                {
+                    Destroy(info.target.gameObject);
+                }
             }
             yield return new WaitForSeconds(0.2f);
             if (info.gridEntity)

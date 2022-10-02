@@ -22,6 +22,18 @@ public class Board
         }
     }
 
+    public void Log(string title)
+    {
+        Debug.Log(string.Format("board: {0}", title));
+        foreach (var square in squares)
+        {
+            if (square.type != BoardSquareType.Empty)
+            {
+                Debug.Log(string.Format("  {0} (health: {1}, max: {2})", square.position, square.health, square.maxHealth));
+            }
+        }
+    }
+
     public int Index(Vector2Int position)
     {
         return position.x + width * position.y;
@@ -38,6 +50,14 @@ public class Board
         if (action.type == BoardActionType.Move)
         {
             board.squares[Index(action.target)].Take(board.squares[Index(action.position)]);
+        }
+        if (action.type == BoardActionType.Attack)
+        {
+            board.squares[Index(action.target)].health -= 1;
+            if (board.squares[Index(action.target)].health == 0)
+            {
+                board.squares[Index(action.target)].type = BoardSquareType.Empty;
+            }
         }
         board.entropy.Apply(Index(action.position));
         return board;
@@ -58,7 +78,6 @@ public class Board
         foreach (var square in squares)
         {
             actions.AddRange(ValidActionsForInternal(friendly, square.position));
-            //actions.AddRange(ValidActionsForInternal(friendly, square.position, BoardActionType.Attack));
         }
         return actions;
     }
@@ -179,6 +198,8 @@ public class BoardSquare
     public void Take(BoardSquare other)
     {
         type = other.type;
+        health = other.health;
+        maxHealth = other.maxHealth;
         other.type = BoardSquareType.Empty;
     }
 }
