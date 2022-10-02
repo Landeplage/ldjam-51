@@ -76,52 +76,34 @@ public class Board
         return null;
     }
 
-    List<Vector2Int> BlockedPositions()
-    {
-        List<Vector2Int> blocked = new();
-        /*foreach (var action in actions)
-        {
-            if (action.type == BoardActionType.Move)
-            {
-                blocked.Add(action.moveFrom);
-                blocked.Add(action.moveTo);
-            }
-        }*/
-        return blocked;
-    }
-
-    List<Vector2Int> BlockedEntities()
-    {
-        List<Vector2Int> blocked = new();
-        foreach (var action in actions)
-        {
-            if (action.type == BoardActionType.Attack)
-            {
-                blocked.Add(action.position);
-            }
-        }
-        return blocked;
-    }
-
     public List<BoardAction> AllValidActions(bool friendly)
     {
         var actions = new List<BoardAction>();
         var applied = ApplyActions();
         foreach (var square in squares)
         {
-            actions.AddRange(applied.ValidActionsForInternal(friendly, square.position, BoardActionType.Move, BlockedPositions(), BlockedEntities()));
-            actions.AddRange(applied.ValidActionsForInternal(friendly, square.position, BoardActionType.Attack, BlockedPositions(), BlockedEntities()));
+            actions.AddRange(applied.ValidActionsForInternal(friendly, square.position, BoardActionType.Move, actions));
+            actions.AddRange(applied.ValidActionsForInternal(friendly, square.position, BoardActionType.Attack, actions));
         }
         return actions;
     }
 
     public List<BoardAction> ValidActionsFor(bool friendly, Vector2Int position, BoardActionType type)
     {
-        return ApplyActions().ValidActionsForInternal(friendly, position, type, BlockedPositions(), BlockedEntities());
+        return ApplyActions().ValidActionsForInternal(friendly, position, type, actions);
     }
 
-    List<BoardAction> ValidActionsForInternal(bool friendly, Vector2Int position, BoardActionType type, List<Vector2Int> blockedPositions, List<Vector2Int> blockedEntities)
+    List<BoardAction> ValidActionsForInternal(bool friendly, Vector2Int position, BoardActionType type, List<BoardAction> appliedActions)
     {
+        List<Vector2Int> blockedEntities = new();
+        foreach (var action in appliedActions)
+        {
+            if (action.type == BoardActionType.Attack)
+            {
+                blockedEntities.Add(action.position);
+            }
+        }
+
         var actions = new List<BoardAction>();
         var square = At(position);
         if (square.Type() == BoardSquareType.Unit)
@@ -132,7 +114,15 @@ public class Board
                 {
                     foreach (var adjacentSquare in Adjacent(square))
                     {
-                        if (adjacentSquare.Type() == BoardSquareType.Empty && !blockedPositions.Contains(adjacentSquare.position))
+                        var allowedMove = true;
+                        foreach (var action in appliedActions)
+                        {
+                            if ((action.moveFrom == adjacentSquare.position || action.moveTo == adjacentSquare.position) && action.obj == square.obj)
+                            {
+                                allowedMove = false;
+                            }
+                        }
+                        if (adjacentSquare.Type() == BoardSquareType.Empty && allowedMove)
                         {
                             actions.Add(BoardAction.Move(square.position, adjacentSquare.position, square.obj));
                         }
