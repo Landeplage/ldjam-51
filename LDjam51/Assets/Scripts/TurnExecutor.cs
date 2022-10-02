@@ -72,6 +72,7 @@ public class TurnExecutor : MonoBehaviour
             }
             if (action.type == BoardActionType.Attack)
             {
+                yield return info.obj.Attack(info.position, info.targetPosition);
                 info.target.Hurt(1);
                 if (info.target.Dead())
                 {
