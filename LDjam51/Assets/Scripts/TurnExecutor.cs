@@ -108,11 +108,11 @@ public class TurnExecutor : MonoBehaviour
             if (action.type == BoardActionType.Move)
             {
                 visuals.MovementLine(action.moveFrom, action.moveTo);
-                visuals.MoveSlot(action.moveTo);
+            visuals.MoveSlot(action.moveTo, false);
             }
             else if (action.type == BoardActionType.Attack)
             {
-                visuals.AttackSlot(action.attackTarget);
+            visuals.AttackSlot(action.attackTarget, false);
             }
             yield return new WaitForSeconds(0.5f);
             if (action.type == BoardActionType.Move)

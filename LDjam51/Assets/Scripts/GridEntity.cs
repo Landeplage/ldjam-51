@@ -6,12 +6,13 @@ using UnityEngine;
 public class GridEntity : MonoBehaviour
 {
     public GridSlot gridSlot;
+    public Vector3 offset;
 
     void Update()
     {
         if (gridSlot != null)
         {
-            transform.position = gridSlot.transform.position;
+            transform.position = gridSlot.transform.position + offset;
         }
     }
 

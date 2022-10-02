@@ -416,7 +416,7 @@ public class TurnPlanner : MonoBehaviour
                 }
                 else if (action.type == BoardActionType.Attack)
                 {
-                    visuals.AttackSlot(action.attackTarget);
+                    visuals.AttackSlot(action.attackTarget, false);
                     if (!lastEnemyMove)
                     {
                         visuals.SecondIndicator(action.position, action.attackTarget, second);
@@ -437,11 +437,11 @@ public class TurnPlanner : MonoBehaviour
             {
                 if (action.type == BoardActionType.Move)
                 {
-                    visuals.MoveSlot(action.moveTo);
+                    visuals.MoveSlot(action.moveTo, true);
                 }
                 else if (action.type == BoardActionType.Attack)
                 {
-                    visuals.AttackSlot(action.attackTarget);
+                    visuals.AttackSlot(action.attackTarget, true);
                 }
             }
         }
