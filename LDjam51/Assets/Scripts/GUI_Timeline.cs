@@ -52,7 +52,7 @@ public class GUI_Timeline : MonoBehaviour
                     {
                         case BoardActionType.Move: icon = IconType.Movement; break;
                         case BoardActionType.Attack: icon = IconType.Attack; break;
-                        //case BoardActionType.Wait: icon = IconType.Wait; break;
+                        case BoardActionType.Idle: icon = IconType.Wait; break;
                         default: icon = IconType.QuestionMark; break;
                     }
                 }
