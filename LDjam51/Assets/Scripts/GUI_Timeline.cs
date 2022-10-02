@@ -38,36 +38,28 @@ public class GUI_Timeline : MonoBehaviour
         }
     }
 
-    void UpdateSlots(Board board)
+    public void UpdateSlots(List<BoardAction> actions)
     {
         for (int i = 0; i < 10; i++)
         {
             var slots = i % 2 == 0 ? blueSlots : redSlots;
-            /*if (i < board.actions.Count)
+            if (i < actions.Count)
             {
                 IconType icon = IconType.QuestionMark;
-                if (!board.actions[i].hidden)
+                switch (actions[i].type)
                 {
-                    switch (board.actions[i].type)
-                    {
-                        case BoardActionType.Move: icon = IconType.Movement; break;
-                        case BoardActionType.Attack: icon = IconType.Attack; break;
-                        case BoardActionType.Idle: icon = IconType.Wait; break;
-                        default: icon = IconType.QuestionMark; break;
-                    }
+                    case BoardActionType.Move: icon = IconType.Movement; break;
+                    case BoardActionType.Attack: icon = IconType.Attack; break;
+                    case BoardActionType.Idle: icon = IconType.Wait; break;
+                    default: icon = IconType.QuestionMark; break;
                 }
                 slots[i / 2].ShowIcon(icon);
             }
             else
             {
                 slots[i / 2].ShowDot();
-            }*/
+            }
         }
-    }
-
-    public void UpdateFromBoard(Board board)
-    {
-        UpdateSlots(board);
     }
 
     public void ActionPerformed(TeamType team, int actionNum)

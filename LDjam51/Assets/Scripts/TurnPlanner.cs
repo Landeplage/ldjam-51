@@ -356,6 +356,7 @@ public class TurnPlanner : MonoBehaviour
     public GUI_Timeline guiTimeline;
 
     private List<BoardAction> validActions = new();
+    private List<BoardAction> appliedActions = new();
     private GridSlot selectedSlot = null;
 
     [System.NonSerialized]
@@ -468,7 +469,7 @@ public class TurnPlanner : MonoBehaviour
         }
         if (!isClear)
         {
-            guiTimeline.UpdateFromBoard(board);
+            guiTimeline.UpdateSlots(appliedActions);
         }
     }
 
@@ -533,12 +534,22 @@ public class TurnPlanner : MonoBehaviour
         var turnExecutor = FindObjectOfType<TurnExecutor>();
         previousBoards.Add(board);
         previousSelectedSlots.Add(selectedSlot);
+        appliedActions.Add(action);
+        guiTimeline.UpdateSlots(appliedActions);
         yield return turnExecutor.PlayAction(action);
         board = board.ApplyAction(action);
         var aiAction = TurnPlannerAi.PlanMove(board);
+        appliedActions.Add(aiAction);
+        guiTimeline.UpdateSlots(appliedActions);
         yield return turnExecutor.PlayAction(aiAction);
         board = board.ApplyAction(aiAction);
         selectedSlot = nextSelection;
+        if (appliedActions.Count == 10)
+        {
+            appliedActions = new();
+            guiTimeline.UpdateSlots(appliedActions);
+            PreventUndos();
+        }
         OnPlanningStart();
     }
 
@@ -551,6 +562,9 @@ public class TurnPlanner : MonoBehaviour
             selectedSlot = previousSelectedSlots[^1];
             previousBoards.RemoveAt(previousBoards.Count - 1);
             previousSelectedSlots.RemoveAt(previousSelectedSlots.Count - 1);
+            appliedActions.RemoveAt(appliedActions.Count - 1);
+            appliedActions.RemoveAt(appliedActions.Count - 1);
+            guiTimeline.UpdateSlots(appliedActions);
             turnExecutor.ResetEntities(board);
             OnPlanningStart();
         }
