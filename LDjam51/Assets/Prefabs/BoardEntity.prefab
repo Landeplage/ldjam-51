@@ -113,6 +113,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
-  friendlyVisuals: {fileID: 5256743130418432460, guid: c2a2001da2f70c54e89f3f03470ff249, type: 3}
+  friendlyMeleeVisuals: {fileID: 5256743130418432460, guid: c2a2001da2f70c54e89f3f03470ff249, type: 3}
+  friendlyRangedVisuals: {fileID: 5256743130418432460, guid: afa649320a9a3ca46a119d67feae512d, type: 3}
+  friendlyHealerVisuals: {fileID: 5256743130418432460, guid: f7b3e9d6c26d99549882574d55daf581, type: 3}
   enemyVisuals: {fileID: 5256743130418432460, guid: 4f2d007f5e553e74bba988b444e6602c, type: 3}
   wellVisuals: {fileID: 5256743130418432460, guid: e8dd6f0329903df4ca2ab15bb60f08e6, type: 3}

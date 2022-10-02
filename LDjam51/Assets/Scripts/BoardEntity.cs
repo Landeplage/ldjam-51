@@ -6,7 +6,9 @@ public class BoardEntity : MonoBehaviour
 {
     public BoardSquareType type;
 
-    public GameObject friendlyVisuals;
+    public GameObject friendlyMeleeVisuals;
+    public GameObject friendlyRangedVisuals;
+    public GameObject friendlyHealerVisuals;
     public GameObject enemyVisuals;
     public GameObject wellVisuals;
 
@@ -23,9 +25,17 @@ public class BoardEntity : MonoBehaviour
         {
             Instantiate(wellVisuals).transform.SetParent(transform, false);
         }
-        else if (BoardSquare.FriendlyType(type))
+        else if (type == BoardSquareType.FriendlyMelee)
         {
-            Instantiate(friendlyVisuals).transform.SetParent(transform, false);
+            Instantiate(friendlyMeleeVisuals).transform.SetParent(transform, false);
+        }
+        else if (type == BoardSquareType.FriendlyRange)
+        {
+            Instantiate(friendlyRangedVisuals).transform.SetParent(transform, false);
+        }
+        else if (type == BoardSquareType.FriendlyHealer)
+        {
+            Instantiate(friendlyHealerVisuals).transform.SetParent(transform, false);
         }
         else if (type == BoardSquareType.Enemy)
         {
