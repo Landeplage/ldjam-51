@@ -2,153 +2,75 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-enum TurnExecutorState
+class MoveInfo
 {
-    Stopped,
-    PlayerAction,
-    AiAction,
+    public GameObject obj;
+    public Vector3 position;
+    public Vector3 targetPosition;
+    public GridSlot newSlot;
+    public GridEntity gridEntity;
 }
 
 public class TurnExecutor : MonoBehaviour
 {
     public GUI_Timeline guiTimeline;
-    List<BoardAction> actions;
-    int playerActionDoneCount = 0;
-    int aiActionDoneCount = 0;
+    public GameObject boardEntity;
 
-    TurnExecutorState state = TurnExecutorState.Stopped;
-    TurnPlannerVisuals visuals;
-
-    List<GameObject> deadEntities;
-
-    public void Go(List<BoardAction> actions)
-    {
-        deadEntities = new();
-        visuals = FindObjectOfType<TurnPlannerVisuals>();
-        this.actions = actions;
-        this.playerActionDoneCount = 0;
-        this.aiActionDoneCount = 0;
-        StartCoroutine(RunActions());
-    }
-
-    private IEnumerator RunActions()
-    {
-        int second = 1;
-        while (true)
-        {
-            if (state == TurnExecutorState.Stopped || state == TurnExecutorState.AiAction)
-            {
-                if (actions.Count > 0)
-                {
-                    state = TurnExecutorState.PlayerAction;
-                }
-                else
-                {
-                    state = TurnExecutorState.Stopped;
-                }
-            }
-            else
-            {
-                if (actions.Count > 0)
-                {
-                    state = TurnExecutorState.AiAction;
-                }
-                else
-                {
-                    state = TurnExecutorState.Stopped;
-                }
-            }
-            if (state == TurnExecutorState.PlayerAction)
-            {
-                var action = actions[0];
-                actions.RemoveAt(0);
-                yield return RunAction(true, action, second++);
-                playerActionDoneCount++;
-                guiTimeline.ActionPerformed(TeamType.Player, playerActionDoneCount);
-            }
-            else if (state == TurnExecutorState.AiAction)
-            {
-                var action = actions[0];
-                actions.RemoveAt(0);
-                yield return RunAction(true, action, second++);
-                aiActionDoneCount++;
-                guiTimeline.ActionPerformed(TeamType.AI, aiActionDoneCount);
-            }
-            else if (state == TurnExecutorState.Stopped)
-            {
-                visuals.Clear();
-                yield return new WaitForSeconds(0.5f);
-                Game.Get().OnExecutionEnd();
-                break;
-            }
-        }
-    }
-
-    private bool ValidAction(BoardAction action)
+    public void ResetEntities(Board board)
     {
         var grid = FindObjectOfType<Grid>();
-        if (action.type == BoardActionType.Move)
+        foreach (var slot in grid.Slots())
         {
-            return grid.At(action.moveTo).entity == null;
-        }
-        if (action.type == BoardActionType.Attack)
-        {
-            if (action.obj == null || deadEntities.Contains(action.obj) || grid.At(action.attackTarget).entity == null || grid.At(action.attackTarget).entity.gameObject == null || deadEntities.Contains(grid.At(action.attackTarget).entity.gameObject))
+            if (slot.entity)
             {
-                return false;
+                Destroy(slot.entity.gameObject);
             }
         }
-        return true;
+        foreach (var square in board.squares)
+        {
+            if (square.type != BoardSquareType.Empty)
+            {
+                var entity = Instantiate(boardEntity);
+                grid.At(square.position).SetEntity(entity.GetComponent<GridEntity>());
+            }
+        }
     }
 
-    private IEnumerator RunAction(bool player, BoardAction action, int second)
+    MoveInfo GetMoveInfo(BoardAction action)
     {
-        visuals.Clear();
-        if (ValidAction(action))
+        var grid = FindObjectOfType<Grid>();
+        MoveInfo info = new();
+        info.obj = grid.At(action.position).entity.gameObject;
+        info.position = grid.At(action.position).transform.position;
+        info.targetPosition = grid.At(action.target).transform.position;
+        info.newSlot = grid.At(action.target);
+        if (action.type == BoardActionType.Move)
         {
-            if (action.type == BoardActionType.Move)
-            {
-                visuals.MovementLine(action.moveFrom, action.moveTo, second);
-                visuals.MoveSlot(action.moveTo, false);
-            }
-            else if (action.type == BoardActionType.Attack)
-            {
-                visuals.AttackLine(action.position, action.attackTarget, second);
-                visuals.AttackSlot(action.attackTarget, false);
-            }
-            yield return new WaitForSeconds(0.5f);
-            if (action.type == BoardActionType.Move)
-            {
-                action.obj.GetComponent<GridEntity>().MoveTo(action.moveTo);
-            }
-            else if (action.type == BoardActionType.Attack)
-            {
-                var grid = FindObjectOfType<Grid>();
-                var targetEntity = grid.At(action.attackTarget).entity;
-                var unit = targetEntity.gameObject.GetComponent<Unit>();
-                var well = targetEntity.gameObject.GetComponent<Well>();
-                if (targetEntity != null)
-                {
-                    if (unit)
-                    {
-                        unit.Hurt(1);
-                        if (unit.Dead())
-                        {
-                            deadEntities.Add(unit.gameObject);
-                            Destroy(unit.gameObject);
-                        }
-                    }
-                    if (well)
-                    {
-                        well.Hurt(1);
-                        if (well.Dead())
-                        {
-                            deadEntities.Add(well.gameObject);
-                            Destroy(well.gameObject);
-                        }
-                    }
-                }
-            }
+            info.gridEntity = grid.At(action.position).entity;
+        }
+        return info;
+    }
+
+    public IEnumerator PlayAction(BoardAction action)
+    {
+        var info = GetMoveInfo(action);
+        if (action.type == BoardActionType.Move) {
+            info.obj.transform.position = info.targetPosition;
+        }
+        yield return new WaitForSeconds(0.2f);
+        if (info.gridEntity)
+        {
+            info.newSlot.SetEntity(info.gridEntity);
+        }
+    }
+
+    public IEnumerator UndoAction(BoardAction action)
+    {
+        var info = GetMoveInfo(action);
+        yield return new WaitForSeconds(0.2f);
+        if (info.gridEntity)
+        {
+            info.newSlot.SetEntity(info.gridEntity);
         }
     }
 }

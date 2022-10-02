@@ -34,6 +34,13 @@ public class GridSlot : MonoBehaviour
         grid.onClickGrid.Invoke(this);
     }
 
+    public void SetEntity(GridEntity entity)
+    {
+        this.entity = entity;
+        entity.gridSlot = this;
+        entity.UpdatePosition();
+    }
+
     public void MoveTo(Vector2Int position)
     {
         if (entity != null)

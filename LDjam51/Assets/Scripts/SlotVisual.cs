@@ -23,7 +23,6 @@ public class SlotVisual : MonoBehaviour
 
     void OnMouseEnter()
     {
-        Debug.Log("OnMouseEnter");
         var boostedColor = color;
         boostedColor.a *= hoverBoost;
         visual.color = boostedColor;

@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class TurnPlannerAi
 {
-    public static void PlanMove(Board board, Entropy entropy)
+    public static BoardAction PlanMove(Board board, Entropy entropy)
     {
         var actions = board.AllValidActions(false);
         var hasAttack = false;
         for (int i = 0; i < actions.Count; ++i)
         {
-            if (GoodAction(board.ApplyActions(), actions[i]))
+            if (GoodAction(board, actions[i]))
             {
                 if (actions[i].type == BoardActionType.Attack)
                 {
@@ -18,14 +18,14 @@ public class TurnPlannerAi
                 }
                 if (actions[i].type == BoardActionType.Move)
                 {
-                    var wellPosition = board.ClosestWell(actions[i].moveTo);
+                    var wellPosition = board.ClosestWell(actions[i].target);
                     if (wellPosition.x == -1)
                     {
                         actions[i].score = 9999.0f;
                     }
                     else
                     {
-                        actions[i].score = ((Vector2)actions[i].moveTo - wellPosition).magnitude;
+                        actions[i].score = ((Vector2)actions[i].target - wellPosition).magnitude;
                     }
                 }
             }
@@ -47,7 +47,7 @@ public class TurnPlannerAi
             }
         }
         actions.Sort((x, y) => x.score.CompareTo(y.score));
-        var foundEntities = new List<Vector2Int>();
+        /*var foundEntities = new List<Vector2Int>();
         for (int i = 0; i < actions.Count; ++i) {
             if (foundEntities.Contains(actions[i].position))
             {
@@ -61,14 +61,14 @@ public class TurnPlannerAi
                     foundEntities.Add(actions[i].position);
                 }
             }
-        }
+        }*/
         if (actions.Count == 0)
         {
-            board.AddIdleAction();
+            return BoardAction.Idle();
         }
         else
         {
-            board.AddAction(actions[(int)(entropy.Next() * actions.Count)]);
+            return actions[(int)(entropy.Next() * actions.Count)];
         }
     }
 
@@ -76,9 +76,9 @@ public class TurnPlannerAi
     {
         if (action.type == BoardActionType.Attack)
         {
-            var targeting = board.At(action.attackTarget);
-            var targettingFriendlyUnit = targeting.Type() == BoardSquareType.Unit && targeting.Friendly();
-            var targettingWell = targeting.Type() == BoardSquareType.Well;
+            var targeting = board.At(action.target);
+            var targettingFriendlyUnit = targeting.type == BoardSquareType.Friendly;
+            var targettingWell = targeting.type == BoardSquareType.Well;
             if (!targettingFriendlyUnit && !targettingWell)
             {
                 return false;

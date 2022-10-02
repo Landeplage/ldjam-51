@@ -43,7 +43,7 @@ public class GUI_Timeline : MonoBehaviour
         for (int i = 0; i < 10; i++)
         {
             var slots = i % 2 == 0 ? blueSlots : redSlots;
-            if (i < board.actions.Count)
+            /*if (i < board.actions.Count)
             {
                 IconType icon = IconType.QuestionMark;
                 if (!board.actions[i].hidden)
@@ -61,7 +61,7 @@ public class GUI_Timeline : MonoBehaviour
             else
             {
                 slots[i / 2].ShowDot();
-            }
+            }*/
         }
     }
 

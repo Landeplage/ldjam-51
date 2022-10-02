@@ -8,7 +8,7 @@ public class GridEntity : MonoBehaviour
     public GridSlot gridSlot;
     public Vector3 offset;
 
-    void Update()
+    public void UpdatePosition()
     {
         if (gridSlot != null)
         {

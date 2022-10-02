@@ -11,9 +11,6 @@ public class Game : MonoBehaviour
     public UnityEvent onGameStart = new();
     public UnityEvent<int> OnTurnStart = new();
 
-    public UnityEvent onPlanningStart = new();
-    public UnityEvent onExecutionStart = new();
-
     private float timeAlive = 0.0f;
     private bool gameStarted = false;
     private int turnNum = 1;
@@ -43,20 +40,7 @@ public class Game : MonoBehaviour
         {
             onGameStart.Invoke();
             OnTurnStart.Invoke(turnNum);
-            onPlanningStart.Invoke();
             gameStarted = true;
         }
-    }
-
-    public void OnPlanningEnd(List<BoardAction> actions)
-    {
-        onExecutionStart.Invoke();
-        FindObjectOfType<TurnExecutor>().Go(actions);
-    }
-
-    public void OnExecutionEnd()
-    {
-        OnTurnStart.Invoke(++turnNum);
-        onPlanningStart.Invoke();
     }
 }

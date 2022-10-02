@@ -7,63 +7,39 @@ public class Board
     public int width;
     public int height;
     public BoardSquare[] squares;
-    public List<BoardAction> actions = new();
     public Entropy entropy = new();
 
-    public Board Copy()
+    public Board() { }
+
+    public Board(Board copy)
     {
-        Board board = new();
-        board.width = this.width;
-        board.height = this.height;
-        board.squares = new BoardSquare[this.squares.Length];
-        for (int i = 0; i < board.squares.Length; ++i)
+        width = copy.width;
+        height = copy.height;
+        squares = new BoardSquare[copy.squares.Length];
+        for (int i = 0; i < squares.Length; ++i)
         {
-            board.squares[i] = this.squares[i].Copy();
+            squares[i] = new BoardSquare(copy.squares[i]);
         }
-        for (int i = 0; i < board.actions.Count; ++i)
-        {
-            board.actions.Add(this.actions[i].Copy());
-        }
-        board.entropy = new(this.entropy);
-        return board;
     }
 
-    int Index(Vector2Int position)
+    public int Index(Vector2Int position)
     {
         return position.x + width * position.y;
     }
 
-    bool ValidPosition(Vector2Int position)
+    public bool ValidPosition(Vector2Int position)
     {
         return position.x >= 0 && position.x < width && position.y >= 0 && position.y < height;
     }
 
-    public void AddAction(BoardAction action)
+    public Board ApplyAction(BoardAction action)
     {
-        actions.Add(action);
-    }
-
-    public void AddIdleAction()
-    {
-        actions.Add(BoardAction.Idle());
-    }
-
-    public void ClearActions()
-    {
-        actions.Clear();
-    }
-
-    public Board ApplyActions()
-    {
-        var board = Copy();
-        foreach (var action in actions)
+        var board = new Board(this);
+        if (action.type == BoardActionType.Move)
         {
-            if (action.type == BoardActionType.Move)
-            {
-                board.entropy.Apply(action.position.x + action.position.y);
-                board.squares[Index(action.moveTo)].Take(board.squares[Index(action.moveFrom)]);
-            }
+            board.squares[Index(action.target)].Take(board.squares[Index(action.position)]);
         }
+        board.entropy.Apply(Index(action.position));
         return board;
     }
 
@@ -79,60 +55,40 @@ public class Board
     public List<BoardAction> AllValidActions(bool friendly)
     {
         var actions = new List<BoardAction>();
-        var applied = ApplyActions();
         foreach (var square in squares)
         {
-            actions.AddRange(applied.ValidActionsForInternal(friendly, square.position, BoardActionType.Move, this.actions));
-            actions.AddRange(applied.ValidActionsForInternal(friendly, square.position, BoardActionType.Attack, this.actions));
+            actions.AddRange(ValidActionsForInternal(friendly, square.position));
+            //actions.AddRange(ValidActionsForInternal(friendly, square.position, BoardActionType.Attack));
         }
         return actions;
     }
 
-    public List<BoardAction> ValidActionsFor(bool friendly, Vector2Int position, BoardActionType type)
+    public List<BoardAction> ValidActionsFor(bool friendly, Vector2Int position)
     {
-        return ApplyActions().ValidActionsForInternal(friendly, position, type, actions);
+        return ValidActionsForInternal(friendly, position);
     }
 
-    List<BoardAction> ValidActionsForInternal(bool friendly, Vector2Int position, BoardActionType type, List<BoardAction> appliedActions)
+    List<BoardAction> ValidActionsForInternal(bool friendly, Vector2Int position)
     {
-        List<Vector2Int> blockedEntities = new();
-        foreach (var action in appliedActions)
-        {
-            if (action.type == BoardActionType.Attack)
-            {
-                blockedEntities.Add(action.position);
-            }
-        }
-
         var actions = new List<BoardAction>();
         var square = At(position);
-        if (square.Type() == BoardSquareType.Unit)
+        if (square.type == BoardSquareType.Friendly || square.type == BoardSquareType.Enemy)
         {
-            if (square.Friendly() == friendly && !blockedEntities.Contains(square.position))
+            var squareFriendly = square.type == BoardSquareType.Friendly;
+            if (squareFriendly == friendly)
             {
-                if (type == BoardActionType.Move)
+                foreach (var adjacentSquare in Adjacent(square))
                 {
-                    foreach (var adjacentSquare in Adjacent(square))
+                    if (adjacentSquare.type == BoardSquareType.Empty)
                     {
-                        var allowedMove = true;
-                        foreach (var action in appliedActions)
-                        {
-                            if ((action.moveFrom == adjacentSquare.position || action.moveTo == adjacentSquare.position) && action.obj == square.obj)
-                            {
-                                allowedMove = false;
-                            }
-                        }
-                        if (adjacentSquare.Type() == BoardSquareType.Empty && allowedMove)
-                        {
-                            actions.Add(BoardAction.Move(square.position, adjacentSquare.position, square.obj));
-                        }
+                        actions.Add(BoardAction.Move(square.position, adjacentSquare.position));
                     }
                 }
-                else if (type == BoardActionType.Attack)
+                foreach (var adjacentSquare in Adjacent(square))
                 {
-                    foreach (var adjacentSquare in Adjacent(square))
+                    if (adjacentSquare.type != BoardSquareType.Empty && adjacentSquare.type != square.type)
                     {
-                        actions.Add(BoardAction.Attack(square.position, adjacentSquare.position, square.obj));
+                        actions.Add(BoardAction.Attack(square.position, adjacentSquare.position));
                     }
                 }
             }
@@ -176,7 +132,7 @@ public class Board
         var distance = 0.0f;
         foreach (var square in squares)
         {
-            if (square.Type() == BoardSquareType.Well)
+            if (square.type == BoardSquareType.Well)
             {
                 if (((Vector2)square.position - position).magnitude < distance || closest.x == -1)
                 {
@@ -192,83 +148,38 @@ public class Board
 public enum BoardSquareType
 {
     Empty,
-    Unit,
+    Friendly,
+    Enemy,
     Well,
 }
 
 public class BoardSquare
 {
-    public GridSlot slot;
     public Vector2Int position;
-    public GameObject obj;
+    public BoardSquareType type;
+    public int maxHealth;
+    public int health;
 
-    BoardSquare() {}
-
-    public BoardSquare(GridSlot slot)
+    public BoardSquare(Vector2Int position, BoardSquareType type)
     {
-        this.slot = slot;
-        this.position = slot.position;
-        var entity = slot.GetComponent<GridSlot>().entity;
-        if (entity != null)
-        {
-            this.obj = entity.gameObject;
-        }
-        else
-        {
-            this.obj = null;
-        }
+        this.position = position;
+        this.type = type;
+        this.maxHealth = 3;
+        this.health = 3;
     }
 
-    public BoardSquareType Type()
+    public BoardSquare(BoardSquare copy)
     {
-        if (obj != null)
-        {
-            if (obj.GetComponent<Unit>())
-            {
-                return BoardSquareType.Unit;
-            }
-            else
-            {
-                return BoardSquareType.Well;
-            }
-        }
-        else
-        {
-            return BoardSquareType.Empty;
-        }
-    }
-
-    public bool Friendly()
-    {
-        if (obj != null)
-        {
-            var unit = obj.GetComponent<Unit>();
-            if (unit)
-            {
-                return unit.friendly;
-            }
-        }
-        return false;
-    }
-
-    public void MakeEmpty()
-    {
-        this.obj = null;
+        position = copy.position;
+        type = copy.type;
+        maxHealth = copy.maxHealth;
+        health = copy.health;
     }
 
     public void Take(BoardSquare other)
     {
-        this.obj = other.obj;
-        other.MakeEmpty();
-    }
-
-    public BoardSquare Copy()
-    {
-        BoardSquare square = new();
-        square.slot = this.slot;
-        square.obj = this.obj;
-        square.position = this.position;
-        return square;
+        type = other.type;
+        other.type = BoardSquareType.Empty;
     }
 }
 
@@ -282,16 +193,9 @@ public enum BoardActionType
 public class BoardAction
 {
     public BoardActionType type;
-    public GameObject obj;
-
     public Vector2Int position;
+    public Vector2Int target;
 
-    public Vector2Int moveFrom;
-    public Vector2Int moveTo;
-
-    public Vector2Int attackTarget;
-
-    public bool hidden;
     public float score = 0.0f;
 
     public static BoardAction Idle()
@@ -299,45 +203,34 @@ public class BoardAction
         BoardAction action = new();
         action.type = BoardActionType.Idle;
         action.position = new Vector2Int(-1, -1);
-        action.obj = null;
-        action.hidden = false;
         return action;
     }
 
-    public static BoardAction Move(Vector2Int from, Vector2Int to, GameObject obj)
+    public static BoardAction Move(Vector2Int from, Vector2Int to)
     {
         BoardAction action = new();
         action.type = BoardActionType.Move;
         action.position = from;
-        action.moveFrom = from;
-        action.moveTo = to;
-        action.obj = obj;
-        action.hidden = false;
+        action.target = to;
         return action;
     }
 
-    public static BoardAction Attack(Vector2Int position, Vector2Int target, GameObject obj)
+    public static BoardAction Attack(Vector2Int position, Vector2Int target)
     {
         BoardAction action = new();
         action.type = BoardActionType.Attack;
         action.position = position;
-        action.attackTarget = target;
-        action.obj = obj;
-        action.hidden = false;
+        action.target = target;
         return action;
     }
 
-    public BoardAction Copy()
+    BoardAction() {}
+
+    BoardAction(BoardAction copy)
     {
-        BoardAction action = new();
-        action.type = this.type;
-        action.obj = this.obj;
-        action.position = this.position;
-        action.moveFrom = this.moveFrom;
-        action.moveTo = this.moveTo;
-        action.attackTarget = this.attackTarget;
-        action.hidden = false;
-        return action;
+        type = copy.type;
+        position = copy.position;
+        target = copy.target;
     }
 }
 
@@ -346,30 +239,36 @@ public class TurnPlanner : MonoBehaviour
     [System.NonSerialized]
     public Grid grid;
 
+    private List<Board> previousBoards = new();
+    private List<GridSlot> previousSelectedSlots = new();
     private Board board;
     [System.NonSerialized]
     public TurnPlannerVisuals visuals;
     public GUI_Timeline guiTimeline;
 
     private List<BoardAction> validActions = new();
-    private BoardActionType actionType = BoardActionType.Move;
     private GridSlot selectedSlot = null;
     private bool planning = false;
+
+    private BoardAction aiAction = BoardAction.Idle();
 
     void Start()
     {
         grid = FindObjectOfType<Grid>();
         Game.Get().clickManager.onClickAny.AddListener(OnClickAny);
         Game.Get().clickManager.onClickNothing.AddListener(OnClickNothing);
-        Game.Get().onPlanningStart.AddListener(OnPlanningStart);
+        Game.Get().onGameStart.AddListener(OnPlanningStart);
         visuals = GetComponentInChildren<TurnPlannerVisuals>();
     }
 
-    void OnPlanningStart()
+    public void OnPlanningStart()
     {
+        if (board == null)
+        {
+            MakeBoardFromScene();
+        }
         planning = true;
-        MakeBoardFromScene();
-        selectedSlot = null;
+        aiAction = TurnPlannerAi.PlanMove(board, new(board.entropy));
         PlanActions();
     }
 
@@ -381,95 +280,76 @@ public class TurnPlanner : MonoBehaviour
         board.squares = new BoardSquare[grid.width * grid.height];
         foreach (var slot in grid.Slots())
         {
-            board.squares[slot.position.x + grid.width * slot.position.y] = new BoardSquare(slot);
+            if (slot.position.x == 0)
+            {
+                board.squares[board.Index(slot.position)] = new BoardSquare(slot.position, BoardSquareType.Friendly);
+            }
+            else if (slot.position.x == 6)
+            {
+                board.squares[board.Index(slot.position)] = new BoardSquare(slot.position, BoardSquareType.Enemy);
+            }
+            else
+            {
+                board.squares[board.Index(slot.position)] = new BoardSquare(slot.position, BoardSquareType.Empty);
+            }
         }
     }
 
-    (BoardAction, int) FindOpposingAction(Vector2Int from, Vector2Int to)
+    void DrawBoard()
     {
-        for (var i = 0; i < board.actions.Count; ++i)
+        foreach (var square in board.squares)
         {
-            var action = board.actions[i];
-            if (action.type == BoardActionType.Move)
+            if (square.type == BoardSquareType.Friendly)
             {
-                if (action.moveTo == from && action.moveFrom == to)
-                {
-                    return (action, i);
-                }
+                visuals.Debug(square.position, Color.green);
             }
-            else if (action.type == BoardActionType.Attack)
+            if (square.type == BoardSquareType.Enemy)
             {
-                if (action.attackTarget == from && action.position == to)
-                {
-                    return (action, i);
-                }
+                visuals.Debug(square.position, Color.red);
             }
         }
-        return (null, 0);
     }
 
-    void DrawBoardActions()
+    void DrawBoardAction(BoardAction action)
     {
-        for (var i = 0; i < board.actions.Count; ++i)
+        /*if (action.type == BoardActionType.Move)
         {
-            var action = board.actions[i];
-            var second = i + 1;
-            GameObject currentObj = null;
-            if (selectedSlot != null)
-            {
-                currentObj = board.ApplyActions().At(selectedSlot.position).obj;
-            }
-            if (action.type == BoardActionType.Move)
-            {
-                if (i < board.actions.Count)
-                {
-                    visuals.Ghost(action.moveTo, action.obj);
-                }
-            }
-            var lastEnemyMove = i == board.actions.Count - 1;
-            if (action.obj == currentObj || lastEnemyMove)
-            {
-                if (action.type == BoardActionType.Move)
-                {
-                    var opposing = FindOpposingAction(action.moveFrom, action.moveTo);
-                    LineIndicatorPosition adjustment = LineIndicatorPosition.Center;
-                    if (opposing.Item1 != null)
-                    {
-                        adjustment = opposing.Item2 < i ? LineIndicatorPosition.Left : LineIndicatorPosition.Right;
-                    }
-                    visuals.MovementLine(action.moveFrom, action.moveTo, second, adjustment);
-                }
-                else if (action.type == BoardActionType.Attack)
-                {
-                    var opposing = FindOpposingAction(action.position, action.attackTarget);
-                    LineIndicatorPosition adjustment = LineIndicatorPosition.Center;
-                    if (opposing.Item1 != null)
-                    {
-                        adjustment = opposing.Item2 < i ? LineIndicatorPosition.Left : LineIndicatorPosition.Right;
-                    }
-                    visuals.AttackSlot(action.attackTarget, false);
-                    visuals.AttackLine(action.position, action.attackTarget, second, adjustment);
-                }
-            }
+            //visuals.Ghost(action.position, action.obj);
         }
+        if (action.type == BoardActionType.Move)
+        {
+            visuals.MovementLine(action.position, action.target, second, adjustment);
+        }
+        else if (action.type == BoardActionType.Attack)
+        {
+            var opposing = FindOpposingAction(action.position, action.attackTarget);
+            LineIndicatorPosition adjustment = LineIndicatorPosition.Center;
+            if (opposing.Item1 != null)
+            {
+                adjustment = opposing.Item2 < i ? LineIndicatorPosition.Left : LineIndicatorPosition.Right;
+            }
+            visuals.AttackSlot(action.attackTarget, false);
+            visuals.AttackLine(action.position, action.attackTarget, second, adjustment);
+        }*/
     }
 
     void PlanActions(bool isClear = false)
     {
         visuals.Clear();
-        DrawBoardActions();
-        if (selectedSlot != null && CanPlan())
+        DrawBoard();
+        //DrawBoardActions();
+        if (selectedSlot != null && planning)
         {
-            validActions = board.ValidActionsFor(true, selectedSlot.position, this.actionType);
+            validActions = board.ApplyAction(aiAction).ValidActionsFor(true, selectedSlot.position);
             foreach (var action in validActions)
             {
                 if (action.type == BoardActionType.Move)
                 {
-                    visuals.MoveSlot(action.moveTo, true);
+                    visuals.MoveSlot(action.target, true);
                 }
                 else if (action.type == BoardActionType.Attack)
                 {
-                    visuals.AttackSlot(action.attackTarget, true);
+                    visuals.AttackSlot(action.target, true);
                 }
             }
         }
@@ -483,17 +363,8 @@ public class TurnPlanner : MonoBehaviour
         }
     }
 
-    bool CanPlan()
-    {
-        return planning && board.actions.Count < 10;
-    }
-
     void OnClickAny(Clickable clickable)
     {
-        if (!planning)
-        {
-            return;
-        }
         var gridSlot = clickable.GetComponent<GridSlot>();
         if (gridSlot)
         {
@@ -504,10 +375,6 @@ public class TurnPlanner : MonoBehaviour
 
     void OnClickNothing()
     {
-        if (!planning)
-        {
-            return;
-        }
         selectedSlot = null;
         PlanActions();
     }
@@ -515,96 +382,74 @@ public class TurnPlanner : MonoBehaviour
     void OnClickGridSlot(GridSlot gridSlot)
     {
         var appliedMove = false;
-        foreach (var validAction in validActions)
+        if (planning)
         {
-            if (validAction.type == BoardActionType.Move)
+            foreach (var validAction in validActions)
             {
-                if (validAction.moveTo == gridSlot.position)
+                if (validAction.type == BoardActionType.Move)
                 {
-                    selectedSlot = gridSlot;
-                    AddAction(validAction);
-                    appliedMove = true;
-                    break;
+                    if (validAction.target == gridSlot.position)
+                    {
+                        planning = false;
+                        StartCoroutine(AddAction(validAction, gridSlot));
+                        appliedMove = true;
+                        break;
+                    }
                 }
-            }
-            else if (validAction.type == BoardActionType.Attack)
-            {
-                if (validAction.attackTarget == gridSlot.position)
+                else if (validAction.type == BoardActionType.Attack)
                 {
-                    AddAction(validAction);
-                    appliedMove = true;
-                    break;
+                    if (validAction.target == gridSlot.position)
+                    {
+                        planning = false;
+                        StartCoroutine(AddAction(validAction, selectedSlot));
+                        appliedMove = true;
+                        break;
+                    }
                 }
             }
         }
         if (!appliedMove)
         {
             selectedSlot = gridSlot;
-            actionType = BoardActionType.Move;
             PlanActions();
         }
     }
 
-    void AddAction(BoardAction action)
+    IEnumerator AddAction(BoardAction action, GridSlot nextSelection)
     {
-        board.AddAction(action);
-        TurnPlannerAi.PlanMove(board, new(board.ApplyActions().entropy));
-        PlanActions();
-    }
-
-    void ClearActions()
-    {
-        board.ClearActions();
-        selectedSlot = null;
-        PlanActions(true);
+        visuals.Clear();
+        var turnExecutor = FindObjectOfType<TurnExecutor>();
+        previousBoards.Add(board);
+        previousSelectedSlots.Add(selectedSlot);
+        turnExecutor.ResetEntities(board);
+        yield return FindObjectOfType<TurnExecutor>().PlayAction(aiAction);
+        board = board.ApplyAction(aiAction);
+        turnExecutor.ResetEntities(board);
+        yield return FindObjectOfType<TurnExecutor>().PlayAction(action);
+        board = board.ApplyAction(action);
+        selectedSlot = nextSelection;
+        OnPlanningStart();
     }
 
     void UndoAction()
     {
-        if (board.actions.Count > 0)
+        if (previousBoards.Count > 0)
         {
-            var lastAction = board.actions[board.actions.Count - 2];
-            if (lastAction.position.x != -1)
-            {
-                selectedSlot = grid.At(lastAction.position);
-            }
-            actionType = BoardActionType.Move;
-            board.actions.RemoveAt(board.actions.Count - 1);
-            board.actions.RemoveAt(board.actions.Count - 1);
-            PlanActions();
+            var turnExecutor = FindObjectOfType<TurnExecutor>();
+            board = previousBoards[^1];
+            selectedSlot = previousSelectedSlots[^1];
+            previousBoards.RemoveAt(previousBoards.Count - 1);
+            previousSelectedSlots.RemoveAt(previousSelectedSlots.Count - 1);
+            turnExecutor.ResetEntities(board);
+            OnPlanningStart();
         }
     }
 
     void Update()
     {
-        if (!planning)
-        {
-            return;
-        }
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKeyDown(KeyCode.Z) && planning)
         {
             UndoAction();
-        }
-        if (Input.GetKeyDown(KeyCode.Space) && board.actions.Count == 10)
-        {
-            planning = false;
-            List<BoardAction> actions = new(board.actions);
-            ClearActions();
-            Game.Get().OnPlanningEnd(actions);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            actionType = BoardActionType.Move;
-            PlanActions();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            actionType = BoardActionType.Attack;
-            PlanActions();
-        }
-        if (Input.GetKeyDown(KeyCode.W) && CanPlan())
-        {
-            AddAction(BoardAction.Idle());
         }
     }
 }

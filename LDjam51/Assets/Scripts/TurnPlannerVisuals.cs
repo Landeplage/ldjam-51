@@ -13,6 +13,7 @@ public class TurnPlannerVisuals : MonoBehaviour
 {
     [System.NonSerialized]
     public Grid grid;
+    public GameObject debug;
     public GameObject moveSlot;
     public GameObject movementLine;
     public GameObject attackSlot;
@@ -37,6 +38,18 @@ public class TurnPlannerVisuals : MonoBehaviour
             ghost.Unghost();
         }
         ghosts = new();
+    }
+
+    public void Debug(Vector2Int position, Color color)
+    {
+        var slot = grid.At(position);
+        if (slot != null)
+        {
+            var debug = Instantiate(this.debug);
+            debug.transform.parent = transform;
+            debug.transform.position = slot.transform.position + new Vector3(0.0f, 0.0f, -0.1f);
+            debug.GetComponent<SpriteRenderer>().color = color;
+        }
     }
 
     public void MoveSlot(Vector2Int position, bool enableHover)

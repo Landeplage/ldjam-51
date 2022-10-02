@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d444988261edce64c944f337f3f3098d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  guiTimeline: {fileID: 0}
 --- !u!1 &6887119269984065568
 GameObject:
   m_ObjectHideFlags: 0
@@ -90,6 +91,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcc7317c1df8fdb428154e97f7e99e79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  guiTimeline: {fileID: 0}
+  boardEntity: {fileID: 606924425411672372, guid: 94398377fdcb0604b993d3046e7d0ebf, type: 3}
 --- !u!1 &8768865615849765061
 GameObject:
   m_ObjectHideFlags: 0
@@ -134,7 +137,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 213e6fa495e3a2440bbc02d979b1a57d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debug: {fileID: 1460110941241086594, guid: 18f21a9651aaafa438e582ade877982a, type: 3}
   moveSlot: {fileID: 3589109381274663705, guid: 9ade08995ae70b140942892660670fc2, type: 3}
   movementLine: {fileID: 1952490782494139265, guid: 25ace2dc4e2c0f343a29f0694c72932c, type: 3}
   attackSlot: {fileID: 3589109381274663705, guid: 41a683b4747b69245bef87c2e784ad23, type: 3}
+  attackLine: {fileID: 0}
   secondIndicator: {fileID: 1135065511454372396, guid: c2d485513facab54f8e4be4502d83e42, type: 3}

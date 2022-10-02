@@ -8,7 +8,6 @@ public class Timer : MonoBehaviour
 
     void Start()
     {
-        Game.Get().onPlanningStart.AddListener(OnPlanningStart);
     }
 
     void OnPlanningStart()
