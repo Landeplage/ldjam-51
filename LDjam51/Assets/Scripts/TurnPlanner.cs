@@ -682,6 +682,10 @@ public class TurnPlanner : MonoBehaviour
         if (!appliedMove)
         {
             selectedSlot = gridSlot;
+            if (!BoardSquare.FriendlyType(board.At(selectedSlot.position).type))
+            {
+                selectedSlot = null;
+            }
             PlanActions();
         }
     }

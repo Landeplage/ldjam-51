@@ -66,6 +66,10 @@ public class BoardEntity : MonoBehaviour
     public void Heal(int amount)
     {
         health = (int)Mathf.Min(health + amount, maxHealth);
+        if (healthbar)
+        {
+            healthbar.UpdateBar(health, maxHealth);
+        }
     }
 
     public bool Dead()
