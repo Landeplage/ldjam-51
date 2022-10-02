@@ -350,7 +350,9 @@ public class TurnPlanner : MonoBehaviour
 
     private List<BoardAction> validActions = new();
     private GridSlot selectedSlot = null;
-    private bool planning = false;
+
+    [System.NonSerialized]
+    public bool planning = false;
 
     void Start()
     {
@@ -547,6 +549,12 @@ public class TurnPlanner : MonoBehaviour
         }
     }
 
+    public void PreventUndos()
+    {
+        previousBoards = new();
+        previousSelectedSlots = new();
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Z) && planning)
@@ -558,5 +566,13 @@ public class TurnPlanner : MonoBehaviour
             planning = false;
             StartCoroutine(AddAction(BoardAction.Idle(), selectedSlot));
         }
+    }
+
+    public void Spawn(Vector2Int position, BoardSquareType type)
+    {
+        var turnExecutor = FindObjectOfType<TurnExecutor>();
+        board.squares[board.Index(position)] = new BoardSquare(position, type);
+        turnExecutor.ResetEntities(board);
+        OnPlanningStart();
     }
 }
