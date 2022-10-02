@@ -12,19 +12,17 @@ enum TurnExecutorState
 public class TurnExecutor : MonoBehaviour
 {
     public GUI_Timeline guiTimeline;
-    List<BoardAction> playerActions;
-    List<BoardAction> aiActions;
+    List<BoardAction> actions;
     int playerActionDoneCount = 0;
     int aiActionDoneCount = 0;
 
     TurnExecutorState state = TurnExecutorState.Stopped;
     TurnPlannerVisuals visuals;
 
-    public void Go(List<BoardAction> playerActions, List<BoardAction> aiActions)
+    public void Go(List<BoardAction> actions)
     {
         visuals = FindObjectOfType<TurnPlannerVisuals>();
-        this.playerActions = playerActions;
-        this.aiActions = aiActions;
+        this.actions = actions;
         this.playerActionDoneCount = 0;
         this.aiActionDoneCount = 0;
         StartCoroutine(RunActions());
@@ -36,7 +34,7 @@ public class TurnExecutor : MonoBehaviour
         {
             if (state == TurnExecutorState.Stopped || state == TurnExecutorState.AiAction)
             {
-                if (playerActions.Count > 0)
+                if (actions.Count > 0)
                 {
                     state = TurnExecutorState.PlayerAction;
                 }
@@ -47,7 +45,7 @@ public class TurnExecutor : MonoBehaviour
             }
             else
             {
-                if (aiActions.Count > 0)
+                if (actions.Count > 0)
                 {
                     state = TurnExecutorState.AiAction;
                 }
@@ -58,16 +56,16 @@ public class TurnExecutor : MonoBehaviour
             }
             if (state == TurnExecutorState.PlayerAction)
             {
-                var action = playerActions[0];
-                playerActions.RemoveAt(0);
+                var action = actions[0];
+                actions.RemoveAt(0);
                 yield return RunAction(true, action);
                 playerActionDoneCount++;
                 guiTimeline.ActionPerformed(TeamType.Player, playerActionDoneCount);
             }
             else if (state == TurnExecutorState.AiAction)
             {
-                var action = aiActions[0];
-                aiActions.RemoveAt(0);
+                var action = actions[0];
+                actions.RemoveAt(0);
                 yield return RunAction(true, action);
                 aiActionDoneCount++;
                 guiTimeline.ActionPerformed(TeamType.AI, aiActionDoneCount);

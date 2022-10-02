@@ -18,7 +18,18 @@ public class Unit : MonoBehaviour
         {
             if (spriteRenderer.gameObject.name != "DropShadow")
             {
-                spriteRenderer.color = new Color(1.0f, 1.0f, 1.0f, 0.5f);
+                if (friendly)
+                {
+                    spriteRenderer.color = new Color(1.0f, 1.0f, 1.0f, 0.2f);
+                }
+                else
+                {
+                    spriteRenderer.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+                }
+            }
+            else
+            {
+                spriteRenderer.enabled = false;
             }
         }
     }
@@ -30,6 +41,10 @@ public class Unit : MonoBehaviour
             if (spriteRenderer.gameObject.name != "DropShadow")
             {
                 spriteRenderer.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+            }
+            else
+            {
+                spriteRenderer.enabled = true;
             }
         }
     }

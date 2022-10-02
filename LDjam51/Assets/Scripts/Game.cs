@@ -48,10 +48,10 @@ public class Game : MonoBehaviour
         }
     }
 
-    public void OnPlanningEnd(List<BoardAction> playerActions, List<BoardAction> aiActions)
+    public void OnPlanningEnd(List<BoardAction> actions)
     {
         onExecutionStart.Invoke();
-        FindObjectOfType<TurnExecutor>().Go(playerActions, aiActions);
+        FindObjectOfType<TurnExecutor>().Go(actions);
     }
 
     public void OnExecutionEnd()

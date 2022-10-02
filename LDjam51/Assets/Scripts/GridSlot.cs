@@ -46,4 +46,14 @@ public class GridSlot : MonoBehaviour
             }
         }
     }
+
+    public bool IsFriendlyUnit()
+    {
+        var unit = GetComponent<Unit>();
+        if (unit)
+        {
+            return unit.friendly;
+        }
+        return false;
+    }
 }
