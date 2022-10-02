@@ -66,7 +66,8 @@ public class TurnPlannerAi
         }
         else
         {
-            return actions[(int)(entropy.Next() * actions.Count)];
+            //return actions[(int)(entropy.Next() * actions.Count)];
+            return actions[0];
         }
     }
 

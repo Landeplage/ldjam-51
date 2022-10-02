@@ -38,21 +38,21 @@ public class GUI_Timeline : MonoBehaviour
         }
     }
 
-    public void UpdateSlots(List<BoardAction> actions)
+    public void UpdateSlots(int count)
     {
         for (int i = 0; i < 10; i++)
         {
             var slots = i % 2 == 0 ? blueSlots : redSlots;
-            if (i < actions.Count)
+            if (i < count)
             {
                 IconType icon = IconType.QuestionMark;
-                switch (actions[i].type)
+                /*switch (actions[i].type)
                 {
                     case BoardActionType.Move: icon = IconType.Movement; break;
                     case BoardActionType.Attack: icon = IconType.Attack; break;
                     case BoardActionType.Idle: icon = IconType.Wait; break;
                     default: icon = IconType.QuestionMark; break;
-                }
+                }*/
                 slots[i / 2].ShowIcon(icon);
             }
             else
