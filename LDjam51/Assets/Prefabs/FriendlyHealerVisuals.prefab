@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1131598489425693889}
   m_Layer: 0
-  m_Name: FriendlyVisuals
+  m_Name: FriendlyHealerVisuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59,8 +59,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7235275297893639086}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.005, y: -0.021099985, z: 0.1}
-  m_LocalScale: {x: 2.48518, y: 1.1255599, z: 0.87992}
+  m_LocalPosition: {x: -0.006, y: -0.1121, z: 1}
+  m_LocalScale: {x: 1.3551686, y: 1.1255946, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1131598489425693889}
@@ -108,7 +108,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 82bbfcce30430b04dbd187a9467b53a7, type: 3}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.18431373}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.39607844}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -143,8 +143,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8291284768555562646}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.068, y: 0.299, z: 0.012000002}
-  m_LocalScale: {x: 1.01907, y: 1.01907, z: 1.01907}
+  m_LocalPosition: {x: -0.01, y: 0.32, z: -2.86}
+  m_LocalScale: {x: 3.222829, y: 3.222829, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1131598489425693889}
@@ -191,9 +191,9 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8652eebfd7a03904aab53bdd17a99a7d, type: 3}
-  m_Color: {r: 0, g: 0.95156765, b: 1, a: 1}
-  m_FlipX: 0
+  m_Sprite: {fileID: 21300000, guid: a60724fede22a6c4882b90d8f60fa8a0, type: 3}
+  m_Color: {r: 0, g: 0.9145849, b: 1, a: 1}
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 0.2, y: 0.23333333}
@@ -209,6 +209,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1131598489425693889}
     m_Modifications:
+    - target: {fileID: 1658506755102129330, guid: ffbdc3d61834b574484fbbcfe8ef52f2, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ec78523f2a624394791ef73467444554, type: 3}
     - target: {fileID: 1658506755868989910, guid: ffbdc3d61834b574484fbbcfe8ef52f2, type: 3}
       propertyPath: m_Name
       value: HealthbarCanvas
@@ -279,11 +283,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1658506755868989911, guid: ffbdc3d61834b574484fbbcfe8ef52f2, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.036
+      value: 0.004
       objectReference: {fileID: 0}
     - target: {fileID: 1658506755868989911, guid: ffbdc3d61834b574484fbbcfe8ef52f2, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.856
+      value: 0.944
       objectReference: {fileID: 0}
     - target: {fileID: 1658506755868989911, guid: ffbdc3d61834b574484fbbcfe8ef52f2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
