@@ -98,51 +98,129 @@ public class Board
             {
                 foreach (var adjacentSquare in Adjacent(square))
                 {
-                    if (adjacentSquare.type == BoardSquareType.Empty)
-                    {
-                        actions.Add(BoardAction.Move(square.position, adjacentSquare.position));
-                    }
+                    actions.Add(BoardAction.Move(square.position, adjacentSquare.position, adjacentSquare.type == BoardSquareType.Empty));
                 }
-                foreach (var adjacentSquare in Adjacent(square))
+                foreach (var adjacentSquare in AttackType(square))
                 {
-                    if (adjacentSquare.type != BoardSquareType.Empty && adjacentSquare.type != square.type)
-                    {
-                        actions.Add(BoardAction.Attack(square.position, adjacentSquare.position));
-                    }
+                    actions.Add(BoardAction.Attack(square.position, adjacentSquare.position, adjacentSquare.type != BoardSquareType.Empty && adjacentSquare.type != square.type));
                 }
             }
         }
         return actions;
     }
 
-    List<BoardSquare> Adjacent(BoardSquare square)
+    List<BoardSquare> Moves(List<List<BoardSquare>> input)
     {
-        Vector2Int[] offsets = new Vector2Int[] {
-            new(-1, 0),
-            new(1, 0),
-            new(0, 1),
-            new(0, -1),
-            new(1, 1),
-            new(1, -1),
-        };
-        if (square.position.y % 2 == 0)
+        List<BoardSquare> moves = new();
+        foreach (var list in input)
         {
-            offsets[2].x -= 1;
-            offsets[3].x -= 1;
-            offsets[4].x -= 1;
-            offsets[5].x -= 1;
-        }
-        List<BoardSquare> adjacentSquares = new();
-        foreach (var offset in offsets)
-        {
-            var offsetPosition = square.position + offset;
-            var offsetSquare = At(offsetPosition);
-            if (offsetSquare != null)
+            foreach (var item in list)
             {
-                adjacentSquares.Add(offsetSquare);
+                if (item != null && !moves.Contains(item))
+                {
+                    moves.Add(item);
+                }
             }
         }
-        return adjacentSquares;
+        return moves;
+    }
+
+    List<BoardSquare> Offsets(BoardSquare square, List<(int, int)> angleDistance)
+    {
+        var offset = new Vector2Int(0, 0);
+        foreach (var (angle, distance) in angleDistance)
+        {
+            if (angle == 0)
+            {
+                offset.x -= distance;
+            }
+            else if (angle == 3)
+            {
+                offset.x += distance;
+            }
+            else
+            {
+                var even = (square.position + offset).y % 2 == 0;
+                for (var i = 0; i < distance; ++i)
+                {
+                    if (angle == 1 || angle == 5)
+                    {
+                        if (even)
+                        {
+                            offset.x -= 1;
+                        }
+                    }
+                    else
+                    {
+                        if (!even)
+                        {
+                            offset.x += 1;
+                        }
+                    }
+                    if (angle == 1 || angle == 2)
+                    {
+                        offset.y += 1;
+                    }
+                    else
+                    {
+                        offset.y -= 1;
+                    }
+                    even = !even;
+                }
+            }
+        }
+        var list = new List<BoardSquare>();
+        var offsetPosition = square.position + offset;
+        list.Add(At(offsetPosition));
+        return list;
+    }
+
+    List<BoardSquare> Adjacent(BoardSquare square)
+    {
+        return Moves(new List<List<BoardSquare>>
+        {
+            Offsets(square, new List<(int, int)> { ( 0, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 1, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 2, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 3, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 4, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 5, 1 ) }),
+        });
+    }
+
+    List<BoardSquare> RangedAttack(BoardSquare square)
+    {
+        return Moves(new List<List<BoardSquare>>
+        {
+            Offsets(square, new List<(int, int)> { ( 0, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 0, 2 ), ( 2, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 1, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 1, 2 ), ( 3, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 2, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 2, 2 ), ( 4, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 3, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 3, 2 ), ( 5, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 4, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 4, 2 ), ( 0, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 5, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 5, 2 ), ( 1, 1 ) }),
+        });
+    }
+
+    List<BoardSquare> AttackType(BoardSquare square)
+    {
+        if (square.type == BoardSquareType.Friendly)
+        {
+            return RangedAttack(square);
+        }
+        else if (square.type == BoardSquareType.Enemy)
+        {
+            return Adjacent(square);
+        }
+        else
+        {
+            return new();
+        }
     }
 
     public Vector2Int ClosestWell(Vector2Int position)
@@ -216,6 +294,7 @@ public class BoardAction
     public BoardActionType type;
     public Vector2Int position;
     public Vector2Int target;
+    public bool enabled;
 
     public float score = 0.0f;
 
@@ -227,21 +306,23 @@ public class BoardAction
         return action;
     }
 
-    public static BoardAction Move(Vector2Int from, Vector2Int to)
+    public static BoardAction Move(Vector2Int from, Vector2Int to, bool enabled)
     {
         BoardAction action = new();
         action.type = BoardActionType.Move;
         action.position = from;
         action.target = to;
+        action.enabled = enabled;
         return action;
     }
 
-    public static BoardAction Attack(Vector2Int position, Vector2Int target)
+    public static BoardAction Attack(Vector2Int position, Vector2Int target, bool enabled)
     {
         BoardAction action = new();
         action.type = BoardActionType.Attack;
         action.position = position;
         action.target = target;
+        action.enabled = enabled;
         return action;
     }
 
@@ -362,13 +443,13 @@ public class TurnPlanner : MonoBehaviour
             validActions = board.ValidActionsFor(true, selectedSlot.position);
             foreach (var action in validActions)
             {
-                if (action.type == BoardActionType.Move)
+                if (action.type == BoardActionType.Move && action.enabled)
                 {
-                    visuals.MoveSlot(action.target, true);
+                    visuals.MoveSlot(action.target, action.enabled);
                 }
                 else if (action.type == BoardActionType.Attack)
                 {
-                    visuals.AttackSlot(action.target, true);
+                    visuals.AttackSlot(action.target, action.enabled);
                 }
             }
         }
@@ -405,24 +486,27 @@ public class TurnPlanner : MonoBehaviour
         {
             foreach (var validAction in validActions)
             {
-                if (validAction.type == BoardActionType.Move)
+                if (validAction.enabled)
                 {
-                    if (validAction.target == gridSlot.position)
+                    if (validAction.type == BoardActionType.Move)
                     {
-                        planning = false;
-                        StartCoroutine(AddAction(validAction, gridSlot));
-                        appliedMove = true;
-                        break;
+                        if (validAction.target == gridSlot.position)
+                        {
+                            planning = false;
+                            StartCoroutine(AddAction(validAction, gridSlot));
+                            appliedMove = true;
+                            break;
+                        }
                     }
-                }
-                else if (validAction.type == BoardActionType.Attack)
-                {
-                    if (validAction.target == gridSlot.position)
+                    else if (validAction.type == BoardActionType.Attack)
                     {
-                        planning = false;
-                        StartCoroutine(AddAction(validAction, selectedSlot));
-                        appliedMove = true;
-                        break;
+                        if (validAction.target == gridSlot.position)
+                        {
+                            planning = false;
+                            StartCoroutine(AddAction(validAction, selectedSlot));
+                            appliedMove = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -440,8 +524,6 @@ public class TurnPlanner : MonoBehaviour
         var turnExecutor = FindObjectOfType<TurnExecutor>();
         previousBoards.Add(board);
         previousSelectedSlots.Add(selectedSlot);
-        //turnExecutor.ResetEntities(board);
-        //turnExecutor.ResetEntities(board);
         yield return turnExecutor.PlayAction(action);
         board = board.ApplyAction(action);
         var aiAction = TurnPlannerAi.PlanMove(board);
@@ -470,6 +552,11 @@ public class TurnPlanner : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Z) && planning)
         {
             UndoAction();
+        }
+        else if (Input.GetKeyDown(KeyCode.Space) && planning)
+        {
+            planning = false;
+            StartCoroutine(AddAction(BoardAction.Idle(), selectedSlot));
         }
     }
 }

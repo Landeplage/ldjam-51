@@ -16,6 +16,9 @@ public class Entropy
 
     public float Next()
     {
+        while (seed < 0) {
+            seed += 12345;
+        }
         seed = (seed * 1103515245 + 12345) % 2147483648;
         return seed / 2147483648.1f;
     }

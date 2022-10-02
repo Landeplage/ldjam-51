@@ -11,6 +11,14 @@ public class TurnPlannerAi
         var hasAttack = false;
         for (int i = 0; i < actions.Count; ++i)
         {
+            if (!actions[i].enabled)
+            {
+                actions.RemoveAt(i);
+                i--;
+            }
+        }
+        for (int i = 0; i < actions.Count; ++i)
+        {
             if (GoodAction(board, actions[i]))
             {
                 if (actions[i].type == BoardActionType.Attack)
@@ -48,7 +56,7 @@ public class TurnPlannerAi
             }
         }
         actions.Sort((x, y) => x.score.CompareTo(y.score));
-        /*var foundEntities = new List<Vector2Int>();
+        var foundEntities = new List<Vector2Int>();
         for (int i = 0; i < actions.Count; ++i) {
             if (foundEntities.Contains(actions[i].position))
             {
@@ -62,7 +70,7 @@ public class TurnPlannerAi
                     foundEntities.Add(actions[i].position);
                 }
             }
-        }*/
+        }
         if (actions.Count == 0)
         {
             return BoardAction.Idle();
