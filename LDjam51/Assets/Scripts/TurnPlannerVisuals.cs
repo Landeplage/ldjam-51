@@ -66,14 +66,15 @@ public class TurnPlannerVisuals : MonoBehaviour
     void SetArrowTransform(GameObject arrow, Vector3 from, Vector3 to, LineIndicatorPosition adjust)
     {
         var startToEnd = to - from;
+        startToEnd.z = 0.0f;
         var halfpoint = from + startToEnd / 2.0f;
 
         // Shift tangent along the arrow dir based on the adjustment
         Vector3 adjustOffset = Vector3.zero;
         switch (adjust)
         {
-            case LineIndicatorPosition.Right: adjustOffset = 0.25f * Vector3.Cross(Vector3.Normalize(halfpoint), Vector3.back); break;
-            case LineIndicatorPosition.Left: adjustOffset = -0.25f * Vector3.Cross(Vector3.Normalize(halfpoint), Vector3.back); break;
+            case LineIndicatorPosition.Right: // fall-through
+            case LineIndicatorPosition.Left: adjustOffset = 0.20f * Vector3.Cross(Vector3.Normalize(startToEnd), Vector3.back); break;
             default: break;
         }
 

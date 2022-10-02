@@ -431,9 +431,9 @@ public class TurnPlanner : MonoBehaviour
             {
                 if (action.type == BoardActionType.Move)
                 {
-                    var opposing = FindOpposingAction(action.moveFrom, action.moveTo);
                     LineIndicatorPosition adjustment = LineIndicatorPosition.Center;
-                    if (opposing.Item1 != null)
+                    var opposing = FindOpposingAction(action.moveFrom, action.moveTo);
+                    if (opposing.Item1 != null && opposing.Item2 >= board.actions.Count - 2)
                     {
                         adjustment = opposing.Item2 < i ? LineIndicatorPosition.Left : LineIndicatorPosition.Right;
                     }
@@ -441,9 +441,9 @@ public class TurnPlanner : MonoBehaviour
                 }
                 else if (action.type == BoardActionType.Attack)
                 {
-                    var opposing = FindOpposingAction(action.position, action.attackTarget);
                     LineIndicatorPosition adjustment = LineIndicatorPosition.Center;
-                    if (opposing.Item1 != null)
+                    var opposing = FindOpposingAction(action.position, action.attackTarget);
+                    if (opposing.Item1 != null && opposing.Item2 >= board.actions.Count - 2)
                     {
                         adjustment = opposing.Item2 < i ? LineIndicatorPosition.Left : LineIndicatorPosition.Right;
                     }
