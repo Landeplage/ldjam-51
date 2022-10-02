@@ -8,7 +8,7 @@ public class EnemySpawns : MonoBehaviour
 
     void Update()
     {
-        timer += Time.deltaTime;
+        //timer += Time.deltaTime;
         if (timer > 10.0) 
         {
             var turnPlanner = FindObjectOfType<TurnPlanner>();

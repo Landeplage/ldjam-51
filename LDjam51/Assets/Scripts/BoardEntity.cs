@@ -6,6 +6,10 @@ public class BoardEntity : MonoBehaviour
 {
     public BoardSquareType type;
 
+    public GameObject friendlyVisuals;
+    public GameObject enemyVisuals;
+    public GameObject wellVisuals;
+
     [System.NonSerialized]
     public int maxHealth;
     [System.NonSerialized]
@@ -15,14 +19,33 @@ public class BoardEntity : MonoBehaviour
 
     public void Create()
     {
+        if (type == BoardSquareType.Friendly)
+        {
+            Instantiate(friendlyVisuals).transform.SetParent(transform, false);
+        }
+        if (type == BoardSquareType.Enemy)
+        {
+            Instantiate(enemyVisuals).transform.SetParent(transform, false);
+        }
+        if (type == BoardSquareType.Well)
+        {
+            Instantiate(wellVisuals).transform.SetParent(transform, false);
+        }
+
         healthbar = GetComponentInChildren<GUI_Healthbar>();
-        healthbar.UpdateBar(health, maxHealth);
+        if (healthbar)
+        {
+            healthbar.UpdateBar(health, maxHealth);
+        }
     }
 
     public void Hurt(int amount)
     {
         health = (int)Mathf.Max(health - amount, 0.0f);
-        healthbar.UpdateBar(health, maxHealth);
+        if (healthbar)
+        {
+            healthbar.UpdateBar(health, maxHealth);
+        }
     }
 
     public bool Dead()
