@@ -63,6 +63,8 @@ public class TurnPlannerVisuals : MonoBehaviour
             lineObject.transform.parent = transform;
             lineObject.transform.position = Vector3.zero;
             var line = lineObject.GetComponent<LineRenderer>();
+            //line.startColor = color;
+            //line.endColor = color;
             line.positionCount = 2;
             line.SetPosition(0, fromSlot.transform.position);
             line.SetPosition(1, toSlot.transform.position);

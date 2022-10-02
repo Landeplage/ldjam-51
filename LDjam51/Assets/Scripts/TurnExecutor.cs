@@ -109,6 +109,15 @@ public class TurnExecutor : MonoBehaviour
             {
                 action.obj.GetComponent<GridEntity>().MoveTo(action.moveTo);
             }
+            else if (action.type == BoardActionType.Attack)
+            {
+                var grid = FindObjectOfType<Grid>();
+                var targetEntity = grid.At(action.attackTarget).entity;
+                if (targetEntity != null && targetEntity.gameObject.GetComponent<Unit>())
+                {
+                    targetEntity.gameObject.GetComponent<Unit>().Hurt(1);
+                }
+            }
         }
     }
 }
