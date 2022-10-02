@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class TurnPlannerAi
 {
-    public static BoardAction PlanMove(Board board, Entropy entropy)
+    public static BoardAction PlanMove(Board board)
     {
+        Entropy entropy = new(board.entropy);
         var actions = board.AllValidActions(false);
         var hasAttack = false;
         for (int i = 0; i < actions.Count; ++i)

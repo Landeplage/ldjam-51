@@ -250,8 +250,6 @@ public class TurnPlanner : MonoBehaviour
     private GridSlot selectedSlot = null;
     private bool planning = false;
 
-    private BoardAction aiAction = BoardAction.Idle();
-
     void Start()
     {
         grid = FindObjectOfType<Grid>();
@@ -270,7 +268,6 @@ public class TurnPlanner : MonoBehaviour
             turnExecutor.ResetEntities(board);
         }
         planning = true;
-        aiAction = TurnPlannerAi.PlanMove(board, new(board.entropy));
         PlanActions();
     }
 
@@ -342,7 +339,7 @@ public class TurnPlanner : MonoBehaviour
         //DrawBoardActions();
         if (selectedSlot != null && planning)
         {
-            validActions = board.ApplyAction(aiAction).ValidActionsFor(true, selectedSlot.position);
+            validActions = board.ValidActionsFor(true, selectedSlot.position);
             foreach (var action in validActions)
             {
                 if (action.type == BoardActionType.Move)
@@ -424,11 +421,12 @@ public class TurnPlanner : MonoBehaviour
         previousBoards.Add(board);
         previousSelectedSlots.Add(selectedSlot);
         //turnExecutor.ResetEntities(board);
-        yield return FindObjectOfType<TurnExecutor>().PlayAction(aiAction);
-        board = board.ApplyAction(aiAction);
         //turnExecutor.ResetEntities(board);
-        yield return FindObjectOfType<TurnExecutor>().PlayAction(action);
+        yield return turnExecutor.PlayAction(action);
         board = board.ApplyAction(action);
+        var aiAction = TurnPlannerAi.PlanMove(board);
+        yield return turnExecutor.PlayAction(aiAction);
+        board = board.ApplyAction(aiAction);
         selectedSlot = nextSelection;
         OnPlanningStart();
     }
