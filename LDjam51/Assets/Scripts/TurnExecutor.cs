@@ -19,8 +19,11 @@ public class TurnExecutor : MonoBehaviour
     TurnExecutorState state = TurnExecutorState.Stopped;
     TurnPlannerVisuals visuals;
 
+    List<GameObject> deadEntities;
+
     public void Go(List<BoardAction> actions)
     {
+        deadEntities = new();
         visuals = FindObjectOfType<TurnPlannerVisuals>();
         this.actions = actions;
         this.playerActionDoneCount = 0;
@@ -87,24 +90,31 @@ public class TurnExecutor : MonoBehaviour
         {
             return grid.At(action.moveTo).entity == null;
         }
+        if (action.type == BoardActionType.Attack)
+        {
+            if (action.obj == null || deadEntities.Contains(action.obj) || grid.At(action.attackTarget).entity == null || grid.At(action.attackTarget).entity.gameObject == null || deadEntities.Contains(grid.At(action.attackTarget).entity.gameObject))
+            {
+                return false;
+            }
+        }
         return true;
     }
 
     private IEnumerator RunAction(bool player, BoardAction action)
     {
         visuals.Clear();
-        if (action.type == BoardActionType.Move)
-        {
-            visuals.MovementLine(action.moveFrom, action.moveTo);
-            visuals.MoveSlot(action.moveTo);
-        }
-        else if (action.type == BoardActionType.Attack)
-        {
-            visuals.AttackSlot(action.attackTarget);
-        }
-        yield return new WaitForSeconds(0.5f);
         if (ValidAction(action))
         {
+            if (action.type == BoardActionType.Move)
+            {
+                visuals.MovementLine(action.moveFrom, action.moveTo);
+                visuals.MoveSlot(action.moveTo);
+            }
+            else if (action.type == BoardActionType.Attack)
+            {
+                visuals.AttackSlot(action.attackTarget);
+            }
+            yield return new WaitForSeconds(0.5f);
             if (action.type == BoardActionType.Move)
             {
                 action.obj.GetComponent<GridEntity>().MoveTo(action.moveTo);
@@ -113,9 +123,15 @@ public class TurnExecutor : MonoBehaviour
             {
                 var grid = FindObjectOfType<Grid>();
                 var targetEntity = grid.At(action.attackTarget).entity;
-                if (targetEntity != null && targetEntity.gameObject.GetComponent<Unit>())
+                var unit = targetEntity.gameObject.GetComponent<Unit>();
+                if (targetEntity != null && unit)
                 {
-                    targetEntity.gameObject.GetComponent<Unit>().Hurt(1);
+                    unit.Hurt(1);
+                    if (unit.Dead())
+                    {
+                        deadEntities.Add(unit.gameObject);
+                        Destroy(unit.gameObject);
+                    }
                 }
             }
         }

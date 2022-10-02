@@ -64,4 +64,9 @@ public class Unit : MonoBehaviour
         health = (int)Mathf.Max(health - amount, 0.0f);
         hpBar.UpdateBar(health, maxHealth);
     }
+
+    public bool Dead()
+    {
+        return health == 0;
+    }
 }
