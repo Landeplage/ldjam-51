@@ -98,11 +98,17 @@ public class Board
             {
                 foreach (var adjacentSquare in Adjacent(square))
                 {
-                    actions.Add(BoardAction.Move(square.position, adjacentSquare.position, adjacentSquare.type == BoardSquareType.Empty));
+                    if (adjacentSquare.type != BoardSquareType.Blocked)
+                    {
+                        actions.Add(BoardAction.Move(square.position, adjacentSquare.position, adjacentSquare.type == BoardSquareType.Empty));
+                    }
                 }
                 foreach (var adjacentSquare in AttackType(square))
                 {
-                    actions.Add(BoardAction.Attack(square.position, adjacentSquare.position, adjacentSquare.type != BoardSquareType.Empty && adjacentSquare.type != square.type));
+                    if (adjacentSquare.type != BoardSquareType.Blocked)
+                    {
+                        actions.Add(BoardAction.Attack(square.position, adjacentSquare.position, adjacentSquare.type != BoardSquareType.Empty && adjacentSquare.type != square.type));
+                    }
                 }
             }
         }
@@ -245,6 +251,7 @@ public class Board
 public enum BoardSquareType
 {
     Empty,
+    Blocked,
     Friendly,
     Enemy,
     Well,
