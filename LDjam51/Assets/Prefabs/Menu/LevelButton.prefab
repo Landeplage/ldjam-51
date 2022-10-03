@@ -190,3 +190,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fae027681d435084589a145146c6583d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  eventOnGoTo:
+    Guid:
+      Data1: 57601077
+      Data2: 1109562027
+      Data3: 1236747936
+      Data4: 758951448
+    Path: event:/UI/Confirm Heavy
