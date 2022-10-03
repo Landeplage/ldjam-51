@@ -768,21 +768,10 @@ public class TurnPlanner : MonoBehaviour
         board = board.ApplyAction(action);
 
         var autoActions = board.AllValidActions(true);
-        BoardAction healAction = null;
         for (var i = 0; i < autoActions.Count; ++i)
         {
             if (autoActions[i].type == BoardActionType.Heal)
             {
-                if (autoActions[i].enabled && board.At(autoActions[i].target).type != BoardSquareType.Empty)
-                {
-                    if ((board.At(autoActions[i].target).health / (float)board.At(autoActions[i].target).maxHealth) < 1.0)
-                    {
-                        if (healAction == null || (board.At(autoActions[i].target).health / (float)board.At(autoActions[i].target).maxHealth) < (board.At(healAction.target).health / (float)board.At(healAction.target).maxHealth))
-                        {
-                            healAction = autoActions[i];
-                        }
-                    }
-                }
                 autoActions.RemoveAt(i);
                 i--;
             }
@@ -794,11 +783,6 @@ public class TurnPlanner : MonoBehaviour
                 yield return turnExecutor.PlayAction(autoAction);
                 board = board.ApplyAction(autoAction);
             }
-        }
-        if (healAction != null)
-        {
-            yield return turnExecutor.PlayAction(healAction);
-            board = board.ApplyAction(healAction);
         }
 
         appliedActions += 1;
@@ -826,6 +810,32 @@ public class TurnPlanner : MonoBehaviour
                 yield return turnExecutor.PlayAction(autoAction);
                 board = board.ApplyAction(autoAction);
             }
+        }
+
+        autoActions = board.AllValidActions(true);
+        BoardAction healAction = null;
+        for (var i = 0; i < autoActions.Count; ++i)
+        {
+            if (autoActions[i].type == BoardActionType.Heal)
+            {
+                if (autoActions[i].enabled && board.At(autoActions[i].target).type != BoardSquareType.Empty)
+                {
+                    if ((board.At(autoActions[i].target).health / (float)board.At(autoActions[i].target).maxHealth) < 1.0)
+                    {
+                        if (healAction == null || (board.At(autoActions[i].target).health / (float)board.At(autoActions[i].target).maxHealth) < (board.At(healAction.target).health / (float)board.At(healAction.target).maxHealth))
+                        {
+                            healAction = autoActions[i];
+                        }
+                    }
+                }
+                autoActions.RemoveAt(i);
+                i--;
+            }
+        }
+        if (healAction != null)
+        {
+            yield return turnExecutor.PlayAction(healAction);
+            board = board.ApplyAction(healAction);
         }
 
         selectedSlot = nextSelection;
