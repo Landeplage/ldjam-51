@@ -46,7 +46,7 @@ public class Tutorial : MonoBehaviour
         {
             if (n == 1)
             {
-                text.text = "Move your Melee unit to attack the enemies\n";
+                text.text = "Move your melee unit to attack the enemies\n";
             }
             if (n == 2)
             {
@@ -61,7 +61,7 @@ public class Tutorial : MonoBehaviour
         {
             if (n == 1)
             {
-                text.text = "Ranged units can attack from further away";
+                text.text = "Ranged units can attack 2 tiles away";
             }
             if (n == 3)
             {
