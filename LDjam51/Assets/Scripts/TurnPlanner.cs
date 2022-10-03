@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using FMODUnity;
 
 public class Board
@@ -544,6 +545,7 @@ public class TurnPlanner : MonoBehaviour
     public GUI_UndoBuffer guiUndoBuffer;
     public GUI_SpawnTimer guiSpawnTimer;
     public GUI_EndLevelScreen guiEndLevel;
+    public GUI_ButtonDimmer guiUndoBtn;
 
     private List<BoardAction> validActions = new();
     private int appliedActions = 0;
@@ -584,6 +586,7 @@ public class TurnPlanner : MonoBehaviour
             MakeBoardFromScene();
             turnExecutor.ResetEntities(board, new());
             guiSpawnTimer.SetSeconds(currentSecond, NestsCount());
+            guiUndoBtn.SetInteractable(CanUndo());
         }
         if (Win())
         {
@@ -599,6 +602,7 @@ public class TurnPlanner : MonoBehaviour
         }
         else
         {
+            guiUndoBtn.SetInteractable(CanUndo());
             planning = true;
             PlanActions();
         }
@@ -956,7 +960,7 @@ public class TurnPlanner : MonoBehaviour
 
     public void UndoAction()
     {
-        if (!planning)
+        if (!planning || !CanUndo())
         {
             return;
         }
