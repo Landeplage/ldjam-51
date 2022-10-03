@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="MixerGroup" id="{fd5c99b3-cea4-44cd-8be9-b1c1dd818fbb}">
+		<property name="name">
+			<value>World</value>
+		</property>
+		<relationship name="effectChain">
+			<destination>{5feb43f4-f94b-4b7f-af17-fc0b33fbfc9e}</destination>
+		</relationship>
+		<relationship name="panner">
+			<destination>{17b5c574-b759-4ac9-9630-d129ab256e4d}</destination>
+		</relationship>
+		<relationship name="output">
+			<destination>{809dd9eb-b9cd-46e6-af78-7e211886bb57}</destination>
+		</relationship>
+	</object>
+	<object class="MixerBusEffectChain" id="{5feb43f4-f94b-4b7f-af17-fc0b33fbfc9e}">
+		<relationship name="effects">
+			<destination>{b0661b10-2f46-4efb-afa6-a410ef4d6754}</destination>
+			<destination>{d8ef8643-78cf-416c-bf7e-59411acf9e01}</destination>
+		</relationship>
+	</object>
+	<object class="MixerBusPanner" id="{17b5c574-b759-4ac9-9630-d129ab256e4d}" />
+	<object class="MixerBusFader" id="{b0661b10-2f46-4efb-afa6-a410ef4d6754}" />
+	<object class="SFXReverbEffect" id="{d8ef8643-78cf-416c-bf7e-59411acf9e01}">
+		<property name="decayTime">
+			<value>1900</value>
+		</property>
+		<property name="wetLevel">
+			<value>-14.5</value>
+		</property>
+	</object>
+</objects>
