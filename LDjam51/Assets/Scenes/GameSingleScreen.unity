@@ -2874,6 +2874,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 132258232}
     - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: healFmodEvent.Path
+      value: event:/Units/Spell - Heal
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
       propertyPath: attackFmodEvent.Path
       value: event:/Units/Attack
       objectReference: {fileID: 0}
@@ -2884,6 +2888,22 @@ PrefabInstance:
     - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
       propertyPath: footstepFmodEvent.Path
       value: event:/Units/Footstep
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: healFmodEvent.Guid.Data1
+      value: 299944708
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: healFmodEvent.Guid.Data2
+      value: 1207978452
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: healFmodEvent.Guid.Data3
+      value: -1027096179
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: healFmodEvent.Guid.Data4
+      value: -540045854
       objectReference: {fileID: 0}
     - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
       propertyPath: enemyAttackFmodEvent.Path

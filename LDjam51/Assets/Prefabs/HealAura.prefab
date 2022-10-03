@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &606924425411672372
+--- !u!1 &4553336217534873148
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,37 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1473237593295216998}
-  - component: {fileID: 8344326731232769447}
-  - component: {fileID: -6790311881120092845}
-  - component: {fileID: 4432444397456500161}
+  - component: {fileID: 8380498789378896404}
+  - component: {fileID: 9157630507956913773}
   m_Layer: 0
-  m_Name: BoardEntity
+  m_Name: Hexagon Pointed-Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1473237593295216998
+--- !u!4 &8380498789378896404
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 606924425411672372}
+  m_GameObject: {fileID: 4553336217534873148}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -1.35}
+  m_LocalScale: {x: 1, y: 0.49, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 5078228702978288341}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &8344326731232769447
+--- !u!212 &9157630507956913773
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 606924425411672372}
+  m_GameObject: {fileID: 4553336217534873148}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -75,49 +73,80 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -2135585597343286014, guid: 5aa8b770bc43046bc8d993d0d5b7f4a5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.8828125, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-6790311881120092845
+--- !u!1 &5138093194441820757
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5078228702978288341}
+  - component: {fileID: 268234337860074461}
+  - component: {fileID: 5707792547074194146}
+  m_Layer: 0
+  m_Name: HealAura
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5078228702978288341
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5138093194441820757}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8380498789378896404}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &268234337860074461
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 606924425411672372}
+  m_GameObject: {fileID: 5138093194441820757}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69b1ce367dfae444c9cd787e32c436a9, type: 3}
+  m_Script: {fileID: 11500000, guid: 65699fc224147344cb0e8744118c237b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridSlot: {fileID: 0}
-  offset: {x: 0, y: 0, z: 0}
---- !u!114 &4432444397456500161
-MonoBehaviour:
+--- !u!95 &5707792547074194146
+Animator:
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 606924425411672372}
+  m_GameObject: {fileID: 5138093194441820757}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5870f693788b23c4b89888520628eeb6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 1
-  friendlyMeleeVisuals: {fileID: 5256743130418432460, guid: c2a2001da2f70c54e89f3f03470ff249, type: 3}
-  friendlyRangedVisuals: {fileID: 5256743130418432460, guid: afa649320a9a3ca46a119d67feae512d, type: 3}
-  friendlyHealerVisuals: {fileID: 5256743130418432460, guid: f7b3e9d6c26d99549882574d55daf581, type: 3}
-  enemyVisuals: {fileID: 5256743130418432460, guid: 4f2d007f5e553e74bba988b444e6602c, type: 3}
-  wellVisuals: {fileID: 5256743130418432460, guid: e8dd6f0329903df4ca2ab15bb60f08e6, type: 3}
-  enemyWellVisuals: {fileID: 5256743130418432460, guid: 5af2e4a26910bc44e86c6fb44af974d5, type: 3}
-  friendlyRangedProjectile: {fileID: 6923734980728111298, guid: d5a0db3b05622d14a86f4cbb60ce6df5, type: 3}
-  healAura: {fileID: 5138093194441820757, guid: d921e1766726cb4429e4547cbcd3a248, type: 3}
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: de2148ee8067f924cbf32cab54e95a1b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

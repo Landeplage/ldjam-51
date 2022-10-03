@@ -59,6 +59,7 @@ public class BoardEntity : MonoBehaviour
     public GameObject enemyWellVisuals;
 
     public GameObject friendlyRangedProjectile;
+    public GameObject healAura;
 
     [System.NonSerialized]
     public int maxHealth;
@@ -152,13 +153,19 @@ public class BoardEntity : MonoBehaviour
             HexDirection dir = HexDirectionUtils.GetDirectionTo(position, targetPosition);
             yield return Play("Attack" + dir.ToString());
         }
-        else
+        else if (type == BoardSquareType.FriendlyRange)
         {
             var projectile = Instantiate(friendlyRangedProjectile);
             projectile.transform.position = position;
             projectile.GetComponent<Projectile>().target = new Vector3(targetPosition.x, targetPosition.y, friendlyRangedProjectile.transform.position.z);
             var angle = Vector3.Angle(Vector3.right, targetPosition - position);
             projectile.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            yield return Play("Attack");
+        }
+        else if (type == BoardSquareType.FriendlyHealer)
+        {
+            var aura = Instantiate(healAura);
+            aura.transform.position = targetPosition;
             yield return Play("Attack");
         }
     }

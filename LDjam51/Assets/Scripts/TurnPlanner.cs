@@ -301,21 +301,7 @@ public class Board
 
     List<BoardSquare> RangedHeal(BoardSquare square)
     {
-        return Moves(new List<List<BoardSquare>>
-        {
-            Offsets(square, new List<(int, int)> { ( 0, 1 ) }),
-            Offsets(square, new List<(int, int)> { ( 1, 1 ) }),
-            Offsets(square, new List<(int, int)> { ( 2, 1 ) }),
-            Offsets(square, new List<(int, int)> { ( 3, 1 ) }),
-            Offsets(square, new List<(int, int)> { ( 4, 1 ) }),
-            Offsets(square, new List<(int, int)> { ( 5, 1 ) }),
-            Offsets(square, new List<(int, int)> { ( 0, 2 ) }),
-            Offsets(square, new List<(int, int)> { ( 1, 2 ) }),
-            Offsets(square, new List<(int, int)> { ( 2, 2 ) }),
-            Offsets(square, new List<(int, int)> { ( 3, 2 ) }),
-            Offsets(square, new List<(int, int)> { ( 4, 2 ) }),
-            Offsets(square, new List<(int, int)> { ( 5, 2 ) }),
-        });
+        return Adjacent2(square);
     }
 
     List<BoardSquare> MoveType(BoardSquare square)
@@ -789,9 +775,12 @@ public class TurnPlanner : MonoBehaviour
             {
                 if (autoActions[i].enabled && board.At(autoActions[i].target).type != BoardSquareType.Empty)
                 {
-                    if (healAction == null || (board.At(autoActions[i].target).health / (float)board.At(autoActions[i].target).maxHealth) < (board.At(healAction.target).health / (float)board.At(healAction.target).maxHealth))
+                    if ((board.At(autoActions[i].target).health / (float)board.At(autoActions[i].target).maxHealth) < 1.0)
                     {
-                        healAction = autoActions[i];
+                        if (healAction == null || (board.At(autoActions[i].target).health / (float)board.At(autoActions[i].target).maxHealth) < (board.At(healAction.target).health / (float)board.At(healAction.target).maxHealth))
+                        {
+                            healAction = autoActions[i];
+                        }
                     }
                 }
                 autoActions.RemoveAt(i);
