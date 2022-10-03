@@ -541,6 +541,7 @@ public class TurnPlanner : MonoBehaviour
     [System.NonSerialized]
     public TurnPlannerVisuals visuals;
     public GUI_Timeline guiTimeline;
+    public GUI_UndoBuffer guiUndoBuffer;
 
     private List<BoardAction> validActions = new();
     private int appliedActions = 0;
@@ -828,6 +829,7 @@ public class TurnPlanner : MonoBehaviour
         }
 
         appliedActions += 1;
+        guiUndoBuffer.QueueNextActionStart(BlockOwner.AI);
         List<Vector2Int> enemies = new();
         foreach (var square in board.squares)
         {
@@ -887,12 +889,41 @@ public class TurnPlanner : MonoBehaviour
             guiTimeline.UpdateSlots(appliedActions);
             SpawnEnemy();
         }
+        
+        guiUndoBuffer.QueueNextActionStart(BlockOwner.Player);
         OnPlanningStart();
         FindObjectOfType<Tutorial>().Next();
     }
 
-    void UndoAction()
+    public void WaitAction()
     {
+        if (!planning)
+        {
+            return;
+        }
+        
+        var canWait = true;
+        if (forcedMoves.Count > 0)
+        {
+            if (forcedMoves[0].Item1 != new Vector2Int(-1, -1) || forcedMoves[0].Item2 != new Vector2Int(-1, -1))
+            {
+                canWait = false;
+            }
+        }
+        if (canWait)
+        {
+            planning = false;
+            StartCoroutine(AddAction(BoardAction.Idle(), selectedSlot));
+        }
+    }
+
+    public void UndoAction()
+    {
+        if (!planning)
+        {
+            return;
+        }
+
         if (previousBoards.Count > 0)
         {
             FMODUtility.Play(undoFmodEvent, transform.position);
@@ -908,6 +939,7 @@ public class TurnPlanner : MonoBehaviour
             {
                 appliedActions += 10;
             }
+            guiUndoBuffer.QueueRemovePlayerAction();
             guiTimeline.UpdateSlots(appliedActions);
             turnExecutor.ResetEntities(board);
             OnPlanningStart();
@@ -953,24 +985,12 @@ public class TurnPlanner : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.Y) && planning)
             {
-                RedoAction();
+            	//RedoAction();
             }
         }
         if (Input.GetKeyDown(KeyCode.Space) && planning)
         {
-            var canWait = true;
-            if (forcedMoves.Count > 0)
-            {
-                if (forcedMoves[0].Item1 != new Vector2Int(-1, -1) || forcedMoves[0].Item2 != new Vector2Int(-1, -1))
-                {
-                    canWait = false;
-                }
-            }
-            if (canWait)
-            {
-                planning = false;
-                StartCoroutine(AddAction(BoardAction.Idle(), selectedSlot));
-            }
+            WaitAction();
         }
         if (Input.GetKeyDown(KeyCode.P))
         {

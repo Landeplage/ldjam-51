@@ -1267,8 +1267,35 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6908337145783534077, guid: 99b88d364dd58f640b81f1ef5b28235c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 688402202}
+    - target: {fileID: 6908337145783534077, guid: 99b88d364dd58f640b81f1ef5b28235c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: UndoAction
+      objectReference: {fileID: 0}
+    - target: {fileID: 8807218507182072203, guid: 99b88d364dd58f640b81f1ef5b28235c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 688402202}
+    - target: {fileID: 8807218507182072203, guid: 99b88d364dd58f640b81f1ef5b28235c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: WaitAction
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 99b88d364dd58f640b81f1ef5b28235c, type: 3}
+--- !u!114 &219028568 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 669840061, guid: 99b88d364dd58f640b81f1ef5b28235c, type: 3}
+  m_PrefabInstance: {fileID: 219028567}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 911463c993b2967438b3f5ed084fc898, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &223722147
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3422,6 +3449,10 @@ PrefabInstance:
       propertyPath: guiTimeline
       value: 
       objectReference: {fileID: 132258232}
+    - target: {fileID: 3572801359473480879, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: guiUndoBuffer
+      value: 
+      objectReference: {fileID: 219028568}
     - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
       propertyPath: guiTimeline
       value: 
@@ -3556,6 +3587,17 @@ PrefabInstance:
       objectReference: {fileID: 1952490782494139265, guid: 143b2e18de8569d44a7ad77dcea30aff, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b2557782715e44b4893d4af98e553470, type: 3}
+--- !u!114 &688402202 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3572801359473480879, guid: b2557782715e44b4893d4af98e553470, type: 3}
+  m_PrefabInstance: {fileID: 688402201}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d444988261edce64c944f337f3f3098d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &691906482
 PrefabInstance:
   m_ObjectHideFlags: 0
