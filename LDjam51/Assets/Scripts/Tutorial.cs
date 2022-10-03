@@ -72,7 +72,7 @@ public class Tutorial : MonoBehaviour
         {
             if (n == 1)
             {
-                text.text = "Move the Healer in range to heal the melee units";
+                text.text = "Move the Healer in range to heal friendly units";
             }
             if (n == 3)
             {
@@ -94,11 +94,11 @@ public class Tutorial : MonoBehaviour
         {
             if (n == 1)
             {
-                text.text = "Wells grant Brightsight, the ability to turn back time\nPress Z to undo moves";
+                text.text = "Wells grant Brightsight, the ability to turn back time";
             }
             if (n >= 3)
             {
-                text.text = "If the wells are destroyed, Brightsight will no longer be available";
+                text.text = "Press Z to undo moves\nIf the wells are destroyed, Brightsight will no longer be available";
             }
         }
     }
