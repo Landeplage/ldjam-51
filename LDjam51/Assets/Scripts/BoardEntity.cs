@@ -158,7 +158,7 @@ public class BoardEntity : MonoBehaviour
             var projectile = Instantiate(friendlyRangedProjectile);
             projectile.transform.position = position;
             projectile.GetComponent<Projectile>().target = new Vector3(targetPosition.x, targetPosition.y, friendlyRangedProjectile.transform.position.z);
-            var angle = Vector3.Angle(Vector3.right, targetPosition - position);
+            var angle = Mathf.Atan2((targetPosition - position).y, (targetPosition - position).x) * 180.0f / 3.14159f;
             projectile.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
             yield return Play("Attack");
         }
