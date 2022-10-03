@@ -60,7 +60,7 @@ public class TurnPlannerAi
             }
         }
         actions.Sort((x, y) => x.score.CompareTo(y.score));
-        while (actions.Count > 3)
+        while (actions.Count > 2)
         {
             actions.RemoveAt(actions.Count - 1);
         }

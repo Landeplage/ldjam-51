@@ -335,15 +335,15 @@ public class Board
         foreach (var square in squares)
         {
             var interest = false;
-            if (aiType == BoardAiType.UnitFocus)
+            if (aiType == BoardAiType.UnitFocus && UnitsAlive())
             {
                 interest = BoardSquare.FriendlyType(square.type) && square.type != BoardSquareType.Well;
             }
-            else if (aiType == BoardAiType.WellFocus)
+            else if (aiType == BoardAiType.WellFocus && WellAlive())
             {
                 interest = square.type == BoardSquareType.Well;
             }
-            else if (aiType == BoardAiType.Any)
+            else
             {
                 interest = BoardSquare.FriendlyType(square.type);
             }
@@ -357,6 +357,30 @@ public class Board
             }
         }
         return closest;
+    }
+
+    public bool UnitsAlive()
+    {
+        foreach (var square in squares)
+        {
+            if (BoardSquare.FriendlyType(square.type))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool WellAlive()
+    {
+        foreach (var square in squares)
+        {
+            if (square.type == BoardSquareType.Well)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
