@@ -8087,10 +8087,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1498894014252333199, guid: 5d93d6e9ff2c9bc43825223259046b50, type: 3}
-      propertyPath: m_Name
-      value: LevelX
-      objectReference: {fileID: 0}
     - target: {fileID: 2126774670696553812, guid: 5d93d6e9ff2c9bc43825223259046b50, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -8138,18 +8134,6 @@ PrefabInstance:
     - target: {fileID: 2126774670696553815, guid: 5d93d6e9ff2c9bc43825223259046b50, type: 3}
       propertyPath: m_Name
       value: LevelLoader
-      objectReference: {fileID: 0}
-    - target: {fileID: 6863112308456005099, guid: 5d93d6e9ff2c9bc43825223259046b50, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8455562860367929268, guid: 5d93d6e9ff2c9bc43825223259046b50, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8928069781559631511, guid: 5d93d6e9ff2c9bc43825223259046b50, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d93d6e9ff2c9bc43825223259046b50, type: 3}
