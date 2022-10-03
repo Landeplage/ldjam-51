@@ -59,7 +59,11 @@
 			<destination>{fd5c99b3-cea4-44cd-8be9-b1c1dd818fbb}</destination>
 		</relationship>
 	</object>
-	<object class="EventAutomatableProperties" id="{ebd31d0e-2f55-4680-b989-919de377a6c1}" />
+	<object class="EventAutomatableProperties" id="{ebd31d0e-2f55-4680-b989-919de377a6c1}">
+		<property name="triggerCooldown">
+			<value>1000</value>
+		</property>
+	</object>
 	<object class="MarkerTrack" id="{a5afa4f4-c183-40b8-9740-afe0305e66ec}" />
 	<object class="GroupTrack" id="{c9dd89e3-ab93-4af0-95ae-445a0ea34e7b}">
 		<relationship name="modules">
@@ -92,6 +96,12 @@
 	</object>
 	<object class="MixerBusPanner" id="{9976a3e2-237b-43ca-a5b7-0aae62382e1c}" />
 	<object class="MultiSound" id="{d051d107-0cb5-4ac5-b756-296f2fa54c51}">
+		<property name="triggerProbabilityEnabled">
+			<value>true</value>
+		</property>
+		<property name="triggerProbability">
+			<value>35</value>
+		</property>
 		<property name="length">
 			<value>0.83552083333333338</value>
 		</property>

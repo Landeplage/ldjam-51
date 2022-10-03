@@ -59,7 +59,14 @@
 			<destination>{fd5c99b3-cea4-44cd-8be9-b1c1dd818fbb}</destination>
 		</relationship>
 	</object>
-	<object class="EventAutomatableProperties" id="{75ae0783-e955-49e4-809f-73ebfc6de453}" />
+	<object class="EventAutomatableProperties" id="{75ae0783-e955-49e4-809f-73ebfc6de453}">
+		<property name="maxVoices">
+			<value>1</value>
+		</property>
+		<property name="voiceStealing">
+			<value>3</value>
+		</property>
+	</object>
 	<object class="MarkerTrack" id="{543880ee-6163-4eb0-b933-74892b457507}" />
 	<object class="GroupTrack" id="{420eb91a-c071-4906-a208-04b48700c4f4}">
 		<relationship name="modules">
@@ -92,6 +99,12 @@
 	</object>
 	<object class="MixerBusPanner" id="{0b465394-30e9-4c31-956e-66e4f25c958e}" />
 	<object class="MultiSound" id="{2298b2b5-533a-46a6-b84f-1543bd759539}">
+		<property name="triggerProbabilityEnabled">
+			<value>true</value>
+		</property>
+		<property name="triggerProbability">
+			<value>50</value>
+		</property>
 		<property name="length">
 			<value>1.5369166666666667</value>
 		</property>
