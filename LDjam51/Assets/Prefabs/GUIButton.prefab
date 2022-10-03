@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6912404190152794653}
   - component: {fileID: 6912404190152794652}
   - component: {fileID: 6912404190152794655}
+  - component: {fileID: 520988158370418320}
   m_Layer: 5
   m_Name: GUIButton
   m_TagString: Untagged
@@ -122,6 +123,39 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &520988158370418320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6912404190152794641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 248f7e5246bf41b4c9fd1f79d3c17bc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onHighlight:
+    Guid:
+      Data1: -1411623192
+      Data2: 1181184343
+      Data3: -1386220913
+      Data4: -1476488391
+    Path: event:/UI/Button Focus
+  onPressed:
+    Guid:
+      Data1: 1824415009
+      Data2: 1151773162
+      Data3: 653775285
+      Data4: 1831707764
+    Path: event:/UI/Button Press
+  onPressedExtra:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!1 &6912404190988154553
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,8 +224,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Next Level
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a1a5e1c5366dac94bb200773d46bdd96, type: 2}
-  m_sharedMaterial: {fileID: -5136384573434366983, guid: a1a5e1c5366dac94bb200773d46bdd96, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c19252c2976e3743bc72bfd3b3ce4ab, type: 2}
+  m_sharedMaterial: {fileID: -3836228937429727959, guid: 5c19252c2976e3743bc72bfd3b3ce4ab, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

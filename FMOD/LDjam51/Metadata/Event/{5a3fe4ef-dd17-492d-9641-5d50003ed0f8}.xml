@@ -67,7 +67,7 @@
 			<value>3</value>
 		</property>
 		<property name="triggerCooldown">
-			<value>3000</value>
+			<value>5000</value>
 		</property>
 	</object>
 	<object class="MarkerTrack" id="{543880ee-6163-4eb0-b933-74892b457507}" />
@@ -102,12 +102,6 @@
 	</object>
 	<object class="MixerBusPanner" id="{0b465394-30e9-4c31-956e-66e4f25c958e}" />
 	<object class="MultiSound" id="{2298b2b5-533a-46a6-b84f-1543bd759539}">
-		<property name="triggerProbabilityEnabled">
-			<value>true</value>
-		</property>
-		<property name="triggerProbability">
-			<value>65</value>
-		</property>
 		<property name="length">
 			<value>1.5369166666666667</value>
 		</property>
