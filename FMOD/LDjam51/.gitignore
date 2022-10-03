@@ -4,3 +4,6 @@
 .cache/**
 .unsaved/**
 .user/**
+
+# Ignore profiler-session wav-files
+Metadata/**/ProfilerSession/**/*.wav
