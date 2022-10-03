@@ -576,6 +576,7 @@ public class TurnPlanner : MonoBehaviour
             var turnExecutor = FindObjectOfType<TurnExecutor>();
             MakeBoardFromScene();
             turnExecutor.ResetEntities(board);
+            guiSpawnTimer.SetSeconds(currentSecond, NestsCount());
         }
         if (Win())
         {
