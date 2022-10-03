@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{a1afab4a-cfb6-4a4e-a944-6bdd8f7c69f0}">
+		<property name="assetPath">
+			<value>Combat/Spell - Heal 02.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>1.9199999999999999</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{7e4c6400-6ff7-44f6-9042-02ebef32ef81}</destination>
+		</relationship>
+	</object>
+</objects>
