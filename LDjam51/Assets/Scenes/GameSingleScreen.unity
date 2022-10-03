@@ -2873,6 +2873,106 @@ PrefabInstance:
       propertyPath: guiTimeline
       value: 
       objectReference: {fileID: 132258232}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: attackFmodEvent.Path
+      value: event:/Units/Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: damageFmodEvent.Path
+      value: event:/Units/Take Damage
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: footstepFmodEvent.Path
+      value: event:/Units/Footstep
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: enemyAttackFmodEvent.Path
+      value: event:/Enemies/Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: enemyDamageFmodEvent.Path
+      value: event:/Enemies/Take Damage
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: attackFmodEvent.Guid.Data1
+      value: 2138863253
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: attackFmodEvent.Guid.Data2
+      value: 1169493516
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: attackFmodEvent.Guid.Data3
+      value: 1202587040
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: attackFmodEvent.Guid.Data4
+      value: -1149602046
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: damageFmodEvent.Guid.Data1
+      value: 368876698
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: damageFmodEvent.Guid.Data2
+      value: 1246593697
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: damageFmodEvent.Guid.Data3
+      value: -620459644
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: damageFmodEvent.Guid.Data4
+      value: -929927290
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: footstepFmodEvent.Guid.Data1
+      value: 222932551
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: footstepFmodEvent.Guid.Data2
+      value: 1097301079
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: footstepFmodEvent.Guid.Data3
+      value: 334408085
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: footstepFmodEvent.Guid.Data4
+      value: 1632382983
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: enemyAttackFmodEvent.Guid.Data1
+      value: -640131678
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: enemyAttackFmodEvent.Guid.Data2
+      value: 1097129310
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: enemyAttackFmodEvent.Guid.Data3
+      value: -2022892381
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: enemyAttackFmodEvent.Guid.Data4
+      value: -360554974
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: enemyDamageFmodEvent.Guid.Data1
+      value: 364986651
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: enemyDamageFmodEvent.Guid.Data2
+      value: 1277415829
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: enemyDamageFmodEvent.Guid.Data3
+      value: -1294758485
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162768430707127317, guid: b2557782715e44b4893d4af98e553470, type: 3}
+      propertyPath: enemyDamageFmodEvent.Guid.Data4
+      value: 664651856
+      objectReference: {fileID: 0}
     - target: {fileID: 7213127312589892548, guid: b2557782715e44b4893d4af98e553470, type: 3}
       propertyPath: healSlot
       value: 

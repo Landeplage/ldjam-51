@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMODUnity;
 
 class MoveInfo
 {
@@ -16,6 +17,12 @@ public class TurnExecutor : MonoBehaviour
 {
     public GUI_Timeline guiTimeline;
     public GameObject boardEntity;
+
+    [SerializeField] EventReference footstepFmodEvent;
+    [SerializeField] EventReference attackFmodEvent;
+    [SerializeField] EventReference enemyAttackFmodEvent;
+    [SerializeField] EventReference damageFmodEvent;
+    [SerializeField] EventReference enemyDamageFmodEvent;
 
     public void ResetEntities(Board board)
     {
@@ -69,6 +76,7 @@ public class TurnExecutor : MonoBehaviour
             if (action.type == BoardActionType.Move)
             {
                 Vector3 startPos = info.obj.transform.position;
+                FMODUtility.Play(footstepFmodEvent, info.obj.transform.position);
                 for (float i = 0; i < 1.0; i += 0.35f)
                 {
                     info.obj.transform.position = Vector3.Lerp(startPos, info.targetPosition, i);
@@ -78,7 +86,23 @@ public class TurnExecutor : MonoBehaviour
             }
             if (action.type == BoardActionType.Attack)
             {
+                if (BoardSquare.FriendlyType(info.obj.type))
+                {
+                    FMODUtility.Play(attackFmodEvent, info.obj.transform.position);
+                }
+                else
+                {
+                    FMODUtility.Play(enemyAttackFmodEvent, info.obj.transform.position);
+                }
                 yield return info.obj.Attack(info.position, info.targetPosition);
+                if (BoardSquare.FriendlyType(info.obj.type))
+                {
+                    FMODUtility.Play(enemyDamageFmodEvent, info.target.transform.position);
+                }
+                else
+                {
+                    FMODUtility.Play(damageFmodEvent, info.target.transform.position);
+                }
                 info.target.Hurt(1);
                 if (info.target.Dead())
                 {
