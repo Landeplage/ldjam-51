@@ -62,7 +62,7 @@ public class GUI_EndLevelScreen : MonoBehaviour
     IEnumerator PlayFadeIn()
     {
         fader.alpha = 0.0f;
-        for (float i = 0; i < 1.0; i += 0.02f)
+        for (float i = 0; i < 1.0; i += 0.03f)
         {
             fader.alpha  = Mathf.Lerp(0.0f, 1.0f, i);
             yield return null;
