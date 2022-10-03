@@ -25,6 +25,6 @@ public class Entropy
 
     public void Apply(int n)
     {
-        seed = (n * seed * 1103515245 + 12345) % 2147483648;
+        seed = n * 11111;
     }
 }

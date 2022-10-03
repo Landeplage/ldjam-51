@@ -1,0 +1,34 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class LevelLoader : MonoBehaviour
+{
+    void Start()
+    {
+        if (Game.level == 1)
+        {
+            transform.Find("Level1").gameObject.SetActive(true);
+        }
+        else if (Game.level == 1)
+        {
+            transform.Find("Level2").gameObject.SetActive(true);
+        }
+        else if (Game.level == 2)
+        {
+            transform.Find("Level3").gameObject.SetActive(true);
+        }
+        else if (Game.level == 3)
+        {
+            transform.Find("Level4").gameObject.SetActive(true);
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneSwitcher.Restart();
+        }
+    }
+}

@@ -114,9 +114,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 3
-  friendlyVisuals: {fileID: 0}
+  friendlyMeleeVisuals: {fileID: 0}
+  friendlyRangedVisuals: {fileID: 0}
+  friendlyHealerVisuals: {fileID: 0}
   enemyVisuals: {fileID: 0}
   wellVisuals: {fileID: 0}
+  enemyWellVisuals: {fileID: 0}
 --- !u!1 &3332354551879480426
 GameObject:
   m_ObjectHideFlags: 0

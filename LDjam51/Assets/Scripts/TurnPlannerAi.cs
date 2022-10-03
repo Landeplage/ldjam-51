@@ -31,7 +31,7 @@ public class TurnPlannerAi
                 }
                 if (actions[i].type == BoardActionType.Move)
                 {
-                    var wellPosition = board.ClosestAiInterest(actions[i].target);
+                    var wellPosition = board.ClosestAiInterest(actions[i].target, board.At(position).aiType);
                     if (wellPosition.x == -1)
                     {
                         actions[i].score = 9999.0f;
@@ -60,14 +60,17 @@ public class TurnPlannerAi
             }
         }
         actions.Sort((x, y) => x.score.CompareTo(y.score));
+        while (actions.Count > 3)
+        {
+            actions.RemoveAt(actions.Count - 1);
+        }
         if (actions.Count == 0)
         {
             return BoardAction.Idle();
         }
         else
         {
-            //return actions[(int)(entropy.Next() * actions.Count)];
-            return actions[0];
+            return actions[(int)(entropy.Next() * actions.Count)];
         }
     }
 

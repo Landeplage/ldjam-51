@@ -19,42 +19,47 @@ public class Grid : MonoBehaviour
     {
         if (Application.IsPlaying(gameObject))
         {
-            var entities = FindObjectsOfType<GridEntity>();
-            var slots = GetComponentsInChildren<GridSlot>();
-            for (int i = 0; i < entities.Length; ++i)
+            Game.Get().onSetupGrid.AddListener(OnSetupGrid);
+        }
+    }
+
+    void OnSetupGrid()
+    {
+        var entities = FindObjectsOfType<GridEntity>();
+        var slots = GetComponentsInChildren<GridSlot>();
+        for (int i = 0; i < entities.Length; ++i)
+        {
+            if (entities[i].gridSlot == null)
             {
-                if (entities[i].gridSlot == null)
+                GridSlot closestSlot = null;
+                float closestDistance = 0.0f;
+                for (int j = 0; j < slots.Length; ++j)
                 {
-                    GridSlot closestSlot = null;
-                    float closestDistance = 0.0f;
-                    for (int j = 0; j < slots.Length; ++j)
+                    float distance = (((Vector2)slots[j].transform.position) - ((Vector2)entities[i].transform.position)).magnitude;
+                    if (closestSlot == null || distance < closestDistance)
                     {
-                        float distance = (((Vector2)slots[j].transform.position) - ((Vector2)entities[i].transform.position)).magnitude;
-                        if (closestSlot == null || distance < closestDistance)
-                        {
-                            closestSlot = slots[j];
-                            closestDistance = distance;
-                        }
+                        closestSlot = slots[j];
+                        closestDistance = distance;
                     }
-                    if (closestSlot != null && closestSlot.entity == null)
-                    {
-                        closestSlot.entity = entities[i];
-                        entities[i].gridSlot = closestSlot;
-                    }
-                    else
-                    {
-                        Destroy(entities[i].gameObject);
-                    }
+                }
+                if (closestSlot != null && closestSlot.entity == null)
+                {
+                    closestSlot.entity = entities[i];
+                    entities[i].gridSlot = closestSlot;
+                }
+                else
+                {
+                    Destroy(entities[i].gameObject);
                 }
             }
-            for (int x = 0; x < width; x++)
+        }
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
             {
-                for (int y = 0; y < height; y++)
-                {
-                    var label = string.Format("{0},{1}", x, y);
-                    var child = transform.Find(label);
-                    child.GetComponent<GridSlot>().position = new Vector2Int(x, y);
-                }
+                var label = string.Format("{0},{1}", x, y);
+                var child = transform.Find(label);
+                child.GetComponent<GridSlot>().position = new Vector2Int(x, y);
             }
         }
     }

@@ -8,12 +8,15 @@ public class Game : MonoBehaviour
     public ClickManager clickManager;
     public SelectManager selectManager;
 
+    public UnityEvent onSetupGrid = new();
     public UnityEvent onGameStart = new();
     public UnityEvent<int> OnTurnStart = new();
 
     private float timeAlive = 0.0f;
     private bool gameStarted = false;
     private int turnNum = 1;
+
+    static public int level = 1;
 
     public static Game Get()
     {
@@ -38,6 +41,7 @@ public class Game : MonoBehaviour
         timeAlive += Time.deltaTime;
         if (!gameStarted && timeAlive > 0.1f)
         {
+            onSetupGrid.Invoke();
             onGameStart.Invoke();
             OnTurnStart.Invoke(turnNum);
             gameStarted = true;

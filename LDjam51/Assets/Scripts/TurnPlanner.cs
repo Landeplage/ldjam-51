@@ -226,6 +226,18 @@ public class Board
             Offsets(square, new List<(int, int)> { ( 3, 2 ) }),
             Offsets(square, new List<(int, int)> { ( 4, 2 ) }),
             Offsets(square, new List<(int, int)> { ( 5, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 0, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 0, 2 ), ( 2, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 1, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 1, 2 ), ( 3, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 2, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 2, 2 ), ( 4, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 3, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 3, 2 ), ( 5, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 4, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 4, 2 ), ( 0, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 5, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 5, 2 ), ( 1, 1 ) }),
         });
     }
 
@@ -245,6 +257,24 @@ public class Board
             Offsets(square, new List<(int, int)> { ( 4, 2 ), ( 0, 1 ) }),
             Offsets(square, new List<(int, int)> { ( 5, 2 ) }),
             Offsets(square, new List<(int, int)> { ( 5, 2 ), ( 1, 1 ) }),
+            /*Offsets(square, new List<(int, int)> { ( 0, 3 ) }),
+            Offsets(square, new List<(int, int)> { ( 0, 3 ), ( 2, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 0, 3 ), ( 2, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 1, 3 ) }),
+            Offsets(square, new List<(int, int)> { ( 1, 3 ), ( 3, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 1, 3 ), ( 3, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 2, 3 ) }),
+            Offsets(square, new List<(int, int)> { ( 2, 3 ), ( 4, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 2, 3 ), ( 4, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 3, 3 ) }),
+            Offsets(square, new List<(int, int)> { ( 3, 3 ), ( 5, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 3, 3 ), ( 5, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 4, 3 ) }),
+            Offsets(square, new List<(int, int)> { ( 4, 3 ), ( 0, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 4, 3 ), ( 0, 2 ) }),
+            Offsets(square, new List<(int, int)> { ( 5, 3 ) }),
+            Offsets(square, new List<(int, int)> { ( 5, 3 ), ( 1, 1 ) }),
+            Offsets(square, new List<(int, int)> { ( 5, 3 ), ( 1, 2 ) }),*/
         });
     }
 
@@ -279,23 +309,17 @@ public class Board
             Offsets(square, new List<(int, int)> { ( 4, 1 ) }),
             Offsets(square, new List<(int, int)> { ( 5, 1 ) }),
             Offsets(square, new List<(int, int)> { ( 0, 2 ) }),
-            Offsets(square, new List<(int, int)> { ( 0, 2 ), ( 2, 1 ) }),
             Offsets(square, new List<(int, int)> { ( 1, 2 ) }),
-            Offsets(square, new List<(int, int)> { ( 1, 2 ), ( 3, 1 ) }),
             Offsets(square, new List<(int, int)> { ( 2, 2 ) }),
-            Offsets(square, new List<(int, int)> { ( 2, 2 ), ( 4, 1 ) }),
             Offsets(square, new List<(int, int)> { ( 3, 2 ) }),
-            Offsets(square, new List<(int, int)> { ( 3, 2 ), ( 5, 1 ) }),
             Offsets(square, new List<(int, int)> { ( 4, 2 ) }),
-            Offsets(square, new List<(int, int)> { ( 4, 2 ), ( 0, 1 ) }),
             Offsets(square, new List<(int, int)> { ( 5, 2 ) }),
-            Offsets(square, new List<(int, int)> { ( 5, 2 ), ( 1, 1 ) }),
         });
     }
 
     List<BoardSquare> MoveType(BoardSquare square)
     {
-        if (square.type == BoardSquareType.FriendlyRange)
+        if (square.type == BoardSquareType.FriendlyRange || square.type == BoardSquareType.FriendlyMelee)
         {
             return Adjacent2(square);
         }
@@ -317,13 +341,26 @@ public class Board
         }
     }
 
-    public Vector2Int ClosestAiInterest(Vector2Int position)
+    public Vector2Int ClosestAiInterest(Vector2Int position, BoardAiType aiType)
     {
         var closest = new Vector2Int(-1, -1);
         var distance = 0.0f;
         foreach (var square in squares)
         {
-            if (BoardSquare.FriendlyType(square.type))
+            var interest = false;
+            if (aiType == BoardAiType.UnitFocus)
+            {
+                interest = BoardSquare.FriendlyType(square.type) && square.type != BoardSquareType.Well;
+            }
+            else if (aiType == BoardAiType.WellFocus)
+            {
+                interest = square.type == BoardSquareType.Well;
+            }
+            else if (aiType == BoardAiType.Any)
+            {
+                interest = BoardSquare.FriendlyType(square.type);
+            }
+            if (interest)
             {
                 if (((Vector2)square.position - position).magnitude < distance || closest.x == -1)
                 {
@@ -348,12 +385,20 @@ public enum BoardSquareType
     EnemyWell,
 }
 
+public enum BoardAiType
+{
+    Any,
+    UnitFocus,
+    WellFocus,
+}
+
 public class BoardSquare
 {
     public Vector2Int position;
     public BoardSquareType type;
     public int maxHealth;
     public int health;
+    public BoardAiType aiType = BoardAiType.Any;
 
     public BoardSquare(Vector2Int position, BoardSquareType type)
     {
@@ -362,15 +407,23 @@ public class BoardSquare
         maxHealth = 2;
         if (type == BoardSquareType.FriendlyMelee)
         {
-            maxHealth = 5;
+            maxHealth = 4;
         }
         else if (type == BoardSquareType.Well)
         {
-            maxHealth = 10;
+            maxHealth = 5;
         }
         else if (type == BoardSquareType.EnemyWell)
         {
             maxHealth = 5;
+        }
+        else if (type == BoardSquareType.Enemy)
+        {
+            maxHealth = 2;
+        }
+        else if (type == BoardSquareType.FriendlyHealer)
+        {
+            maxHealth = 1;
         }
         health = maxHealth;
     }
@@ -388,6 +441,7 @@ public class BoardSquare
         type = other.type;
         health = other.health;
         maxHealth = other.maxHealth;
+        aiType = other.aiType;
         other.type = BoardSquareType.Empty;
     }
 
@@ -525,8 +579,16 @@ public class TurnPlanner : MonoBehaviour
             MakeBoardFromScene();
             turnExecutor.ResetEntities(board);
         }
-        planning = true;
-        PlanActions();
+        if (Win())
+        {
+            Game.level += 1;
+            SceneSwitcher.Restart();
+        }
+        else
+        {
+            planning = true;
+            PlanActions();
+        }
     }
 
     void MakeBoardFromScene()
@@ -708,13 +770,34 @@ public class TurnPlanner : MonoBehaviour
         board = board.ApplyAction(action);
 
         var autoActions = board.AllValidActions(true);
+        BoardAction healAction = null;
+        for (var i = 0; i < autoActions.Count; ++i)
+        {
+            if (autoActions[i].type == BoardActionType.Heal)
+            {
+                if (autoActions[i].enabled && board.At(autoActions[i].target).type != BoardSquareType.Empty)
+                {
+                    if (healAction == null || (board.At(autoActions[i].target).health / (float)board.At(autoActions[i].target).maxHealth) < (board.At(healAction.target).health / (float)board.At(healAction.target).maxHealth))
+                    {
+                        healAction = autoActions[i];
+                    }
+                }
+                autoActions.RemoveAt(i);
+                i--;
+            }
+        }
         foreach (var autoAction in autoActions)
         {
-            if ((autoAction.type == BoardActionType.Attack || autoAction.type == BoardActionType.Heal) && autoAction.enabled && board.At(autoAction.target).type != BoardSquareType.Empty)
+            if (autoAction.type == BoardActionType.Attack && autoAction.enabled && board.At(autoAction.target).type != BoardSquareType.Empty)
             {
                 yield return turnExecutor.PlayAction(autoAction);
                 board = board.ApplyAction(autoAction);
             }
+        }
+        if (healAction != null)
+        {
+            yield return turnExecutor.PlayAction(healAction);
+            board = board.ApplyAction(healAction);
         }
 
         appliedActions += 1;
@@ -843,10 +926,47 @@ public class TurnPlanner : MonoBehaviour
                     var position = board.squares[index].position;
                     var turnExecutor = FindObjectOfType<TurnExecutor>();
                     board.squares[board.Index(position)] = new BoardSquare(position, BoardSquareType.Enemy);
+                    var r = entropy.Next();
+                    if (r < 0.45)
+                    {
+                        board.squares[board.Index(position)].aiType = BoardAiType.UnitFocus;
+                    }
+                    else if (r < 0.9)
+                    {
+                        board.squares[board.Index(position)].aiType = BoardAiType.WellFocus;
+                    }
+                    else
+                    {
+                        board.squares[board.Index(position)].aiType = BoardAiType.Any;
+                    }
                     turnExecutor.ResetEntities(board);
                     break;
                 }
             }
         }
+    }
+
+    public bool Win()
+    {
+        foreach (var square in board.squares)
+        {
+            if (BoardSquare.EnemyType(square.type))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public bool Lost()
+    {
+        foreach (var square in board.squares)
+        {
+            if (BoardSquare.FriendlyType(square.type))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }

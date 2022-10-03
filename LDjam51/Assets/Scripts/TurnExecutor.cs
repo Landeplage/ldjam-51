@@ -69,7 +69,7 @@ public class TurnExecutor : MonoBehaviour
             if (action.type == BoardActionType.Move)
             {
                 Vector3 startPos = info.obj.transform.position;
-                for (float i = 0; i < 1.0; i += 0.15f)
+                for (float i = 0; i < 1.0; i += 0.35f)
                 {
                     info.obj.transform.position = Vector3.Lerp(startPos, info.targetPosition, i);
                     yield return new WaitForSeconds(0.016f);
