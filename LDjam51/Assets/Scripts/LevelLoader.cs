@@ -6,7 +6,7 @@ public class LevelLoader : MonoBehaviour
 {
     void Start()
     {
-        if (Game.level > 9)
+        if (Game.level > 10)
         {
             Game.level = 1;
         }
@@ -45,6 +45,10 @@ public class LevelLoader : MonoBehaviour
         else if (Game.level == 9)
         {
             transform.Find("Level9").gameObject.SetActive(true);
+        }
+        else if (Game.level == 10)
+        {
+            transform.Find("Level10").gameObject.SetActive(true);
         }
     }
 
