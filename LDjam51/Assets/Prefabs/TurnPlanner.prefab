@@ -50,7 +50,6 @@ MonoBehaviour:
   guiUndoBuffer: {fileID: 0}
   guiSpawnTimer: {fileID: 0}
   guiEndLevel: {fileID: 0}
-  lastLevel: 10
   undoFmodEvent:
     Guid:
       Data1: 173299357
@@ -107,6 +106,13 @@ MonoBehaviour:
       Data3: -1869763164
       Data4: 1324658803
     Path: event:/UI/Confirm Light
+  voSelectFmodEvent:
+    Guid:
+      Data1: 1514136815
+      Data2: 1227742487
+      Data3: 1348288918
+      Data4: -120570368
+    Path: event:/Units/VO - Selected
 --- !u!1 &6887119269984065568
 GameObject:
   m_ObjectHideFlags: 0
@@ -216,6 +222,20 @@ MonoBehaviour:
       Data3: -807248505
       Data4: 625026105
     Path: event:/Enemies/Phase Out
+  voDeathFmodEvent:
+    Guid:
+      Data1: -168648206
+      Data2: 1157580611
+      Data3: 267212474
+      Data4: -584733754
+    Path: event:/Units/VO - Death
+  voDamageFmodEvent:
+    Guid:
+      Data1: -402511612
+      Data2: 1094083325
+      Data3: 1882130595
+      Data4: -1532549466
+    Path: event:/Units/VO - Take Damage
 --- !u!1 &8768865615849765061
 GameObject:
   m_ObjectHideFlags: 0

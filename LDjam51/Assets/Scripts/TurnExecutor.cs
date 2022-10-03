@@ -27,6 +27,8 @@ public class TurnExecutor : MonoBehaviour
     [SerializeField] EventReference hitWellFmodEvent;
     [SerializeField] EventReference hitEggsFmodEvent;
     [SerializeField] EventReference enemyDespawnFmodEvent;
+    [SerializeField] EventReference voDeathFmodEvent;
+    [SerializeField] EventReference voDamageFmodEvent;
 
     public void ResetEntities(Board board, List<Vector2Int> fadeIn)
     {
@@ -135,6 +137,17 @@ public class TurnExecutor : MonoBehaviour
                     else
                     {
                         Destroy(info.target.gameObject);
+                    }
+                    if (BoardSquare.FriendlyType(info.target.type))
+                    {
+                        FMODUtility.Play(voDeathFmodEvent, info.target.transform.position);
+                    }
+                }
+                else
+                {
+                    if (BoardSquare.FriendlyType(info.target.type))
+                    {
+                        FMODUtility.Play(voDamageFmodEvent, info.target.transform.position);
                     }
                 }
             }

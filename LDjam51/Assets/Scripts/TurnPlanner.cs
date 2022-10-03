@@ -565,6 +565,7 @@ public class TurnPlanner : MonoBehaviour
     [SerializeField] EventReference selectUnitFmodEvent;
     [SerializeField] EventReference deselectUnitFmodEvent;
     [SerializeField] EventReference actionFmodEvent;
+    [SerializeField] EventReference voSelectFmodEvent;
 
     void Start()
     {
@@ -805,6 +806,7 @@ public class TurnPlanner : MonoBehaviour
                 if (selectedSlot)
                 {
                     FMODUtility.Play(selectUnitFmodEvent, transform.position);
+                    FMODUtility.Play(voSelectFmodEvent, transform.position);
                 }
                 else
                 {
