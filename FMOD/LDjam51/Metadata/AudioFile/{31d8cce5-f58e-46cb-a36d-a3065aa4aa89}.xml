@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects serializationModel="Studio.02.02.00">
-	<object class="AudioFile" id="{11a58f4f-dd0f-4926-896e-da05b6e72fc2}">
+	<object class="AudioFile" id="{31d8cce5-f58e-46cb-a36d-a3065aa4aa89}">
 		<property name="assetPath">
-			<value>UI/Confirm - Heavy 01.wav</value>
+			<value>UI/History - Undo 01.wav</value>
 		</property>
 		<property name="frequencyInKHz">
 			<value>48</value>
@@ -11,7 +11,7 @@
 			<value>2</value>
 		</property>
 		<property name="length">
-			<value>1.76525</value>
+			<value>0.37704166666666666</value>
 		</property>
 		<relationship name="masterAssetFolder">
 			<destination>{7e4c6400-6ff7-44f6-9042-02ebef32ef81}</destination>

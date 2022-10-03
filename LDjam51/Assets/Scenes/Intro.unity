@@ -330,63 +330,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attenuationObject: {fileID: 0}
---- !u!1001 &388550371
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2077585629368928293, guid: f42351bc685db1d49b765ba3d53a3080, type: 3}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2077585629368928293, guid: f42351bc685db1d49b765ba3d53a3080, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2077585629368928293, guid: f42351bc685db1d49b765ba3d53a3080, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2077585629368928293, guid: f42351bc685db1d49b765ba3d53a3080, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2077585629368928293, guid: f42351bc685db1d49b765ba3d53a3080, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2077585629368928293, guid: f42351bc685db1d49b765ba3d53a3080, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2077585629368928293, guid: f42351bc685db1d49b765ba3d53a3080, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2077585629368928293, guid: f42351bc685db1d49b765ba3d53a3080, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2077585629368928293, guid: f42351bc685db1d49b765ba3d53a3080, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2077585629368928293, guid: f42351bc685db1d49b765ba3d53a3080, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2077585629368928293, guid: f42351bc685db1d49b765ba3d53a3080, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2077585629368928295, guid: f42351bc685db1d49b765ba3d53a3080, type: 3}
-      propertyPath: m_Name
-      value: SceneSwitcher
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: f42351bc685db1d49b765ba3d53a3080, type: 3}
 --- !u!1 &556989324
 GameObject:
   m_ObjectHideFlags: 0
@@ -550,13 +493,6 @@ MonoBehaviour:
       Data3: -1508710495
       Data4: -1618697428
     Path: event:/Intro/Amb 4
-  ambience5FmodEvent:
-    Guid:
-      Data1: 84936053
-      Data2: 1265233366
-      Data3: -1148830580
-      Data4: -132818711
-    Path: event:/Intro/Amb 5
   voiceOver1FmodEvent:
     Guid:
       Data1: 315102608
@@ -592,13 +528,27 @@ MonoBehaviour:
       Data3: -122343021
       Data4: 2071085877
     Path: event:/Intro/VO 5
-  musicFmodEvent:
+  transitionEvent:
+    Guid:
+      Data1: 1935136833
+      Data2: 1184019175
+      Data3: -463594828
+      Data4: -2003244279
+    Path: event:/Intro/Whoosh
+  musicEvent:
     Guid:
       Data1: -297302511
       Data2: 1201934594
       Data3: -165977205
       Data4: 1158219474
     Path: event:/Music/Intro
+  skipEvent:
+    Guid:
+      Data1: 1878384744
+      Data2: 1276658359
+      Data3: -1869763164
+      Data4: 1324658803
+    Path: event:/UI/Confirm Light
 --- !u!212 &646482159
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -993,7 +943,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7850214960484692026, guid: 2974236a24a7fa74985fa590e98cc1b6, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7850214960484692026, guid: 2974236a24a7fa74985fa590e98cc1b6, type: 3}
       propertyPath: m_LocalPosition.x

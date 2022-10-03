@@ -10,18 +10,21 @@ public class Intro : MonoBehaviour
     [SerializeField] EventReference ambience2FmodEvent;
     [SerializeField] EventReference ambience3FmodEvent;
     [SerializeField] EventReference ambience4FmodEvent;
-    [SerializeField] EventReference ambience5FmodEvent;
     [SerializeField] EventReference voiceOver1FmodEvent;
     [SerializeField] EventReference voiceOver2FmodEvent;
     [SerializeField] EventReference voiceOver3FmodEvent;
     [SerializeField] EventReference voiceOver4FmodEvent;
     [SerializeField] EventReference voiceOver5FmodEvent;
+    [SerializeField] EventReference transitionEvent;
+    [SerializeField] EventReference musicEvent;
+    [SerializeField] EventReference skipEvent;
 
     List<EventInstance> sweetSounds = new();
     bool ending = false;
 
     public void StartVoice1()
     {
+        sweetSounds.Add(FMODUtility.Play(musicEvent));
         sweetSounds.Add(FMODUtility.Play(ambience1FmodEvent, transform.position));
         sweetSounds.Add(FMODUtility.Play(voiceOver1FmodEvent, transform.position));
     }
@@ -46,8 +49,11 @@ public class Intro : MonoBehaviour
 
     public void StartVoice5()
     {
-        sweetSounds.Add(FMODUtility.Play(ambience5FmodEvent, transform.position));
         sweetSounds.Add(FMODUtility.Play(voiceOver5FmodEvent, transform.position));
+    }
+
+    public void PlayTransition() {
+        FMODUtility.Play(transitionEvent);
     }
 
     public void FadeOut()
@@ -56,6 +62,8 @@ public class Intro : MonoBehaviour
         {
             sweetSound.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         }
+
+        sweetSounds.Clear();
     }
 
     public void End()
@@ -68,6 +76,7 @@ public class Intro : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && !ending)
         {
+            FMODUtility.Play(skipEvent);
             FadeOut();
             End();
         }

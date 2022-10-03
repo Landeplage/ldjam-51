@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects serializationModel="Studio.02.02.00">
-	<object class="AudioFile" id="{11a58f4f-dd0f-4926-896e-da05b6e72fc2}">
+	<object class="AudioFile" id="{4f38e50d-c584-4b74-8ac8-a1c22275f33b}">
 		<property name="assetPath">
-			<value>UI/Confirm - Heavy 01.wav</value>
+			<value>Intro/Amb 03.wav</value>
 		</property>
 		<property name="frequencyInKHz">
 			<value>48</value>
 		</property>
 		<property name="channelCount">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<property name="length">
-			<value>1.76525</value>
+			<value>12.189187499999999</value>
 		</property>
 		<relationship name="masterAssetFolder">
 			<destination>{7e4c6400-6ff7-44f6-9042-02ebef32ef81}</destination>

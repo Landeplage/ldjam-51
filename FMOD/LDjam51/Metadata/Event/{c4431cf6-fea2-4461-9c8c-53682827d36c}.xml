@@ -165,6 +165,9 @@
 		<property name="attackShape">
 			<value>-1.00000048</value>
 		</property>
+		<property name="releaseTime">
+			<value>1800</value>
+		</property>
 		<property name="releaseShape">
 			<value>-0.271852672</value>
 		</property>

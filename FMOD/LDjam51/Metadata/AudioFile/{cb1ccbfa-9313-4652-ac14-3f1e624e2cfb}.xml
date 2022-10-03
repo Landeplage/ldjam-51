@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects serializationModel="Studio.02.02.00">
-	<object class="AudioFile" id="{11a58f4f-dd0f-4926-896e-da05b6e72fc2}">
+	<object class="AudioFile" id="{cb1ccbfa-9313-4652-ac14-3f1e624e2cfb}">
 		<property name="assetPath">
-			<value>UI/Confirm - Heavy 01.wav</value>
+			<value>Intro/Whoosh 01.wav</value>
 		</property>
 		<property name="frequencyInKHz">
 			<value>48</value>
@@ -11,7 +11,7 @@
 			<value>2</value>
 		</property>
 		<property name="length">
-			<value>1.76525</value>
+			<value>6.8333541666666671</value>
 		</property>
 		<relationship name="masterAssetFolder">
 			<destination>{7e4c6400-6ff7-44f6-9042-02ebef32ef81}</destination>
