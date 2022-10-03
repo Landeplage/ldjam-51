@@ -902,6 +902,16 @@ public class TurnPlanner : MonoBehaviour
             planning = false;
             StartCoroutine(AddAction(BoardAction.Idle(), selectedSlot));
         }
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Game.level += 1;
+            SceneSwitcher.Restart();
+        }
+        if (Input.GetKeyDown(KeyCode.O) && Game.level > 1)
+        {
+            Game.level -= 1;
+            SceneSwitcher.Restart();
+        }
     }
 
     public void SpawnEnemy()
