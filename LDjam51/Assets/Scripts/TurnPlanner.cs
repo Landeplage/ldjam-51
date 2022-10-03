@@ -553,6 +553,8 @@ public class TurnPlanner : MonoBehaviour
     [System.NonSerialized]
     public bool planning = false;
 
+    private bool exiting = false;
+
     private List<(Vector2Int, Vector2Int)> forcedMoves = new();
 
     [SerializeField] EventReference undoFmodEvent;
@@ -1058,6 +1060,18 @@ public class TurnPlanner : MonoBehaviour
         {
             Game.level -= 1;
             SceneSwitcher.Restart();
+        }
+        if (Input.GetKeyDown(KeyCode.Escape) && !exiting)
+        {
+            planning = false;
+            SceneSwitcher.GoTo("Menu");
+            var music = FindObjectOfType<InGameMusicController>();
+            if (music)
+            {
+                music.OnFadeOut();
+            }
+            FMODUtility.Play(defeatFmodEvent, transform.position);
+            exiting = true;
         }
     }
 
