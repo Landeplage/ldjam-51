@@ -575,6 +575,7 @@ public class TurnPlanner : MonoBehaviour
         }
         if (Win())
         {
+            FindObjectOfType<Tutorial>().End();
             FMODUtility.Play(victoryFmodEvent, transform.position);
             Game.level += 1;
             SceneSwitcher.Restart();
@@ -790,6 +791,7 @@ public class TurnPlanner : MonoBehaviour
 
     IEnumerator AddAction(BoardAction action, GridSlot nextSelection)
     {
+        FindObjectOfType<Tutorial>().Next();
         if (forcedMoves.Count > 0)
         {
             forcedMoves.RemoveAt(0);
@@ -886,6 +888,7 @@ public class TurnPlanner : MonoBehaviour
             SpawnEnemy();
         }
         OnPlanningStart();
+        FindObjectOfType<Tutorial>().Next();
     }
 
     void UndoAction()
