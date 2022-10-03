@@ -7,6 +7,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 276152041315409395, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: fmodEvent.Path
+      value: event:/Music/Menu
+      objectReference: {fileID: 0}
+    - target: {fileID: 276152041315409395, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: fmodEvent.Guid.Data1
+      value: 862827362
+      objectReference: {fileID: 0}
+    - target: {fileID: 276152041315409395, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: fmodEvent.Guid.Data2
+      value: 1127337680
+      objectReference: {fileID: 0}
+    - target: {fileID: 276152041315409395, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: fmodEvent.Guid.Data3
+      value: -1512111483
+      objectReference: {fileID: 0}
+    - target: {fileID: 276152041315409395, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: fmodEvent.Guid.Data4
+      value: 743106002
+      objectReference: {fileID: 0}
     - target: {fileID: 407025579131690343, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
       propertyPath: m_Name
       value: SceneAudio-Menu
@@ -67,6 +87,14 @@ PrefabInstance:
       propertyPath: EventReference.Guid.Data4
       value: 743106002
       objectReference: {fileID: 0}
+    - target: {fileID: 7936683005974662279, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: Banks.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7936683005974662279, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: Banks.Array.data[0]
+      value: Menu
+      objectReference: {fileID: 0}
     - target: {fileID: 8781278115810248076, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -110,6 +138,26 @@ PrefabInstance:
     - target: {fileID: 8781278115810248076, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9138771859153242855, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: fmodEvent.Path
+      value: event:/Ambience/Menu
+      objectReference: {fileID: 0}
+    - target: {fileID: 9138771859153242855, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: fmodEvent.Guid.Data1
+      value: -70774074
+      objectReference: {fileID: 0}
+    - target: {fileID: 9138771859153242855, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: fmodEvent.Guid.Data2
+      value: 1092342996
+      objectReference: {fileID: 0}
+    - target: {fileID: 9138771859153242855, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: fmodEvent.Guid.Data3
+      value: -779055432
+      objectReference: {fileID: 0}
+    - target: {fileID: 9138771859153242855, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: fmodEvent.Guid.Data4
+      value: 11774929
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}

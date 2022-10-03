@@ -353,8 +353,8 @@ MonoBehaviour:
   sourceProjectPath: ../FMOD/LDjam51/LDjam51.fspro
   sourceBankPath: ../FMOD/LDjam51/Build
   SourceBankPathUnformatted: 
-  BankRefreshCooldown: 5
-  ShowBankRefreshWindow: 1
+  BankRefreshCooldown: 1
+  ShowBankRefreshWindow: 0
   AutomaticEventLoading: 1
   BankLoadType: 0
   AutomaticSampleLoading: 0
@@ -375,7 +375,10 @@ MonoBehaviour:
   Plugins: []
   MasterBanks:
   - Master
-  Banks: []
+  Banks:
+  - In-Game
+  - Intro
+  - Menu
   BanksToLoad: []
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0

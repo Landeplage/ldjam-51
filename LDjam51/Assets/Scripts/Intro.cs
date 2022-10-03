@@ -16,15 +16,9 @@ public class Intro : MonoBehaviour
     [SerializeField] EventReference voiceOver3FmodEvent;
     [SerializeField] EventReference voiceOver4FmodEvent;
     [SerializeField] EventReference voiceOver5FmodEvent;
-    [SerializeField] EventReference musicFmodEvent;
 
     List<EventInstance> sweetSounds = new();
     bool ending = false;
-
-    void Start()
-    {
-        sweetSounds.Add(FMODUtility.Play(musicFmodEvent, transform.position));
-    }
 
     public void StartVoice1()
     {

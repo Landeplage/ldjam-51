@@ -7,6 +7,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 276152041315409395, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: fmodEvent.Path
+      value: event:/Music/In-Game
+      objectReference: {fileID: 0}
+    - target: {fileID: 276152041315409395, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: fmodEvent.Guid.Data1
+      value: -1266679620
+      objectReference: {fileID: 0}
+    - target: {fileID: 276152041315409395, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: fmodEvent.Guid.Data2
+      value: 1300568549
+      objectReference: {fileID: 0}
+    - target: {fileID: 276152041315409395, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: fmodEvent.Guid.Data3
+      value: 2052941714
+      objectReference: {fileID: 0}
+    - target: {fileID: 276152041315409395, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: fmodEvent.Guid.Data4
+      value: -1343636039
+      objectReference: {fileID: 0}
     - target: {fileID: 407025579131690343, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
       propertyPath: m_Name
       value: SceneAudio-InGame
@@ -67,6 +87,14 @@ PrefabInstance:
       propertyPath: EventReference.Guid.Data4
       value: -1343636039
       objectReference: {fileID: 0}
+    - target: {fileID: 7936683005974662279, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: Banks.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7936683005974662279, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: Banks.Array.data[0]
+      value: In-Game
+      objectReference: {fileID: 0}
     - target: {fileID: 8781278115810248076, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -110,6 +138,26 @@ PrefabInstance:
     - target: {fileID: 8781278115810248076, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9138771859153242855, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: fmodEvent.Path
+      value: event:/Ambience/In-Game
+      objectReference: {fileID: 0}
+    - target: {fileID: 9138771859153242855, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: fmodEvent.Guid.Data1
+      value: -1002234634
+      objectReference: {fileID: 0}
+    - target: {fileID: 9138771859153242855, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: fmodEvent.Guid.Data2
+      value: 1147272866
+      objectReference: {fileID: 0}
+    - target: {fileID: 9138771859153242855, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: fmodEvent.Guid.Data3
+      value: 1750305948
+      objectReference: {fileID: 0}
+    - target: {fileID: 9138771859153242855, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: fmodEvent.Guid.Data4
+      value: 1825777448
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}

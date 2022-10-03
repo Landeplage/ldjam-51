@@ -32,7 +32,7 @@
 			<destination>{4416a337-5790-472c-87cf-189e097602c5}</destination>
 		</relationship>
 		<relationship name="banks">
-			<destination>{15a6f7d0-dadb-4674-9a3f-52ee7935c59e}</destination>
+			<destination>{a732f47c-1222-4af9-959c-350e1b12b216}</destination>
 		</relationship>
 	</object>
 	<object class="EventMixer" id="{50c90135-aab3-4d07-bb85-4302b69fb960}">
@@ -89,6 +89,9 @@
 	</object>
 	<object class="MixerBusPanner" id="{8a13c324-449b-463e-b89b-6c43d77c358f}" />
 	<object class="SingleSound" id="{5042cb0a-a3b5-4808-90d5-ef6cf7ef156a}">
+		<property name="start">
+			<value>0.5</value>
+		</property>
 		<property name="length">
 			<value>10.367270833333333</value>
 		</property>

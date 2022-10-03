@@ -35,8 +35,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 90, y: 0}
-  m_SizeDelta: {x: -180, y: 0}
+  m_AnchoredPosition: {x: 41, y: 0}
+  m_SizeDelta: {x: -82, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5679235995275142489
 CanvasRenderer:
@@ -68,15 +68,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: Button
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a1a5e1c5366dac94bb200773d46bdd96, type: 2}
-  m_sharedMaterial: {fileID: -5136384573434366983, guid: a1a5e1c5366dac94bb200773d46bdd96, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c19252c2976e3743bc72bfd3b3ce4ab, type: 2}
+  m_sharedMaterial: {fileID: -3836228937429727959, guid: 5c19252c2976e3743bc72bfd3b3ce4ab, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294942501
-  m_fontColor: {r: 0.1462264, g: 0.62393284, b: 1, a: 1}
+    rgba: 4294954330
+  m_fontColor: {r: 0.3537736, g: 0.8025436, b: 1, a: 1}
   m_enableVertexGradient: 1
   m_colorMode: 2
   m_fontColorGradient:
@@ -284,3 +284,10 @@ MonoBehaviour:
       Data3: 653775285
       Data4: 1831707764
     Path: event:/UI/Button Press
+  onPressedExtra:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
