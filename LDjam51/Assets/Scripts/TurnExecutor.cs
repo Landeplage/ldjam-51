@@ -24,6 +24,8 @@ public class TurnExecutor : MonoBehaviour
     [SerializeField] EventReference damageFmodEvent;
     [SerializeField] EventReference enemyDamageFmodEvent;
     [SerializeField] EventReference healFmodEvent;
+    [SerializeField] EventReference hitWellFmodEvent;
+    [SerializeField] EventReference hitEggsFmodEvent;
 
     public void ResetEntities(Board board)
     {
@@ -96,7 +98,15 @@ public class TurnExecutor : MonoBehaviour
                     FMODUtility.Play(enemyAttackFmodEvent, info.obj.transform.position);
                 }
                 yield return info.obj.Attack(info.position, info.targetPosition);
-                if (BoardSquare.FriendlyType(info.obj.type))
+                if (info.obj.type == BoardSquareType.EnemyWell)
+                {
+                    FMODUtility.Play(hitEggsFmodEvent, info.target.transform.position);
+                }
+                else if (info.obj.type == BoardSquareType.Well)
+                {
+                    FMODUtility.Play(hitWellFmodEvent, info.target.transform.position);
+                }
+                else if (BoardSquare.FriendlyType(info.obj.type))
                 {
                     FMODUtility.Play(enemyDamageFmodEvent, info.target.transform.position);
                 }

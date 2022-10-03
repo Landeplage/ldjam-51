@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   guiTimeline: {fileID: 0}
+  guiUndoBuffer: {fileID: 0}
   undoFmodEvent:
     Guid:
       Data1: 173299357
@@ -163,6 +164,20 @@ MonoBehaviour:
       Data3: 0
       Data4: 0
     Path: 
+  hitWellFmodEvent:
+    Guid:
+      Data1: 1293162130
+      Data2: 1154440879
+      Data3: -219935347
+      Data4: 1585263280
+    Path: event:/Units/Well - Take Damage
+  hitEggsFmodEvent:
+    Guid:
+      Data1: 1062523720
+      Data2: 1266699245
+      Data3: -572879464
+      Data4: 170649301
+    Path: event:/Enemies/Egg - Take Damage
 --- !u!1 &8768865615849765061
 GameObject:
   m_ObjectHideFlags: 0
