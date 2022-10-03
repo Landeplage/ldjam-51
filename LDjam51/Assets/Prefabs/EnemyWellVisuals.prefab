@@ -192,7 +192,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: ea5ff1ee400b81f4f8f09a89c742eee1, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.25, b: 0.25, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -220,7 +220,7 @@ PrefabInstance:
     - target: {fileID: 1658506755102129330, guid: ffbdc3d61834b574484fbbcfe8ef52f2, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: ec78523f2a624394791ef73467444554, type: 3}
+      objectReference: {fileID: 21300000, guid: 55f815aed05b45941a4330f6d05f0924, type: 3}
     - target: {fileID: 1658506755868989910, guid: ffbdc3d61834b574484fbbcfe8ef52f2, type: 3}
       propertyPath: m_Name
       value: HealthbarCanvas
