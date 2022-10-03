@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMODUnity;
 
 public class Board
 {
@@ -562,6 +563,11 @@ public class TurnPlanner : MonoBehaviour
     [System.NonSerialized]
     public bool planning = false;
 
+    [SerializeField] EventReference undoFmodEvent;
+    [SerializeField] EventReference redoFmodEvent;
+    [SerializeField] EventReference victoryFmodEvent;
+    [SerializeField] EventReference defeatFmodEvent;
+
     void Start()
     {
         grid = FindObjectOfType<Grid>();
@@ -581,8 +587,14 @@ public class TurnPlanner : MonoBehaviour
         }
         if (Win())
         {
+            FMODUtility.Play(victoryFmodEvent, transform.position);
             Game.level += 1;
             SceneSwitcher.Restart();
+        }
+        else if (Lost())
+        {
+            FMODUtility.Play(defeatFmodEvent, transform.position);
+            planning = true;
         }
         else
         {
@@ -841,6 +853,7 @@ public class TurnPlanner : MonoBehaviour
     {
         if (previousBoards.Count > 0)
         {
+            FMODUtility.Play(undoFmodEvent, transform.position);
             var turnExecutor = FindObjectOfType<TurnExecutor>();
             redoBoards.Add(board);
             redoSelectedSlots.Add(selectedSlot);
@@ -863,6 +876,7 @@ public class TurnPlanner : MonoBehaviour
     {
         if (redoBoards.Count > 0)
         {
+            FMODUtility.Play(redoFmodEvent, transform.position);
             var turnExecutor = FindObjectOfType<TurnExecutor>();
             previousBoards.Add(board);
             previousSelectedSlots.Add(selectedSlot);
