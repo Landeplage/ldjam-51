@@ -18,6 +18,14 @@ public class GUI_SpawnTimer : MonoBehaviour
 
     public void SetSeconds(int seconds, int nests)
     {
+        if (nests == 0)
+        {
+            GetComponent<CanvasGroup>().alpha = 0.5f;
+        }
+        else
+        {
+            GetComponent<CanvasGroup>().alpha = 1.0f;
+        }
         seconds %= 10;
         if (seconds == 0)
         {
