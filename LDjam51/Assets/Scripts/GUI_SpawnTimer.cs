@@ -6,6 +6,8 @@ using TMPro;
 
 public class GUI_SpawnTimer : MonoBehaviour
 {
+    public GameObject timerContents;
+    public GameObject noNestsContents;
     public Image image;
     public TMP_Text text;
     public TMP_Text nestsText;
@@ -20,11 +22,15 @@ public class GUI_SpawnTimer : MonoBehaviour
     {
         if (nests == 0)
         {
-            GetComponent<CanvasGroup>().alpha = 0.5f;
+            //GetComponent<CanvasGroup>().alpha = 0.5f;
+            noNestsContents.SetActive(true);
+            timerContents.SetActive(false);
         }
         else
         {
-            GetComponent<CanvasGroup>().alpha = 1.0f;
+            //GetComponent<CanvasGroup>().alpha = 1.0f;
+            noNestsContents.SetActive(false);
+            timerContents.SetActive(true);
         }
         seconds %= 10;
         if (seconds == 0)
