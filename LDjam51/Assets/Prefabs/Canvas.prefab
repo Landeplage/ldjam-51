@@ -210,6 +210,13 @@ MonoBehaviour:
   youWin: {fileID: 2005011893}
   youLose: {fileID: 417367321}
   end: {fileID: 277740318}
+  clickFmodEvent:
+    Guid:
+      Data1: 1824415009
+      Data2: 1151773162
+      Data3: 653775285
+      Data4: 1831707764
+    Path: event:/UI/Button Press
 --- !u!225 &2024439382
 CanvasGroup:
   m_ObjectHideFlags: 0

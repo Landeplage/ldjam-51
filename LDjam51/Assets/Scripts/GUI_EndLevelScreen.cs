@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMODUnity;
 
 public class GUI_EndLevelScreen : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class GUI_EndLevelScreen : MonoBehaviour
     public GameObject youWin;
     public GameObject youLose;
     public GameObject end;
+
+    [SerializeField] EventReference clickFmodEvent;
 
     bool transitionQueued = false;
     
@@ -24,6 +27,7 @@ public class GUI_EndLevelScreen : MonoBehaviour
     {
         if (!transitionQueued)
         {
+            FMODUtility.Play(clickFmodEvent);
             transitionQueued = true;
             SceneSwitcher.Restart();
         }
@@ -33,6 +37,7 @@ public class GUI_EndLevelScreen : MonoBehaviour
     {
         if (!transitionQueued)
         {
+            FMODUtility.Play(clickFmodEvent);
             transitionQueued = true;
             Game.level += 1;
             SceneSwitcher.Restart();
@@ -43,6 +48,7 @@ public class GUI_EndLevelScreen : MonoBehaviour
     {
         if (!transitionQueued)
         {
+            FMODUtility.Play(clickFmodEvent);
             var music = FindObjectOfType<InGameMusicController>();
             if (music)
             {
