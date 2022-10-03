@@ -980,18 +980,27 @@ public class TurnPlanner : MonoBehaviour
         previousSelectedSlots = new();
     }
 
+    public bool CanUndo()
+    {
+        foreach (var square in board.squares)
+        {
+            if (square.type == BoardSquareType.Well)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     void Update()
     {
-        if (Game.level > 3)
+        if (Input.GetKeyDown(KeyCode.Z) && planning && CanUndo())
         {
-            if (Input.GetKeyDown(KeyCode.Z) && planning)
-            {
-                UndoAction();
-            }
-            if (Input.GetKeyDown(KeyCode.Y) && planning)
-            {
-            	//RedoAction();
-            }
+            UndoAction();
+        }
+        if (Input.GetKeyDown(KeyCode.Y) && planning && CanUndo())
+        {
+            //RedoAction();
         }
         if (Input.GetKeyDown(KeyCode.Space) && planning)
         {

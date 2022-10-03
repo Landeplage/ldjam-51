@@ -83,7 +83,7 @@ public class Tutorial : MonoBehaviour
         {
             if (n == 1)
             {
-                text.text = "Each turn takes 1s of time\nMore enemies spawn from nests every 10 seconds";
+                text.text = "Each turn takes 1 second of time\nMore enemies spawn from nests every 10 seconds";
             }
             if (n >= 3)
             {
