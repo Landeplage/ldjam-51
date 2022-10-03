@@ -87,6 +87,10 @@ PrefabInstance:
       propertyPath: EventReference.Guid.Data4
       value: -1343636039
       objectReference: {fileID: 0}
+    - target: {fileID: 7618791269437663874, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7936683005974662279, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
       propertyPath: Banks.Array.size
       value: 1
@@ -159,5 +163,23 @@ PrefabInstance:
       propertyPath: fmodEvent.Guid.Data4
       value: 1825777448
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 276152041315409395, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+--- !u!1 &1627793823549843174 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7618791269437663874, guid: 3fcee8d506cd6e34eaa4493509d1e26e, type: 3}
+  m_PrefabInstance: {fileID: 9163830804515556452}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1850242158310979978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1627793823549843174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccc551d23d3c0b74298586baf931531b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

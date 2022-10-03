@@ -120,38 +120,9 @@
 	<object class="MixerBusEffectChain" id="{1e2ffcce-28f5-4a27-b86f-5dafddda3123}">
 		<relationship name="effects">
 			<destination>{57493fbd-2670-4004-91ef-f06dbb5f4f4f}</destination>
-			<destination>{ac87e5e6-1326-4120-981a-12ad4b0d4b80}</destination>
-			<destination>{f8a7afab-9d78-46d3-9768-88028ed142a7}</destination>
-			<destination>{6651fb45-6455-44ba-93c7-a77f92428af9}</destination>
-			<destination>{b7c33d01-64d1-4e7e-ad10-b72717ee1ac7}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{cabc0a19-fddf-4163-b567-0fc9f0f8cc1a}" />
 	<object class="MixerBusFader" id="{91eb8291-ca37-4f91-a455-336eecefd853}" />
 	<object class="MixerBusFader" id="{57493fbd-2670-4004-91ef-f06dbb5f4f4f}" />
-	<object class="ChorusEffect" id="{ac87e5e6-1326-4120-981a-12ad4b0d4b80}">
-		<property name="depth">
-			<value>66.5</value>
-		</property>
-	</object>
-	<object class="PitchShifterEffect" id="{f8a7afab-9d78-46d3-9768-88028ed142a7}" />
-	<object class="DelayEffect" id="{6651fb45-6455-44ba-93c7-a77f92428af9}">
-		<property name="delay">
-			<value>200</value>
-		</property>
-		<property name="feedback">
-			<value>25.5</value>
-		</property>
-		<property name="level">
-			<value>-13</value>
-		</property>
-	</object>
-	<object class="ThreeEQEffect" id="{b7c33d01-64d1-4e7e-ad10-b72717ee1ac7}">
-		<property name="midGain">
-			<value>-23.5</value>
-		</property>
-		<property name="highGain">
-			<value>-80</value>
-		</property>
-	</object>
 </objects>

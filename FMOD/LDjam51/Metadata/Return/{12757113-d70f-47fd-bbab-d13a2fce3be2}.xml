@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="MixerReturn" id="{12757113-d70f-47fd-bbab-d13a2fce3be2}">
+		<property name="volume">
+			<value>-80</value>
+		</property>
+		<property name="name">
+			<value>Music Ducking</value>
+		</property>
+		<relationship name="effectChain">
+			<destination>{223c68aa-1089-4681-a2e3-a65485bd04f8}</destination>
+		</relationship>
+		<relationship name="panner">
+			<destination>{08b75206-98d3-47cf-9e8b-8c57dbda48c2}</destination>
+		</relationship>
+		<relationship name="output">
+			<destination>{df80236c-8c3a-4d83-87c9-87007f8c840c}</destination>
+		</relationship>
+	</object>
+	<object class="MixerBusEffectChain" id="{223c68aa-1089-4681-a2e3-a65485bd04f8}">
+		<relationship name="effects">
+			<destination>{3a00d147-02db-493f-a8b1-3d596c58e437}</destination>
+			<destination>{5168a7db-268f-4fce-a4bd-4612cd5cff92}</destination>
+		</relationship>
+	</object>
+	<object class="MixerBusPanner" id="{08b75206-98d3-47cf-9e8b-8c57dbda48c2}" />
+	<object class="Sidechain" id="{3a00d147-02db-493f-a8b1-3d596c58e437}" />
+	<object class="MixerBusFader" id="{5168a7db-268f-4fce-a4bd-4612cd5cff92}" />
+</objects>
