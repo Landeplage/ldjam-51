@@ -2550,7 +2550,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &840161754
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5993,6 +5993,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1398680765449487437}
   - component: {fileID: 219028572}
+  - component: {fileID: 6135410877488307516}
   m_Layer: 5
   m_Name: GUI_HUDButton_Undo
   m_TagString: Untagged
@@ -6023,6 +6024,23 @@ RectTransform:
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &219028572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4646906318925523676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 669ccbe8b863eac4abf5ee15632d77eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactable: 1
+  canvasGrp: {fileID: 7805864907762131378}
+  btn: {fileID: 6908337145783534077}
+  dimAmount: 0.5
+  noWellsWarning: {fileID: 840161753}
+--- !u!114 &6135410877488307516
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
