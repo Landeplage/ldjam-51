@@ -26,6 +26,7 @@ public class TurnExecutor : MonoBehaviour
     [SerializeField] EventReference healFmodEvent;
     [SerializeField] EventReference hitWellFmodEvent;
     [SerializeField] EventReference hitEggsFmodEvent;
+    [SerializeField] EventReference enemyDespawnFmodEvent;
 
     public void ResetEntities(Board board)
     {
@@ -118,6 +119,10 @@ public class TurnExecutor : MonoBehaviour
                 if (info.target.Dead())
                 {
                     Destroy(info.target.gameObject);
+                    if (!BoardSquare.FriendlyType(info.target.type))
+                    {
+                        FMODUtility.Play(enemyDespawnFmodEvent, info.target.transform.position);
+                    }
                 }
             }
             if (action.type == BoardActionType.Heal)

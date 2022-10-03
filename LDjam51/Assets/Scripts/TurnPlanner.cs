@@ -558,6 +558,7 @@ public class TurnPlanner : MonoBehaviour
     [SerializeField] EventReference redoFmodEvent;
     [SerializeField] EventReference victoryFmodEvent;
     [SerializeField] EventReference defeatFmodEvent;
+    [SerializeField] EventReference enemySpawnFmodEvent;
 
     void Start()
     {
@@ -1087,6 +1088,7 @@ public class TurnPlanner : MonoBehaviour
                         board.squares[board.Index(position)].aiType = BoardAiType.Any;
                     }
                     turnExecutor.ResetEntities(board);
+                    FMODUtility.Play(enemySpawnFmodEvent, grid.At(position).transform.position);
                     break;
                 }
             }
