@@ -14,4 +14,8 @@ public class InGameMusicController : MonoBehaviour
 
         emitter.Play();
     }
+
+    public void OnFadeOut() {
+        emitter.Stop();
+    }
 }

@@ -43,6 +43,11 @@ public class GUI_EndLevelScreen : MonoBehaviour
     {
         if (!transitionQueued)
         {
+            var music = FindObjectOfType<InGameMusicController>();
+            if (music)
+            {
+                music.OnFadeOut();
+            }
             transitionQueued = true;
             SceneSwitcher.GoTo("Menu");
         }
