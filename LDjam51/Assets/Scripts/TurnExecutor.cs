@@ -138,14 +138,14 @@ public class TurnExecutor : MonoBehaviour
                     {
                         Destroy(info.target.gameObject);
                     }
-                    if (BoardSquare.FriendlyType(info.target.type))
+                    if (BoardSquare.FriendlyType(info.target.type) && info.target.type != BoardSquareType.Well)
                     {
                         FMODUtility.Play(voDeathFmodEvent, info.target.transform.position);
                     }
                 }
                 else
                 {
-                    if (BoardSquare.FriendlyType(info.target.type))
+                    if (BoardSquare.FriendlyType(info.target.type) && info.target.type != BoardSquareType.Well)
                     {
                         FMODUtility.Play(voDamageFmodEvent, info.target.transform.position);
                     }
