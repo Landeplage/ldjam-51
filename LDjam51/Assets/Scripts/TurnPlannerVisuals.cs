@@ -20,6 +20,7 @@ public class TurnPlannerVisuals : MonoBehaviour
     public GameObject healSlot;
     public GameObject attackLine;
     public GameObject secondIndicator;
+    public GameObject arrow;
 
     private List<Ghostable> ghosts = new();
 
@@ -185,6 +186,17 @@ public class TurnPlannerVisuals : MonoBehaviour
             obj.transform.SetParent(transform, false);
             obj.transform.position = new Vector3(center.x, center.y, 0.0f);
             obj.GetComponentInChildren<TMPro.TextMeshPro>().text = second.ToString();
+        }
+    }
+
+    public void Arrow(Vector2Int position)
+    {
+        var positionSlot = grid.At(position);
+        if (positionSlot != null)
+        {
+            var obj = Instantiate(arrow);
+            obj.transform.SetParent(transform, false);
+            obj.transform.position = positionSlot.transform.position;
         }
     }
 }

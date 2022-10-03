@@ -549,6 +549,8 @@ public class TurnPlanner : MonoBehaviour
     [System.NonSerialized]
     public bool planning = false;
 
+    private List<(Vector2Int, Vector2Int)> forcedMoves = new();
+
     [SerializeField] EventReference undoFmodEvent;
     [SerializeField] EventReference redoFmodEvent;
     [SerializeField] EventReference victoryFmodEvent;
@@ -611,8 +613,19 @@ public class TurnPlanner : MonoBehaviour
         }
     }
 
-    void DrawBoardAction(BoardAction action)
+    void DrawBoardVisuals()
     {
+        if (forcedMoves.Count > 0)
+        {
+            if (!selectedSlot)
+            {
+                visuals.Arrow(forcedMoves[0].Item1);
+            }
+            else
+            {
+                visuals.Arrow(forcedMoves[0].Item2);
+            }
+        }
         /*if (action.type == BoardActionType.Move)
         {
             //visuals.Ghost(action.position, action.obj);
@@ -637,7 +650,7 @@ public class TurnPlanner : MonoBehaviour
     void PlanActions(bool isClear = false)
     {
         visuals.Clear();
-        //DrawBoardActions();
+        DrawBoardVisuals();
         if (planning)
         {
             validActions = new();
@@ -650,11 +663,19 @@ public class TurnPlanner : MonoBehaviour
             {
                 var noneSelected = selectedSlot == null || board.At(selectedSlot.position).type == BoardSquareType.Empty;
                 var selected = selectedSlot != null && action.position == selectedSlot.position;
+                var allowHover = true;
+                if (forcedMoves.Count > 0)
+                {
+                    if (forcedMoves[0].Item2 != action.target || selectedSlot == null)
+                    {
+                        allowHover = false;
+                    }
+                }
                 if (action.type == BoardActionType.Move && action.enabled)
                 {
                     if (selected)
                     {
-                        visuals.MoveSlot(action.target, action.enabled);
+                        visuals.MoveSlot(action.target, action.enabled && allowHover);
                     }
                 }
                 else if (action.type == BoardActionType.Attack)
@@ -718,6 +739,13 @@ public class TurnPlanner : MonoBehaviour
                 {
                     if (validAction.type == BoardActionType.Move)
                     {
+                        if (forcedMoves.Count > 0)
+                        {
+                            if (validAction.target != forcedMoves[0].Item2)
+                            {
+                                continue;
+                            }
+                        }
                         if (validAction.target == gridSlot.position)
                         {
                             planning = false;
@@ -744,7 +772,14 @@ public class TurnPlanner : MonoBehaviour
             selectedSlot = gridSlot;
             if (selectedSlot != null)
             {
-                if (board.At(selectedSlot.position) != null && !BoardSquare.FriendlyType(board.At(selectedSlot.position).type))
+                if (board.At(selectedSlot.position) != null && (!BoardSquare.FriendlyType(board.At(selectedSlot.position).type) || board.At(selectedSlot.position).type == BoardSquareType.Well))
+                {
+                    selectedSlot = null;
+                }
+            }
+            if (forcedMoves.Count > 0 && selectedSlot)
+            {
+                if (selectedSlot.position != forcedMoves[0].Item1)
                 {
                     selectedSlot = null;
                 }
@@ -755,6 +790,11 @@ public class TurnPlanner : MonoBehaviour
 
     IEnumerator AddAction(BoardAction action, GridSlot nextSelection)
     {
+        if (forcedMoves.Count > 0)
+        {
+            forcedMoves.RemoveAt(0);
+        }
+
         visuals.Clear();
         var turnExecutor = FindObjectOfType<TurnExecutor>();
         previousBoards.Add(board);
@@ -902,18 +942,32 @@ public class TurnPlanner : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z) && planning)
+        if (Game.level > 3)
         {
-            UndoAction();
+            if (Input.GetKeyDown(KeyCode.Z) && planning)
+            {
+                UndoAction();
+            }
+            if (Input.GetKeyDown(KeyCode.Y) && planning)
+            {
+                RedoAction();
+            }
         }
-        if (Input.GetKeyDown(KeyCode.Y) && planning)
+        if (Input.GetKeyDown(KeyCode.Space) && planning)
         {
-            RedoAction();
-        }
-        else if (Input.GetKeyDown(KeyCode.Space) && planning)
-        {
-            planning = false;
-            StartCoroutine(AddAction(BoardAction.Idle(), selectedSlot));
+            var canWait = true;
+            if (forcedMoves.Count > 0)
+            {
+                if (forcedMoves[0].Item1 != new Vector2Int(-1, -1) || forcedMoves[0].Item2 != new Vector2Int(-1, -1))
+                {
+                    canWait = false;
+                }
+            }
+            if (canWait)
+            {
+                planning = false;
+                StartCoroutine(AddAction(BoardAction.Idle(), selectedSlot));
+            }
         }
         if (Input.GetKeyDown(KeyCode.P))
         {
@@ -991,5 +1045,10 @@ public class TurnPlanner : MonoBehaviour
             }
         }
         return true;
+    }
+
+    public void ForceMove(Vector2Int from, Vector2Int to)
+    {
+        forcedMoves.Add((from, to));
     }
 }
