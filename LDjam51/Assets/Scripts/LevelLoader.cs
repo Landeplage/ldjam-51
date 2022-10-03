@@ -6,6 +6,10 @@ public class LevelLoader : MonoBehaviour
 {
     void Start()
     {
+        if (Game.level > 9)
+        {
+            Game.level = 1;
+        }
         if (Game.level == 1)
         {
             transform.Find("Level1").gameObject.SetActive(true);
@@ -25,6 +29,22 @@ public class LevelLoader : MonoBehaviour
         else if (Game.level == 5)
         {
             transform.Find("Level5").gameObject.SetActive(true);
+        }
+        else if (Game.level == 6)
+        {
+            transform.Find("Level6").gameObject.SetActive(true);
+        }
+        else if (Game.level == 7)
+        {
+            transform.Find("Level7").gameObject.SetActive(true);
+        }
+        else if (Game.level == 8)
+        {
+            transform.Find("Level8").gameObject.SetActive(true);
+        }
+        else if (Game.level == 9)
+        {
+            transform.Find("Level9").gameObject.SetActive(true);
         }
     }
 
