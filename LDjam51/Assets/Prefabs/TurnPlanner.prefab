@@ -47,6 +47,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   guiTimeline: {fileID: 0}
+  undoFmodEvent:
+    Guid:
+      Data1: 173299357
+      Data2: 1106984200
+      Data3: 390769039
+      Data4: -1164828084
+    Path: event:/UI/History Undo
+  redoFmodEvent:
+    Guid:
+      Data1: 1393413469
+      Data2: 1210091975
+      Data3: -273014129
+      Data4: -702424345
+    Path: event:/UI/History Redo
+  victoryFmodEvent:
+    Guid:
+      Data1: -1605133921
+      Data2: 1271451754
+      Data3: 582451077
+      Data4: -1206721866
+    Path: event:/Music/Jingle - Victory
+  defeatFmodEvent:
+    Guid:
+      Data1: -392895918
+      Data2: 1232524149
+      Data3: 1675562642
+      Data4: -1721613372
+    Path: event:/Music/Jingle - Defeat
 --- !u!1 &6887119269984065568
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,6 +121,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guiTimeline: {fileID: 0}
   boardEntity: {fileID: 606924425411672372, guid: 94398377fdcb0604b993d3046e7d0ebf, type: 3}
+  footstepFmodEvent:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  attackFmodEvent:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  enemyAttackFmodEvent:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  damageFmodEvent:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  enemyDamageFmodEvent:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!1 &8768865615849765061
 GameObject:
   m_ObjectHideFlags: 0
@@ -141,5 +204,6 @@ MonoBehaviour:
   moveSlot: {fileID: 3589109381274663705, guid: 9ade08995ae70b140942892660670fc2, type: 3}
   movementLine: {fileID: 1952490782494139265, guid: 25ace2dc4e2c0f343a29f0694c72932c, type: 3}
   attackSlot: {fileID: 3589109381274663705, guid: 41a683b4747b69245bef87c2e784ad23, type: 3}
+  healSlot: {fileID: 0}
   attackLine: {fileID: 0}
   secondIndicator: {fileID: 1135065511454372396, guid: c2d485513facab54f8e4be4502d83e42, type: 3}

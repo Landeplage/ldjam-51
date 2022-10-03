@@ -58,6 +58,8 @@ public class BoardEntity : MonoBehaviour
     public GameObject wellVisuals;
     public GameObject enemyWellVisuals;
 
+    public GameObject friendlyRangedProjectile;
+
     [System.NonSerialized]
     public int maxHealth;
     [System.NonSerialized]
@@ -145,7 +147,19 @@ public class BoardEntity : MonoBehaviour
 
     public IEnumerator Attack(Vector3 position, Vector3 targetPosition)
     {
-        HexDirection dir = HexDirectionUtils.GetDirectionTo(position, targetPosition);
-        yield return Play("Attack" + dir.ToString());
+        if (type == BoardSquareType.FriendlyMelee || type == BoardSquareType.Enemy)
+        {
+            HexDirection dir = HexDirectionUtils.GetDirectionTo(position, targetPosition);
+            yield return Play("Attack" + dir.ToString());
+        }
+        else
+        {
+            var projectile = Instantiate(friendlyRangedProjectile);
+            projectile.transform.position = position;
+            projectile.GetComponent<Projectile>().target = new Vector3(targetPosition.x, targetPosition.y, friendlyRangedProjectile.transform.position.z);
+            var angle = Vector3.Angle(Vector3.right, targetPosition - position);
+            projectile.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            yield return Play("Attack");
+        }
     }
 }
