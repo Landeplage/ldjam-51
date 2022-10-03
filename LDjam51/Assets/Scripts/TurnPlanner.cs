@@ -542,9 +542,11 @@ public class TurnPlanner : MonoBehaviour
     public TurnPlannerVisuals visuals;
     public GUI_Timeline guiTimeline;
     public GUI_UndoBuffer guiUndoBuffer;
+    public GUI_SpawnTimer guiSpawnTimer;
 
     private List<BoardAction> validActions = new();
     private int appliedActions = 0;
+    private int currentSecond = 1;
     private GridSlot selectedSlot = null;
 
     [System.NonSerialized]
@@ -831,6 +833,7 @@ public class TurnPlanner : MonoBehaviour
         appliedActions += 1;
         yield return new WaitForSeconds(0.25f);
         guiUndoBuffer.QueueNextActionStart(BlockOwner.AI);
+        guiSpawnTimer.SetSeconds(++currentSecond, NestsCount());
         yield return new WaitForSeconds(0.25f);
         List<Vector2Int> enemies = new();
         foreach (var square in board.squares)
@@ -896,6 +899,8 @@ public class TurnPlanner : MonoBehaviour
             SpawnEnemy();
         }
         
+        guiSpawnTimer.SetSeconds(++currentSecond, NestsCount());
+        
         OnPlanningStart();
         FindObjectOfType<Tutorial>().Next();
     }
@@ -940,6 +945,8 @@ public class TurnPlanner : MonoBehaviour
             previousBoards.RemoveAt(previousBoards.Count - 1);
             previousSelectedSlots.RemoveAt(previousSelectedSlots.Count - 1);
             appliedActions -= 2;
+            currentSecond -= 2;
+            guiSpawnTimer.SetSeconds(currentSecond, NestsCount());
             if (appliedActions < 0)
             {
                 appliedActions += 10;
@@ -1029,6 +1036,19 @@ public class TurnPlanner : MonoBehaviour
             Game.level -= 1;
             SceneSwitcher.Restart();
         }
+    }
+
+    int NestsCount()
+    {
+        int result = 0;
+        foreach (var square in board.squares)
+        {
+            if (board.At(square.position).type == BoardSquareType.EnemyWell)
+            {
+                result++;
+            }
+        }
+        return result;
     }
 
     public void SpawnEnemy()
