@@ -98,15 +98,15 @@ public class TurnExecutor : MonoBehaviour
                     FMODUtility.Play(enemyAttackFmodEvent, info.obj.transform.position);
                 }
                 yield return info.obj.Attack(info.position, info.targetPosition);
-                if (info.obj.type == BoardSquareType.EnemyWell)
+                if (info.target.type == BoardSquareType.EnemyWell)
                 {
                     FMODUtility.Play(hitEggsFmodEvent, info.target.transform.position);
                 }
-                else if (info.obj.type == BoardSquareType.Well)
+                else if (info.target.type == BoardSquareType.Well)
                 {
                     FMODUtility.Play(hitWellFmodEvent, info.target.transform.position);
                 }
-                else if (BoardSquare.FriendlyType(info.obj.type))
+                else if (BoardSquare.FriendlyType(info.target.type))
                 {
                     FMODUtility.Play(enemyDamageFmodEvent, info.target.transform.position);
                 }
