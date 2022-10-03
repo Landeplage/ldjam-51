@@ -829,7 +829,9 @@ public class TurnPlanner : MonoBehaviour
         }
 
         appliedActions += 1;
+        yield return new WaitForSeconds(0.25f);
         guiUndoBuffer.QueueNextActionStart(BlockOwner.AI);
+        yield return new WaitForSeconds(0.25f);
         List<Vector2Int> enemies = new();
         foreach (var square in board.squares)
         {
@@ -876,6 +878,10 @@ public class TurnPlanner : MonoBehaviour
                 i--;
             }
         }
+        yield return new WaitForSeconds(0.25f);
+        guiUndoBuffer.QueueNextActionStart(BlockOwner.Player);
+        yield return new WaitForSeconds(0.25f);
+
         if (healAction != null)
         {
             yield return turnExecutor.PlayAction(healAction);
@@ -890,7 +896,6 @@ public class TurnPlanner : MonoBehaviour
             SpawnEnemy();
         }
         
-        guiUndoBuffer.QueueNextActionStart(BlockOwner.Player);
         OnPlanningStart();
         FindObjectOfType<Tutorial>().Next();
     }
