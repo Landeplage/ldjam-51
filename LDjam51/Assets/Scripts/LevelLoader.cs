@@ -10,17 +10,21 @@ public class LevelLoader : MonoBehaviour
         {
             transform.Find("Level1").gameObject.SetActive(true);
         }
-        else if (Game.level == 1)
+        else if (Game.level == 2)
         {
             transform.Find("Level2").gameObject.SetActive(true);
         }
-        else if (Game.level == 2)
+        else if (Game.level == 3)
         {
             transform.Find("Level3").gameObject.SetActive(true);
         }
-        else if (Game.level == 3)
+        else if (Game.level == 4)
         {
             transform.Find("Level4").gameObject.SetActive(true);
+        }
+        else if (Game.level == 5)
+        {
+            transform.Find("Level5").gameObject.SetActive(true);
         }
     }
 
