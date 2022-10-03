@@ -947,6 +947,7 @@ public class TurnPlanner : MonoBehaviour
             guiUndoBuffer.QueueRemovePlayerAction();
             guiTimeline.UpdateSlots(appliedActions);
             turnExecutor.ResetEntities(board);
+            PulseWells();
             OnPlanningStart();
         }
     }
@@ -990,6 +991,18 @@ public class TurnPlanner : MonoBehaviour
             }
         }
         return false;
+    }
+
+    void PulseWells()
+    {
+        foreach (var square in board.squares)
+        {
+            if (square.type == BoardSquareType.Well)
+            {
+                grid.At(square.position).entity.GetComponentInChildren<Animator>().Play("Idle");
+                grid.At(square.position).entity.GetComponentInChildren<Animator>().Play("Brightsight");
+            }
+        }
     }
 
     void Update()
