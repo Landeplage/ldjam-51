@@ -93,10 +93,10 @@
 	<object class="MixerBusPanner" id="{9e56db47-cede-4d67-b3ad-3a2caa6120f5}" />
 	<object class="SingleSound" id="{67f84993-8f7b-4b57-9f05-0c77b061af8e}">
 		<property name="length">
-			<value>9.0744583333333342</value>
+			<value>8.5744583333333342</value>
 		</property>
 		<property name="timelockedOffset">
-			<value>0.5</value>
+			<value>1</value>
 		</property>
 		<relationship name="fadeInCurve">
 			<destination>{a306ec4a-000c-4fff-892b-221912d0f820}</destination>
