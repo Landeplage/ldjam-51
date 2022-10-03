@@ -575,7 +575,7 @@ public class TurnPlanner : MonoBehaviour
         {
             var turnExecutor = FindObjectOfType<TurnExecutor>();
             MakeBoardFromScene();
-            turnExecutor.ResetEntities(board);
+            turnExecutor.ResetEntities(board, new());
             guiSpawnTimer.SetSeconds(currentSecond, NestsCount());
         }
         if (Win())
@@ -955,7 +955,7 @@ public class TurnPlanner : MonoBehaviour
             }
             guiUndoBuffer.QueueRemovePlayerAction();
             guiTimeline.UpdateSlots(appliedActions);
-            turnExecutor.ResetEntities(board);
+            turnExecutor.ResetEntities(board, new());
             PulseWells();
             OnPlanningStart();
         }
@@ -979,7 +979,7 @@ public class TurnPlanner : MonoBehaviour
                 appliedActions -= 10;
             }
             guiTimeline.UpdateSlots(appliedActions);
-            turnExecutor.ResetEntities(board);
+            turnExecutor.ResetEntities(board, new());
             OnPlanningStart();
         }
     }
@@ -1064,6 +1064,8 @@ public class TurnPlanner : MonoBehaviour
             }
         }
         Entropy entropy = new(board.entropy);
+        List<Vector2Int> fadeIn = new();
+        var turnExecutor = FindObjectOfType<TurnExecutor>();
         foreach (var enemyWell in enemyWells)
         {
             for (int i = 0; i < 100; ++i)
@@ -1073,7 +1075,6 @@ public class TurnPlanner : MonoBehaviour
                 if (board.squares[index].type == BoardSquareType.Empty && distance < 3)
                 {
                     var position = board.squares[index].position;
-                    var turnExecutor = FindObjectOfType<TurnExecutor>();
                     board.squares[board.Index(position)] = new BoardSquare(position, BoardSquareType.Enemy);
                     var r = entropy.Next();
                     if (r < 0.45)
@@ -1088,12 +1089,13 @@ public class TurnPlanner : MonoBehaviour
                     {
                         board.squares[board.Index(position)].aiType = BoardAiType.Any;
                     }
-                    turnExecutor.ResetEntities(board);
+                    fadeIn.Add(position);
                     FMODUtility.Play(enemySpawnFmodEvent, grid.At(position).transform.position);
                     break;
                 }
             }
         }
+        turnExecutor.ResetEntities(board, fadeIn);
     }
 
     public bool Win()

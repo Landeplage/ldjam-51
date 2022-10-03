@@ -28,7 +28,7 @@ public class TurnExecutor : MonoBehaviour
     [SerializeField] EventReference hitEggsFmodEvent;
     [SerializeField] EventReference enemyDespawnFmodEvent;
 
-    public void ResetEntities(Board board)
+    public void ResetEntities(Board board, List<Vector2Int> fadeIn)
     {
         var grid = FindObjectOfType<Grid>();
         foreach (var slot in grid.Slots())
@@ -49,6 +49,14 @@ public class TurnExecutor : MonoBehaviour
                 boardEntity.health = square.health;
                 boardEntity.maxHealth = square.maxHealth;
                 boardEntity.Create();
+                if (fadeIn.Contains(square.position))
+                {
+                    var fade = entity.GetComponentInChildren<EnemyFade>();
+                    if (fade)
+                    {
+                        fade.FadeIn();
+                    }
+                }
             }
         }
     }
@@ -118,10 +126,15 @@ public class TurnExecutor : MonoBehaviour
                 info.target.Hurt(1);
                 if (info.target.Dead())
                 {
-                    Destroy(info.target.gameObject);
-                    if (!BoardSquare.FriendlyType(info.target.type))
+                    var fade = info.target.GetComponentInChildren<EnemyFade>();
+                    if (fade != null)
                     {
+                        fade.FadeOut();
                         FMODUtility.Play(enemyDespawnFmodEvent, info.target.transform.position);
+                    }
+                    else
+                    {
+                        Destroy(info.target.gameObject);
                     }
                 }
             }
