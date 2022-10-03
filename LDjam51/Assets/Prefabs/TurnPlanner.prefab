@@ -49,6 +49,8 @@ MonoBehaviour:
   guiTimeline: {fileID: 0}
   guiUndoBuffer: {fileID: 0}
   guiSpawnTimer: {fileID: 0}
+  guiEndLevel: {fileID: 0}
+  lastLevel: 10
   undoFmodEvent:
     Guid:
       Data1: 173299357
@@ -84,6 +86,27 @@ MonoBehaviour:
       Data3: -1900365914
       Data4: 1400163953
     Path: event:/Enemies/Phase In
+  selectUnitFmodEvent:
+    Guid:
+      Data1: 1824415009
+      Data2: 1151773162
+      Data3: 653775285
+      Data4: 1831707764
+    Path: event:/UI/Button Press
+  deselectUnitFmodEvent:
+    Guid:
+      Data1: -1411623192
+      Data2: 1181184343
+      Data3: -1386220913
+      Data4: -1476488391
+    Path: event:/UI/Button Focus
+  actionFmodEvent:
+    Guid:
+      Data1: 1878384744
+      Data2: 1276658359
+      Data3: -1869763164
+      Data4: 1324658803
+    Path: event:/UI/Confirm Light
 --- !u!1 &6887119269984065568
 GameObject:
   m_ObjectHideFlags: 0

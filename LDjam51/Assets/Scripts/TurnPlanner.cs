@@ -561,6 +561,9 @@ public class TurnPlanner : MonoBehaviour
     [SerializeField] EventReference victoryFmodEvent;
     [SerializeField] EventReference defeatFmodEvent;
     [SerializeField] EventReference enemySpawnFmodEvent;
+    [SerializeField] EventReference selectUnitFmodEvent;
+    [SerializeField] EventReference deselectUnitFmodEvent;
+    [SerializeField] EventReference actionFmodEvent;
 
     void Start()
     {
@@ -733,6 +736,10 @@ public class TurnPlanner : MonoBehaviour
     void OnClickNothing()
     {
         selectedSlot = null;
+        if (planning)
+        {
+            FMODUtility.Play(deselectUnitFmodEvent, transform.position);
+        }
         PlanActions();
     }
 
@@ -792,6 +799,17 @@ public class TurnPlanner : MonoBehaviour
                     selectedSlot = null;
                 }
             }
+            if (planning)
+            {
+                if (selectedSlot)
+                {
+                    FMODUtility.Play(selectUnitFmodEvent, transform.position);
+                }
+                else
+                {
+                    FMODUtility.Play(deselectUnitFmodEvent, transform.position);
+                }
+            }
             PlanActions();
         }
     }
@@ -803,6 +821,8 @@ public class TurnPlanner : MonoBehaviour
         {
             forcedMoves.RemoveAt(0);
         }
+
+        FMODUtility.Play(actionFmodEvent);
 
         visuals.Clear();
         var turnExecutor = FindObjectOfType<TurnExecutor>();
