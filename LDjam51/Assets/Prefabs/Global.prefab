@@ -87,6 +87,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7773135006161931199}
   - component: {fileID: 2023834362869650936}
+  - component: {fileID: 6738783075829010874}
   m_Layer: 0
   m_Name: Audio
   m_TagString: Untagged
@@ -127,6 +128,25 @@ MonoBehaviour:
   - Master
   CollisionTag: 
   PreloadSamples: 0
+--- !u!114 &6738783075829010874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8343995695009822213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58a6df8f971bf1f4bb11c4d271b88231, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mutedSnapshot:
+    Guid:
+      Data1: 1352834956
+      Data2: 1096913856
+      Data3: -1903178356
+      Data4: -1545455527
+    Path: snapshot:/Music Muted
 --- !u!1001 &872006974212371111
 PrefabInstance:
   m_ObjectHideFlags: 0
