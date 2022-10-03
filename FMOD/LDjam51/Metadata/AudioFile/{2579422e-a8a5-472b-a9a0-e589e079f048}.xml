@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{2579422e-a8a5-472b-a9a0-e589e079f048}">
+		<property name="assetPath">
+			<value>Units/VO - Take Damage 01.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>0.80554166666666671</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{7e4c6400-6ff7-44f6-9042-02ebef32ef81}</destination>
+		</relationship>
+	</object>
+</objects>

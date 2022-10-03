@@ -544,7 +544,6 @@ public class TurnPlanner : MonoBehaviour
     public GUI_UndoBuffer guiUndoBuffer;
     public GUI_SpawnTimer guiSpawnTimer;
     public GUI_EndLevelScreen guiEndLevel;
-    public int lastLevel = 10;
 
     private List<BoardAction> validActions = new();
     private int appliedActions = 0;
@@ -586,12 +585,12 @@ public class TurnPlanner : MonoBehaviour
         if (Win())
         {
             FindObjectOfType<Tutorial>().End();
-            guiEndLevel.Show(true, Game.level == lastLevel);
+            guiEndLevel.Show(true, Game.level == Game.maxLevels);
             FMODUtility.Play(victoryFmodEvent, transform.position);
         }
         else if (Lost())
         {
-            guiEndLevel.Show(false, Game.level == lastLevel);
+            guiEndLevel.Show(false, Game.level == Game.maxLevels);
             FMODUtility.Play(defeatFmodEvent, transform.position);
             planning = true;
         }

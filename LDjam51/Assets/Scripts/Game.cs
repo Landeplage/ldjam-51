@@ -17,6 +17,7 @@ public class Game : MonoBehaviour
     private int turnNum = 1;
 
     static public int level = 1;
+    static public int maxLevels = 10;
 
     public static Game Get()
     {
